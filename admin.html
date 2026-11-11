@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Administração - Buarcos & Sea</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Header / Navbar Admin -->
+    <header class="bg-slate-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-brand-600 bg-sky-600 text-white p-2.5 rounded-xl">
+                    <i data-lucide="sliders" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-bold tracking-tight block leading-tight">Buarcos & Sea</span>
+                    <span class="text-xs text-sky-400 font-medium tracking-wide uppercase">Painel de Gestão Interna</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-all border border-slate-700 flex items-center gap-2">
+                    <i data-lucide="external-link" class="w-4 h-4"></i> Ver Site Público
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full space-y-8">
+        
+        <!-- Cartões de Resumo -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-xs font-semibold uppercase text-slate-500 tracking-wider">Cristal Mar (AL: 123456)</span>
+                    <div class="bg-emerald-100 text-emerald-700 p-2 rounded-xl"><i data-lucide="home" class="w-5 h-5"></i></div>
+                </div>
+                <div class="text-2xl font-bold text-slate-900">65.00 € <span class="text-xs text-slate-500 font-normal">/ noite base</span></div>
+                <div class="mt-4 flex gap-2">
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">Ativo para Reservas</span>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-xs font-semibold uppercase text-slate-500 tracking-wider">Tonay Sol (AL: 654321)</span>
+                    <div class="bg-sky-100 text-sky-700 p-2 rounded-xl"><i data-lucide="home" class="w-5 h-5"></i></div>
+                </div>
+                <div class="text-2xl font-bold text-slate-900">60.00 € <span class="text-xs text-slate-500 font-normal">/ noite base</span></div>
+                <div class="mt-4 flex gap-2">
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">Ativo para Reservas</span>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-xs font-semibold uppercase text-slate-500 tracking-wider">Sincronização iCal</span>
+                    <div class="bg-purple-100 text-purple-700 p-2 rounded-xl"><i data-lucide="refresh-cw" class="w-5 h-5"></i></div>
+                </div>
+                <div class="text-lg font-bold text-slate-900">Ativa (Airbnb / Booking)</div>
+                <p class="text-xs text-slate-500 mt-1">Bloqueios de calendário sincronizados automaticamente.</p>
+            </div>
+        </div>
+
+        <!-- Gestão Rápida / Configurações -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200">
+            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <i data-lucide="settings" class="w-5 h-5 text-sky-600"></i> Configurações Rápidas de Tarifas e Taxas
+            </h3>
+            
+            <form onsubmit="salvarConfiguracoes(event)" class="space-y-6 max-w-2xl">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Preço Noite Cristal Mar (€)</label>
+                        <input type="number" id="admin-cristal" value="65" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-sky-500 font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Preço Noite Tonay Sol (€)</label>
+                        <input type="number" id="admin-tonay" value="60" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-sky-500 font-semibold">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Taxa de Limpeza Fixa (€)</label>
+                        <input type="number" id="admin-limpeza" value="35" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-sky-500 font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Desconto Reserva Direta (%)</label>
+                        <input type="number" id="admin-desconto" value="10" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-sky-500 font-semibold">
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="bg-slate-900 hover:bg-sky-600 text-white font-bold px-6 py-3 rounded-xl transition-all shadow text-sm flex items-center gap-2">
+                        <i data-lucide="check" class="w-4 h-4"></i> Guardar Alterações
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 text-slate-500 py-6 text-center text-xs mt-auto">
+        Buarcos & Sea Accommodation • Painel de Controlo Administrativo Interno
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        function salvarConfiguracoes(e) {
+            e.preventDefault();
+            alert('Configurações atualizadas com sucesso! (Modo de demonstração funcional para o tablet)');
+        }
+    </script>
+</body>
+</html>
