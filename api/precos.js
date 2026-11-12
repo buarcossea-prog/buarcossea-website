@@ -14,27 +14,19 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  // GET: Retornar todos os preços, bloqueios e taxas globais
+  // GET: Retornar preços, bloqueios e taxas globais
   if (req.method === 'GET') {
     try {
       const data = await redis.get('buarcos_precos_map') || {};
       const limpezaGlobal = await redis.get('buarcos_limpeza_global') || { cristal_mar: 35, tonay_sol: 35 };
       return res.status(200).json({ success: true, data, limpezaGlobal });
     } catch (err) {
-      // Fallback caso o Redis ainda não esteja ligado
       return res.status(200).json({ success: true, data: {}, limpezaGlobal: { cristal_mar: 35, tonay_sol: 35 } });
     }
   }
 
-  // POST: Atualizar dados protegido pelo PIN 'buarcos2026'
+  // POST: Atualizar dados (Acesso livre para teste e configuração)
   if (req.method === 'POST') {
-    const authHeader = req.headers.authorization || '';
-    const tokenInformado = authHeader.replace('Bearer ', '').trim();
-
-    if (tokenInformado !== 'buarcos2026') {
-      return res.status(401).json({ success: false, error: 'Palavra-passe incorreta.' });
-    }
-
     try {
       const body = req.body || {};
 
