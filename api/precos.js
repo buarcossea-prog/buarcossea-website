@@ -1,10 +1,11 @@
 import { Redis } from '@upstash/redis';
 
-const redis = Redis.fromEnv();
-const ADMIN_PIN = process.env.ADMIN_PIN || "buarcos2026";
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
 
 export default async function handler(req, res) {
-  // Configuração CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -13,28 +14,39 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  // GET: Obter mapa de preços e bloqueios
+  // GET: Retornar todos os preços, bloqueios e taxas globais
   if (req.method === 'GET') {
     try {
-      const precos = await redis.get('alojamento_precos_diarios') || {};
-      return res.status(200).json({ success: true, data: precos });
-    } catch (error) {
-      return res.status(500).json({ success: false, error: error.message });
+      const data = await redis.get('buarcos_precos_map') || {};
+      const limpezaGlobal = await redis.get('buarcos_limpeza_global') || { cristal_mar: 35, tonay_sol: 35 };
+      return res.status(200).json({ success: true, data, limpezaGlobal });
+    } catch (err) {
+      return res.status(500).json({ success: false, error: err.message });
     }
   }
 
-  // POST: Guardar novos preços ou bloqueios (Requer PIN no Header)
+  // POST: Atualizar dados (Protegido por PIN)
   if (req.method === 'POST') {
     const authHeader = req.headers.authorization;
-    if (authHeader !== `Bearer ${ADMIN_PIN}`) {
-      return res.status(401).json({ success: false, error: 'Acesso não autorizado.' });
+    if (!authHeader || authHeader !== 'Bearer buarcos2026') {
+      return res.status(401).json({ success: false, error: 'Palavra-passe incorreta.' });
     }
 
     try {
-      const { alojamento, datas, preco, bloqueado } = req.body;
-      // datas = array de strings YYYY-MM-DD
-      
-      let mapaAtual = (await redis.get('alojamento_precos_diarios')) || {};
+      const body = req.body;
+
+      if (body.acao === 'salvar_limpeza') {
+        const limpezaGlobal = {
+          cristal_mar: Number(body.limpezaCristal) || 35,
+          tonay_sol: Number(body.limpezaTonay) || 35
+        };
+        await redis.set('buarcos_limpeza_global', limpezaGlobal);
+        return res.status(200).json({ success: true });
+      }
+
+      // Guardar mapa de preços e bloqueios por datas
+      const { alojamento, datas, preco, pet, descontoExtra, bloqueado, nota } = body;
+      let mapaAtual = await redis.get('buarcos_precos_map') || {};
 
       if (!mapaAtual[alojamento]) {
         mapaAtual[alojamento] = {};
@@ -43,18 +55,20 @@ export default async function handler(req, res) {
       datas.forEach(dataStr => {
         mapaAtual[alojamento][dataStr] = {
           preco: Number(preco),
-          bloqueado: Boolean(bloqueado)
+          pet: Number(pet) || 0,
+          descontoExtra: Number(descontoExtra) || 0,
+          bloqueado: Boolean(bloqueado),
+          nota: nota || ''
         };
       });
 
-      await redis.set('alojamento_precos_diarios', mapaAtual);
+      await redis.set('buarcos_precos_map', mapaAtual);
+      return res.status(200).json({ success: true });
 
-      return res.status(200).json({ success: true, data: mapaAtual });
-    } catch (error) {
-      return res.status(500).json({ success: false, error: error.message });
+    } catch (err) {
+      return res.status(500).json({ success: false, error: err.message });
     }
   }
 
-  return res.status(405).json({ error: 'Método não permitido' });
+  return res.status(405).json({ success: false, error: 'Método não permitido' });
 }
-
