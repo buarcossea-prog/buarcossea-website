@@ -297,7 +297,7 @@
                         </button>
                         <button type="button" onclick="selecionarMetodoPagamento('multibanco')" class="p-3 border-2 border-sea-100 rounded-xl hover:border-sea-500 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer text-center bg-sand-50">
                             <span class="font-bold text-navy-900 text-sm">MULTIBANCO</span>
-                            <span class="text-[10px] text-navy-800/70">ATM / Homebanking</span>
+                            <span class="text-[10px] text-navy-800/70" data-i18n="pay_multibanco">ATM / Homebanking</span>
                         </button>
                         <button type="button" onclick="selecionarMetodoPagamento('cartao')" class="p-3 border-2 border-sea-100 rounded-xl hover:border-sea-500 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer text-center bg-sand-50">
                             <span class="font-bold text-navy-800 text-sm">VISA / MC</span>
@@ -461,7 +461,6 @@
                 sec_aloj_sub: "Explore as comodidades e fotos de cada apartamento antes de simular a sua estadia",
                 cristal_preco: "Desde 65€ / noite",
                 cristal_desc: "Apartamento moderno com excelente exposição solar, vista privilegiada e a poucos passos da praia de Buarcos.",
-                tonay_preco: "Desde 60€ / noite",
                 tonay_desc: "Espaço acolhedor e totalmente renovado, perfeito para famílias que procuram tranquilidade e proximidade ao mar.",
                 com_hospedes: "Até 4 Hóspedes",
                 com_cozinha: "Cozinha Equipada",
@@ -491,6 +490,7 @@
                 pay_sub: "Selecione o método pretendido para concluir a sua reserva:",
                 pay_cert: "Plataforma Certificada",
                 pay_mbway: "Telemóvel imediato",
+                pay_multibanco: "ATM / Homebanking",
                 pay_cartao: "Cartão de Crédito",
                 pay_carteiras: "Pay / Carteiras",
                 info_transp: "Transparência e Segurança",
@@ -513,10 +513,27 @@
                 foot_termos: "Termos e Condições de Reserva",
                 foot_contactos: "Contactos",
                 foot_copy: "© 2026 Buarcos & Sea. Todos os direitos reservados. AL: 161145/AL & 146454/AL.",
-                // Textos específicos para a janela de detalhes dos apartamentos
                 galeria_fotos: "Galeria de Fotos",
                 comodidades_apt: "Comodidades do Alojamento",
-                btn_simular_modal: "Simular Reserva para este Apartamento"
+                btn_simular_modal: "Simular Reserva para este Apartamento",
+                // Comodidades Cristal Mar PT
+                cm_1: "Wi-Fi Fibra Alta Velocidade",
+                cm_2: "Smart TV 4K com Streaming",
+                cm_3: "Vista Panorâmica de Mar",
+                cm_4: "Cozinha Totalmente Equipada",
+                cm_5: "Máquina de Café Expresso",
+                cm_6: "Roupa de Cama e Banho Incluída",
+                cm_7: "Secador de Cabelo",
+                cm_8: "Ferro de Engomar",
+                // Comodidades Tonay Sol PT
+                ts_1: "Wi-Fi Grátis",
+                ts_2: "Smart TV",
+                ts_3: "Proximidade à Praia (50m)",
+                ts_4: "Cozinha Completa",
+                ts_5: "Máquina de Lavar Roupa",
+                ts_6: "Varanda Solarenga",
+                ts_7: "Artigos de Higiene Pessoal",
+                ts_8: "Estacionamento Gratuito Próximo"
             },
             en: {
                 meta_title: "Buarcos & Sea - Vacation Rentals in Figueira da Foz",
@@ -536,7 +553,6 @@
                 sec_aloj_sub: "Explore amenities and photos of each apartment before simulating your stay",
                 cristal_preco: "From 65€ / night",
                 cristal_desc: "Modern apartment with excellent sun exposure, privileged views, and just steps from Buarcos beach.",
-                tonay_preco: "From 60€ / night",
                 tonay_desc: "Cozy and fully renovated space, perfect for families seeking tranquility and proximity to the sea.",
                 com_hospedes: "Up to 4 Guests",
                 com_cozinha: "Equipped Kitchen",
@@ -566,6 +582,7 @@
                 pay_sub: "Select your preferred method to complete your booking:",
                 pay_cert: "Certified Platform",
                 pay_mbway: "Instant Mobile Pay",
+                pay_multibanco: "ATM / Homebanking",
                 pay_cartao: "Credit Card",
                 pay_carteiras: "Pay / Wallets",
                 info_transp: "Transparency & Security",
@@ -590,7 +607,25 @@
                 foot_copy: "© 2026 Buarcos & Sea. All rights reserved. AL: 161145/AL & 146454/AL.",
                 galeria_fotos: "Photo Gallery",
                 comodidades_apt: "Apartment Amenities",
-                btn_simular_modal: "Simulate Booking for this Apartment"
+                btn_simular_modal: "Simulate Booking for this Apartment",
+                // Comodidades Cristal Mar EN
+                cm_1: "High-Speed Fiber Wi-Fi",
+                cm_2: "4K Smart TV with Streaming",
+                cm_3: "Panoramic Sea View",
+                cm_4: "Fully Equipped Kitchen",
+                cm_5: "Espresso Coffee Machine",
+                cm_6: "Bed Linen and Towels Included",
+                cm_7: "Hairdryer",
+                cm_8: "Iron",
+                // Comodidades Tonay Sol EN
+                ts_1: "Free Wi-Fi",
+                ts_2: "Smart TV",
+                ts_3: "Proximity to Beach (50m)",
+                ts_4: "Full Kitchen",
+                ts_5: "Washing Machine",
+                ts_6: "Sunny Balcony",
+                ts_7: "Personal Hygiene Products",
+                ts_8: "Free Parking Nearby"
             },
             fr: {
                 meta_title: "Buarcos & Sea - Location de Vacances à Figueira da Foz",
@@ -610,7 +645,6 @@
                 sec_aloj_sub: "Découvrez les équipements et photos de chaque appartement avant de simuler votre séjour",
                 cristal_preco: "À partir de 65€ / nuit",
                 cristal_desc: "Appartement moderne avec excellente exposition au soleil, vue privilégiée et à quelques pas de la plage de Buarcos.",
-                tonay_preco: "À partir de 60€ / nuit",
                 tonay_desc: "Espace chaleureux et entièrement rénové, idéal pour les familles cherchant tranquillité et proximité de la mer.",
                 com_hospedes: "Jusqu'à 4 Voyageurs",
                 com_cozinha: "Cuisine Équipée",
@@ -640,6 +674,7 @@
                 pay_sub: "Sélectionnez votre méthode préférée pour finaliser la réservation :",
                 pay_cert: "Plateforme Certifiée",
                 pay_mbway: "Paiement Mobile",
+                pay_multibanco: "ATM / Homebanking",
                 pay_cartao: "Carte de Crédit",
                 pay_carteiras: "Pay / Portefeuilles",
                 info_transp: "Transparence & Sécurité",
@@ -664,7 +699,25 @@
                 foot_copy: "© 2026 Buarcos & Sea. Tous droits réservés. AL: 161145/AL & 146454/AL.",
                 galeria_fotos: "Galerie Photos",
                 comodidades_apt: "Équipements de l'Appartement",
-                btn_simular_modal: "Simuler la réservation pour cet appartement"
+                btn_simular_modal: "Simuler la réservation pour cet appartement",
+                // Comodidades Cristal Mar FR
+                cm_1: "Wi-Fi Fibre Haute Vitesse",
+                cm_2: "Smart TV 4K avec Streaming",
+                cm_3: "Vue Panoramique sur la Mer",
+                cm_4: "Cuisine Entièrement Équipée",
+                cm_5: "Machine à Café Expresso",
+                cm_6: "Linge de Lit et Serviettes Inclus",
+                cm_7: "Sèche-cheveux",
+                cm_8: "Fer à Repasser",
+                // Comodidades Tonay Sol FR
+                ts_1: "Wi-Fi Gratuit",
+                ts_2: "Smart TV",
+                ts_3: "Proximité de la Plage (50m)",
+                ts_4: "Cuisine Complète",
+                ts_5: "Lave-linge",
+                ts_6: "Balcon Ensoleillé",
+                ts_7: "Produits d'Hygiène Personnelle",
+                ts_8: "Parking Gratuit à Proximité"
             }
         };
 
@@ -678,7 +731,6 @@
             });
             localStorage.setItem('buarcos_lang', lang);
             
-            // Atualizar o calendário para o novo idioma
             if (typeof inicializarCalendario === 'function') {
                 inicializarCalendario();
             }
@@ -713,16 +765,7 @@
                     "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
                     "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80"
                 ],
-                comodidades: [
-                    "Wi-Fi Fibra Alta Velocidade",
-                    "Smart TV 4K com Streaming",
-                    "Vista Panorâmica de Mar",
-                    "Cozinha Totalmente Equipada",
-                    "Máquina de Café Expresso",
-                    "Roupa de Cama e Banho Incluída",
-                    "Secador de Cabelo",
-                    "Ferro de Engomar"
-                ]
+                comodidades_keys: ["cm_1", "cm_2", "cm_3", "cm_4", "cm_5", "cm_6", "cm_7", "cm_8"]
             },
             tonay_sol: {
                 nome: "Tonay Sol",
@@ -733,16 +776,7 @@
                     "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80",
                     "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80"
                 ],
-                comodidades: [
-                    "Wi-Fi Grátis",
-                    "Smart TV",
-                    "Proximidade à Praia (50m)",
-                    "Cozinha Completa",
-                    "Máquina de Lavar Roupa",
-                    "Varanda Solarenga",
-                    "Artigos de Higiene Pessoal",
-                    "Estacionamento Gratuito Próximo"
-                ]
+                comodidades_keys: ["ts_1", "ts_2", "ts_3", "ts_4", "ts_5", "ts_6", "ts_7", "ts_8"]
             }
         };
 
@@ -755,7 +789,11 @@
 
             const descTexto = t[apt.descricao_key] || apt.descricao_key;
             let fotosHtml = apt.fotos.map(f => `<img src="${f}" class="w-full h-48 object-cover rounded-xl shadow-sm">`).join('');
-            let comodidadesHtml = apt.comodidades.map(c => `<li class="flex items-center gap-2 text-sm text-navy-900"><span class="w-2 h-2 rounded-full bg-sea-600"></span> ${c}</li>`).join('');
+            
+            let comodidadesHtml = apt.comodidades_keys.map(key => {
+                const textoComodidade = t[key] || key;
+                return `<li class="flex items-center gap-2 text-sm text-navy-900"><span class="w-2 h-2 rounded-full bg-sea-600"></span> ${textoComodidade}</li>`;
+            }).join('');
 
             conteudo.innerHTML = `
                 <div class="flex justify-between items-start border-b border-sea-100 pb-4">
@@ -819,7 +857,7 @@
 
             calendarioPicker = flatpickr("#campo-datas", {
                 mode: "range",
-                locale: langAtual, // Aplica o idioma ativo (pt, en ou fr) ao calendário
+                locale: langAtual,
                 minDate: "today",
                 dateFormat: "Y-m-d",
                 disable: diasIndisponiveis,
