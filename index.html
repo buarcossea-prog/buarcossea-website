@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buarcos & Sea - Alojamento Local em Figueira da Foz</title>
+    <title data-i18n="meta_title">Buarcos & Sea - Alojamento Local em Figueira da Foz</title>
     <!-- Tailwind CSS Play CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -39,24 +39,31 @@
 </head>
 <body class="bg-sand-50 text-navy-900 font-sans antialiased min-h-screen flex flex-col">
 
-    <!-- Header / Navbar -->
+    <!-- Header / Navbar com Seletor de Idiomas -->
     <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-sea-200/60">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center">
                 <img src="logo.png" alt="Buarcos & Sea" class="h-12 w-auto object-contain">
             </a>
             
-            <nav class="hidden md:flex items-center space-x-7 text-sm font-medium text-navy-800">
-                <a href="#alojamentos" class="hover:text-sea-600 transition-colors">Alojamentos</a>
-                <a href="#simulador" class="hover:text-sea-600 transition-colors">Simulador & Reservas</a>
-                <a href="#pagamentos" class="hover:text-sea-600 transition-colors">Pagamentos</a>
-                <a href="#explorar" class="hover:text-sea-600 transition-colors">Figueira da Foz</a>
-                <a href="#localizacao" class="hover:text-sea-600 transition-colors">Localização</a>
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-navy-800">
+                <a href="#alojamentos" class="hover:text-sea-600 transition-colors" data-i18n="nav_alojamentos">Alojamentos</a>
+                <a href="#simulador" class="hover:text-sea-600 transition-colors" data-i18n="nav_simulador">Simulador & Reservas</a>
+                <a href="#pagamentos" class="hover:text-sea-600 transition-colors" data-i18n="nav_pagamentos">Pagamentos</a>
+                <a href="#explorar" class="hover:text-sea-600 transition-colors" data-i18n="nav_explorar">Figueira da Foz</a>
+                <a href="#localizacao" class="hover:text-sea-600 transition-colors" data-i18n="nav_localizacao">Localização</a>
             </nav>
 
             <div class="flex items-center gap-3">
-                <a href="#simulador" class="bg-navy-900 hover:bg-navy-800 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all shadow-sm flex items-center gap-2 cursor-pointer">
-                    <i data-lucide="calendar" class="w-4 h-4 text-sea-500"></i> Reservar Já
+                <!-- Seletor de Idiomas -->
+                <select id="seletor-idioma" onchange="mudarIdioma(this.value)" class="bg-sand-100 border border-sea-200 text-navy-900 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:border-sea-500 cursor-pointer">
+                    <option value="pt">🇵🇹 PT</option>
+                    <option value="en">🇬🇧 EN</option>
+                    <option value="fr">🇫🇷 FR</option>
+                </select>
+
+                <a href="#simulador" class="hidden sm:flex bg-navy-900 hover:bg-navy-800 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all shadow-sm items-center gap-2 cursor-pointer">
+                    <i data-lucide="calendar" class="w-4 h-4 text-sea-500"></i> <span data-i18n="btn_reservar">Reservar Já</span>
                 </a>
             </div>
         </div>
@@ -71,22 +78,22 @@
 
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             <span class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold bg-navy-900/80 text-sea-200 border border-sea-500/30 mb-6 backdrop-blur-md">
-                <i data-lucide="heart" class="w-3.5 h-3.5 text-sea-400 fill-sea-400"></i> Reserva Direta • Melhores tarifas garantidas sem comissões
+                <i data-lucide="heart" class="w-3.5 h-3.5 text-sea-400 fill-sea-400"></i> <span data-i18n="hero_badge">Reserva Direta • Melhores tarifas garantidas sem comissões</span>
             </span>
 
             <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-6 drop-shadow-md">
-                A sua casa à beira-mar em <span class="text-sea-400">Buarcos</span>
+                <span data-i18n="hero_title_1">A sua casa à beira-mar em</span> <span class="text-sea-400">Buarcos</span>
             </h1>
             
-            <p class="text-base sm:text-lg text-slate-200 leading-relaxed mb-8 max-w-2xl mx-auto drop-shadow">
+            <p class="text-base sm:text-lg text-slate-200 leading-relaxed mb-8 max-w-2xl mx-auto drop-shadow" data-i18n="hero_desc">
                 Desfrute do conforto dos apartamentos <strong>Cristal Mar</strong> e <strong>Tonay Sol</strong> a escassos passos da praia na Figueira da Foz.
             </p>
 
             <div class="flex flex-wrap justify-center gap-4">
                 <a href="#simulador" class="bg-sea-600 hover:bg-sea-500 text-white font-semibold px-8 py-3.5 rounded-xl transition-all shadow-lg flex items-center gap-2">
-                    <i data-lucide="calendar" class="w-5 h-5"></i> Simular e Reservar
+                    <i data-lucide="calendar" class="w-5 h-5"></i> <span data-i18n="hero_btn_simular">Simular e Reservar</span>
                 </a>
-                <a href="#alojamentos" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-3.5 rounded-xl transition-all border border-white/30 backdrop-blur-md">
+                <a href="#alojamentos" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-3.5 rounded-xl transition-all border border-white/30 backdrop-blur-md" data-i18n="hero_btn_ver">
                     Ver Alojamentos
                 </a>
             </div>
@@ -96,9 +103,9 @@
     <!-- Alojamentos Section -->
     <section id="alojamentos" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="mb-10 text-center sm:text-left">
-            <span class="text-sea-600 font-semibold text-xs uppercase tracking-widest">Os Nossos Espaços</span>
-            <h2 class="text-3xl font-bold text-navy-900 mt-1">Alojamentos em Buarcos</h2>
-            <p class="text-navy-800/70 mt-1 text-sm">Explore as comodidades e fotos de cada apartamento antes de simular a sua estadia</p>
+            <span class="text-sea-600 font-semibold text-xs uppercase tracking-widest" data-i18n="sec_espacos">Os Nossos Espaços</span>
+            <h2 class="text-3xl font-bold text-navy-900 mt-1" data-i18n="sec_aloj_titulo">Alojamentos em Buarcos</h2>
+            <p class="text-navy-800/70 mt-1 text-sm" data-i18n="sec_aloj_sub">Explore as comodidades e fotos de cada apartamento antes de simular a sua estadia</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -106,7 +113,7 @@
             <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-sea-200/70 hover:shadow-md transition-shadow flex flex-col">
                 <div class="relative h-64 bg-sand-100">
                     <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80" alt="Cristal Mar" class="w-full h-full object-cover">
-                    <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold text-navy-900 shadow-sm border border-sea-100">
+                    <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold text-navy-900 shadow-sm border border-sea-100" data-i18n="cristal_preco">
                         Desde 65€ / noite
                     </div>
                 </div>
@@ -116,22 +123,22 @@
                             <h3 class="text-2xl font-bold text-navy-900">Cristal Mar</h3>
                             <span class="text-[11px] bg-sea-100 text-navy-800 px-2.5 py-0.5 rounded-md font-mono font-medium">161145/AL</span>
                         </div>
-                        <p class="text-navy-800/80 text-sm mb-5 leading-relaxed">Apartamento moderno com excelente exposição solar, vista privilegiada e a poucos passos da praia de Buarcos.</p>
+                        <p class="text-navy-800/80 text-sm mb-5 leading-relaxed" data-i18n="cristal_desc">Apartamento moderno com excelente exposição solar, vista privilegiada e a poucos passos da praia de Buarcos.</p>
                         
                         <div class="grid grid-cols-2 gap-3 text-xs font-medium text-navy-800 mb-6">
-                            <div class="flex items-center gap-2"><i data-lucide="users" class="w-4 h-4 text-sea-600"></i> Até 4 Hóspedes</div>
+                            <div class="flex items-center gap-2"><i data-lucide="users" class="w-4 h-4 text-sea-600"></i> <span data-i18n="com_hospedes">Até 4 Hóspedes</span></div>
                             <div class="flex items-center gap-2"><i data-lucide="wifi" class="w-4 h-4 text-sea-600"></i> Wi-Fi Fibra</div>
                             <div class="flex items-center gap-2"><i data-lucide="tv" class="w-4 h-4 text-sea-600"></i> Smart TV 4K</div>
-                            <div class="flex items-center gap-2"><i data-lucide="coffee" class="w-4 h-4 text-sea-600"></i> Cozinha Equipada</div>
+                            <div class="flex items-center gap-2"><i data-lucide="coffee" class="w-4 h-4 text-sea-600"></i> <span data-i18n="com_cozinha">Cozinha Equipada</span></div>
                         </div>
                     </div>
                     
                     <div class="space-y-2.5">
                         <button type="button" onclick="abrirDetalhes('cristal_mar')" class="w-full bg-sand-100 hover:bg-sea-100 text-navy-900 text-sm font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2 border border-sea-200/60 cursor-pointer">
-                            <i data-lucide="eye" class="w-4 h-4 text-sea-600"></i> Ver Detalhes, Fotos e Comodidades
+                            <i data-lucide="eye" class="w-4 h-4 text-sea-600"></i> <span data-i18n="btn_detalhes">Ver Detalhes, Fotos e Comodidades</span>
                         </button>
                         <button type="button" onclick="selecionarApartamento('cristal_mar')" class="w-full bg-navy-900 hover:bg-navy-800 text-white text-sm font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer">
-                            <i data-lucide="calculator" class="w-4 h-4 text-sea-500"></i> Simular Reserva
+                            <i data-lucide="calculator" class="w-4 h-4 text-sea-500"></i> <span data-i18n="btn_simular">Simular Reserva</span>
                         </button>
                     </div>
                 </div>
@@ -141,7 +148,7 @@
             <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-sea-200/70 hover:shadow-md transition-shadow flex flex-col">
                 <div class="relative h-64 bg-sand-100">
                     <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80" alt="Tonay Sol" class="w-full h-full object-cover">
-                    <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold text-navy-900 shadow-sm border border-sea-100">
+                    <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold text-navy-900 shadow-sm border border-sea-100" data-i18n="tonay_preco">
                         Desde 60€ / noite
                     </div>
                 </div>
@@ -151,22 +158,22 @@
                             <h3 class="text-2xl font-bold text-navy-900">Tonay Sol</h3>
                             <span class="text-[11px] bg-sea-100 text-navy-800 px-2.5 py-0.5 rounded-md font-mono font-medium">146454/AL</span>
                         </div>
-                        <p class="text-navy-800/80 text-sm mb-5 leading-relaxed">Espaço acolhedor e totalmente renovado, perfeito para famílias que procuram tranquilidade e proximidade ao mar.</p>
+                        <p class="text-navy-800/80 text-sm mb-5 leading-relaxed" data-i18n="tonay_desc">Espaço acolhedor e totalmente renovado, perfeito para famílias que procuram tranquilidade e proximidade ao mar.</p>
                         
                         <div class="grid grid-cols-2 gap-3 text-xs font-medium text-navy-800 mb-6">
-                            <div class="flex items-center gap-2"><i data-lucide="users" class="w-4 h-4 text-sea-600"></i> Até 4 Hóspedes</div>
+                            <div class="flex items-center gap-2"><i data-lucide="users" class="w-4 h-4 text-sea-600"></i> <span data-i18n="com_hospedes">Até 4 Hóspedes</span></div>
                             <div class="flex items-center gap-2"><i data-lucide="wifi" class="w-4 h-4 text-sea-600"></i> Wi-Fi Grátis</div>
                             <div class="flex items-center gap-2"><i data-lucide="tv" class="w-4 h-4 text-sea-600"></i> Smart TV</div>
-                            <div class="flex items-center gap-2"><i data-lucide="utensils" class="w-4 h-4 text-sea-600"></i> Cozinha Completa</div>
+                            <div class="flex items-center gap-2"><i data-lucide="utensils" class="w-4 h-4 text-sea-600"></i> <span data-i18n="com_cozinha_comp">Cozinha Completa</span></div>
                         </div>
                     </div>
                     
                     <div class="space-y-2.5">
                         <button type="button" onclick="abrirDetalhes('tonay_sol')" class="w-full bg-sand-100 hover:bg-sea-100 text-navy-900 text-sm font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2 border border-sea-200/60 cursor-pointer">
-                            <i data-lucide="eye" class="w-4 h-4 text-sea-600"></i> Ver Detalhes, Fotos e Comodidades
+                            <i data-lucide="eye" class="w-4 h-4 text-sea-600"></i> <span data-i18n="btn_detalhes">Ver Detalhes, Fotos e Comodidades</span>
                         </button>
                         <button type="button" onclick="selecionarApartamento('tonay_sol')" class="w-full bg-navy-900 hover:bg-navy-800 text-white text-sm font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer">
-                            <i data-lucide="calculator" class="w-4 h-4 text-sea-500"></i> Simular Reserva
+                            <i data-lucide="calculator" class="w-4 h-4 text-sea-500"></i> <span data-i18n="btn_simular">Simular Reserva</span>
                         </button>
                     </div>
                 </div>
@@ -188,48 +195,48 @@
     <section id="simulador" class="py-16 bg-navy-900 text-white">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10">
-                <span class="text-sea-500 font-semibold text-xs uppercase tracking-widest">Reserva Direta</span>
-                <h2 class="text-3xl font-bold mt-1">Simulador de Valores e Reserva</h2>
-                <p class="text-slate-300 text-sm mt-2">Selecione as datas no calendário interativo para verificar disponibilidade e calcular o valor exato.</p>
+                <span class="text-sea-500 font-semibold text-xs uppercase tracking-widest" data-i18n="sim_etiqueta">Reserva Direta</span>
+                <h2 class="text-3xl font-bold mt-1" data-i18n="sim_titulo">Simulador de Valores e Reserva</h2>
+                <p class="text-slate-300 text-sm mt-2" data-i18n="sim_sub">Selecione as datas no calendário interativo para verificar disponibilidade e calcular o valor exato.</p>
             </div>
 
             <div class="bg-navy-950/70 border border-navy-800 rounded-3xl p-6 sm:p-8 shadow-2xl">
                 <form id="booking-form" onsubmit="calcularReserva(event)" class="space-y-6">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-xs font-semibold text-sea-500 uppercase tracking-wider mb-2">Alojamento</label>
+                            <label class="block text-xs font-semibold text-sea-500 uppercase tracking-wider mb-2" data-i18n="lbl_alojamento">Alojamento</label>
                             <select id="apt-select" onchange="atualizarCalendarioDisponibilidade()" class="w-full bg-navy-900 border border-navy-800 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sea-500 text-sm cursor-pointer">
                                 <option value="cristal_mar">Cristal Mar (Desde 65€/noite)</option>
                                 <option value="tonay_sol">Tonay Sol (Desde 60€/noite)</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-sea-500 uppercase tracking-wider mb-2">Período de Estadia (Check-in ➔ Check-out)</label>
+                            <label class="block text-xs font-semibold text-sea-500 uppercase tracking-wider mb-2" data-i18n="lbl_periodo">Período de Estadia (Check-in ➔ Check-out)</label>
                             <input type="text" id="campo-datas" placeholder="Selecione as datas..." required class="w-full bg-navy-900 border border-navy-800 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sea-500 text-sm cursor-pointer font-semibold text-sea-200">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-2 border-t border-navy-800">
                         <div>
-                            <label class="block text-xs font-semibold text-sea-500 uppercase tracking-wider mb-2">Adultos (16+ anos)</label>
+                            <label class="block text-xs font-semibold text-sea-500 uppercase tracking-wider mb-2" data-i18n="lbl_adultos">Adultos (16+ anos)</label>
                             <input type="number" id="hospedes" value="2" min="1" max="4" required class="w-full bg-navy-900 border border-navy-800 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sea-500 text-sm">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-sea-500 uppercase tracking-wider mb-2">Crianças (0-15 anos)</label>
+                            <label class="block text-xs font-semibold text-sea-500 uppercase tracking-wider mb-2" data-i18n="lbl_criancas">Crianças (0-15 anos)</label>
                             <input type="number" id="criancas" value="0" min="0" max="3" class="w-full bg-navy-900 border border-navy-800 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sea-500 text-sm">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-sea-500 uppercase tracking-wider mb-2">Animais de Estimação</label>
+                            <label class="block text-xs font-semibold text-sea-500 uppercase tracking-wider mb-2" data-i18n="lbl_animais">Animais de Estimação</label>
                             <select id="tem-pet" class="w-full bg-navy-900 border border-navy-800 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sea-500 text-sm cursor-pointer">
-                                <option value="nao">Não trago animais</option>
-                                <option value="sim">Sim (Trazer Pet)</option>
+                                <option value="nao" data-i18n="pet_nao">Não trago animais</option>
+                                <option value="sim" data-i18n="pet_sim">Sim (Trazer Pet)</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="pt-4 border-t border-navy-800 flex justify-end">
                         <button type="submit" class="w-full sm:w-auto bg-sea-600 hover:bg-sea-500 text-white font-bold px-8 py-3.5 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer">
-                            <i data-lucide="refresh-cw" class="w-5 h-5"></i> Calcular Valor Total
+                            <i data-lucide="refresh-cw" class="w-5 h-5"></i> <span data-i18n="btn_calcular">Calcular Valor Total</span>
                         </button>
                     </div>
                 </form>
@@ -237,38 +244,38 @@
                 <!-- Resumo do Cálculo -->
                 <div id="resultado-simulacao" class="hidden mt-8 pt-8 border-t border-navy-800 bg-navy-900/90 p-6 rounded-2xl border border-navy-800">
                     <h3 class="text-xl font-bold mb-4 text-white flex items-center gap-2">
-                        <i data-lucide="check-circle-2" class="w-5 h-5 text-sea-500"></i> Resumo da Simulação
+                        <i data-lucide="check-circle-2" class="w-5 h-5 text-sea-500"></i> <span data-i18n="res_titulo">Resumo da Simulação</span>
                     </h3>
                     <div class="space-y-3 text-sm text-slate-200">
                         <div class="flex justify-between">
-                            <span id="label-noites">Estadia (noites):</span>
+                            <span id="label-noites" data-i18n="res_noites">Estadia (noites):</span>
                             <span id="valor-noites" class="font-semibold text-white">0.00 €</span>
                         </div>
                         <div id="linha-desconto" class="flex justify-between text-sea-500">
-                            <span id="label-desc-texto">Desconto Reserva Direta:</span>
+                            <span id="label-desc-texto" data-i18n="res_desconto">Desconto Reserva Direta:</span>
                             <span id="valor-desconto" class="font-semibold">-0.00 €</span>
                         </div>
                         <div class="flex justify-between">
-                            <span>Taxa de Limpeza:</span>
+                            <span data-i18n="res_limpeza">Taxa de Limpeza:</span>
                             <span id="valor-limpeza" class="font-semibold text-white">35.00 €</span>
                         </div>
                         <div id="linha-pet" class="flex justify-between hidden text-amber-300">
-                            <span>Taxa Animais de Estimação (Pet):</span>
+                            <span data-i18n="res_pet">Taxa Animais de Estimação (Pet):</span>
                             <span id="valor-pet-total" class="font-semibold">0.00 €</span>
                         </div>
                         <div class="flex justify-between">
-                            <span id="label-taxa-turistica">Taxa Turística F. Foz:</span>
+                            <span id="label-taxa-turistica" data-i18n="res_taxa">Taxa Turística F. Foz:</span>
                             <span id="valor-taxa-turistica" class="font-semibold text-white">0.00 €</span>
                         </div>
                         <div class="flex justify-between pt-3 border-t border-navy-800 text-lg font-bold text-white">
-                            <span>Total Final com Taxas:</span>
+                            <span data-i18n="res_total">Total Final com Taxas:</span>
                             <span id="valor-total" class="text-sea-500">0.00 €</span>
                         </div>
                     </div>
 
                     <div class="mt-6">
                         <button type="button" onclick="abrirPagamento()" class="w-full bg-sea-600 hover:bg-sea-500 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg cursor-pointer">
-                            <i data-lucide="credit-card" class="w-5 h-5"></i> Prosseguir para Pagamento Seguro
+                            <i data-lucide="credit-card" class="w-5 h-5"></i> <span data-i18n="btn_pagar">Prosseguir para Pagamento Seguro</span>
                         </button>
                     </div>
                 </div>
@@ -277,16 +284,16 @@
                 <div id="modal-ifthenpay" class="hidden mt-8 p-6 bg-white text-navy-900 rounded-2xl shadow-xl space-y-6">
                     <div class="flex justify-between items-center pb-3 border-b border-sea-100">
                         <div>
-                            <h4 class="font-bold text-lg text-navy-900">Formas de Pagamento 100% Seguras</h4>
-                            <p class="text-xs text-navy-800/70">Selecione o método pretendido para concluir a sua reserva:</p>
+                            <h4 class="font-bold text-lg text-navy-900" data-i18n="pay_titulo">Formas de Pagamento 100% Seguras</h4>
+                            <p class="text-xs text-navy-800/70" data-i18n="pay_sub">Selecione o método pretendido para concluir a sua reserva:</p>
                         </div>
-                        <span class="text-xs bg-sea-100 text-navy-900 px-3 py-1 rounded-full font-semibold">Plataforma Certificada</span>
+                        <span class="text-xs bg-sea-100 text-navy-900 px-3 py-1 rounded-full font-semibold" data-i18n="pay_cert">Plataforma Certificada</span>
                     </div>
 
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         <button type="button" onclick="selecionarMetodoPagamento('mbway')" class="p-3 border-2 border-sea-100 rounded-xl hover:border-sea-500 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer text-center bg-sand-50">
                             <span class="font-extrabold text-red-600 text-sm">MB WAY</span>
-                            <span class="text-[10px] text-navy-800/70">Telemóvel imediato</span>
+                            <span class="text-[10px] text-navy-800/70" data-i18n="pay_mbway">Telemóvel imediato</span>
                         </button>
                         <button type="button" onclick="selecionarMetodoPagamento('multibanco')" class="p-3 border-2 border-sea-100 rounded-xl hover:border-sea-500 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer text-center bg-sand-50">
                             <span class="font-bold text-navy-900 text-sm">MULTIBANCO</span>
@@ -294,11 +301,11 @@
                         </button>
                         <button type="button" onclick="selecionarMetodoPagamento('cartao')" class="p-3 border-2 border-sea-100 rounded-xl hover:border-sea-500 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer text-center bg-sand-50">
                             <span class="font-bold text-navy-800 text-sm">VISA / MC</span>
-                            <span class="text-[10px] text-navy-800/70">Cartão de Crédito</span>
+                            <span class="text-[10px] text-navy-800/70" data-i18n="pay_cartao">Cartão de Crédito</span>
                         </button>
                         <button type="button" onclick="selecionarMetodoPagamento('carteiras')" class="p-3 border-2 border-sea-100 rounded-xl hover:border-sea-500 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer text-center bg-sand-50">
                             <span class="font-bold text-navy-900 text-sm">Apple / Google</span>
-                            <span class="text-[10px] text-navy-800/70">Pay / Carteiras</span>
+                            <span class="text-[10px] text-navy-800/70" data-i18n="pay_carteiras">Pay / Carteiras</span>
                         </button>
                     </div>
 
@@ -311,9 +318,9 @@
     <!-- Secção Informativa de Pagamentos -->
     <section id="pagamentos" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="bg-white rounded-3xl p-8 sm:p-10 shadow-sm border border-sea-200/70 text-center max-w-4xl mx-auto">
-            <span class="text-sea-600 font-semibold text-xs uppercase tracking-widest">Transparência e Segurança</span>
-            <h2 class="text-3xl font-bold text-navy-900 mt-1 mb-3">Formas de Pagamento Aceites</h2>
-            <p class="text-navy-800/75 text-sm leading-relaxed mb-8 max-w-2xl mx-auto">
+            <span class="text-sea-600 font-semibold text-xs uppercase tracking-widest" data-i18n="info_transp">Transparência e Segurança</span>
+            <h2 class="text-3xl font-bold text-navy-900 mt-1 mb-3" data-i18n="info_metodos">Formas de Pagamento Aceites</h2>
+            <p class="text-navy-800/75 text-sm leading-relaxed mb-8 max-w-2xl mx-auto" data-i18n="info_desc">
                 Disponibilizamos os métodos de pagamento mais seguros e cómodos do mercado através de plataforma certificada em Portugal.
             </p>
 
@@ -347,9 +354,9 @@
     <section id="explorar" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="bg-sea-100/60 rounded-3xl p-8 sm:p-10 border border-sea-200 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
             <div class="md:col-span-2">
-                <span class="text-sea-600 font-semibold text-xs uppercase tracking-widest">Turismo & Cultura</span>
-                <h2 class="text-2xl sm:text-3xl font-bold text-navy-900 mt-1 mb-3">Descubra a Figueira da Foz e Buarcos</h2>
-                <p class="text-navy-800/80 text-sm leading-relaxed mb-6">
+                <span class="text-sea-600 font-semibold text-xs uppercase tracking-widest" data-i18n="tur_etiqueta">Turismo & Cultura</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-navy-900 mt-1 mb-3" data-i18n="tur_titulo">Descubra a Figueira da Foz e Buarcos</h2>
+                <p class="text-navy-800/80 text-sm leading-relaxed mb-6" data-i18n="tur_desc">
                     Aproveite a sua estadia para explorar as praias douradas, a gastronomia rica em peixe fresco e os eventos culturais da região. Consulte os portais locais para planear cada dia:
                 </p>
                 <div class="flex flex-wrap gap-3">
@@ -368,8 +375,8 @@
                 <div class="w-12 h-12 bg-sea-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
                     <i data-lucide="compass" class="w-6 h-6 text-sea-600"></i>
                 </div>
-                <h3 class="font-bold text-navy-900 text-sm">Agenda & Eventos</h3>
-                <p class="text-xs text-navy-800/70 mt-1 leading-relaxed">Acompanhe os concertos, exposições e novidades locais durante a sua estadia.</p>
+                <h3 class="font-bold text-navy-900 text-sm" data-i18n="tur_agenda_tit">Agenda & Eventos</h3>
+                <p class="text-xs text-navy-800/70 mt-1 leading-relaxed" data-i18n="tur_agenda_desc">Acompanhe os concertos, exposições e novidades locais durante a sua estadia.</p>
             </div>
         </div>
     </section>
@@ -378,15 +385,15 @@
     <section id="localizacao" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="bg-white rounded-3xl p-8 shadow-sm border border-sea-200/70 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
-                <span class="text-sea-600 font-semibold text-xs uppercase tracking-widest">Localização Privilegiada</span>
-                <h2 class="text-3xl font-bold text-navy-900 mt-1 mb-4">Buarcos, Figueira da Foz</h2>
-                <p class="text-navy-800/80 text-sm leading-relaxed mb-6">
+                <span class="text-sea-600 font-semibold text-xs uppercase tracking-widest" data-i18n="loc_etiqueta">Localização Privilegiada</span>
+                <h2 class="text-3xl font-bold text-navy-900 mt-1 mb-4" data-i18n="loc_titulo">Buarcos, Figueira da Foz</h2>
+                <p class="text-navy-800/80 text-sm leading-relaxed mb-6" data-i18n="loc_desc">
                     Situados numa das zonas mais tradicionais e encantadoras da Figueira da Foz. A curta distância a pé da praia de Buarcos, de excelentes restaurantes de peixe fresco, pastelarias e comércio local.
                 </p>
                 <div class="space-y-3 text-sm text-navy-900 font-medium">
-                    <div class="flex items-center gap-3"><i data-lucide="map-pin" class="w-5 h-5 text-sea-600"></i> <span>A 50 metros da frente marítima e praias</span></div>
-                    <div class="flex items-center gap-3"><i data-lucide="car" class="w-5 h-5 text-sea-600"></i> <span>Fácil estacionamento gratuito nas imediações</span></div>
-                    <div class="flex items-center gap-3"><i data-lucide="utensils" class="w-5 h-5 text-sea-600"></i> <span>Próximo de cafés, mercados e restaurantes</span></div>
+                    <div class="flex items-center gap-3"><i data-lucide="map-pin" class="w-5 h-5 text-sea-600"></i> <span data-i18n="loc_p1">A 50 metros da frente marítima e praias</span></div>
+                    <div class="flex items-center gap-3"><i data-lucide="car" class="w-5 h-5 text-sea-600"></i> <span data-i18n="loc_p2">Fácil estacionamento gratuito nas imediações</span></div>
+                    <div class="flex items-center gap-3"><i data-lucide="utensils" class="w-5 h-5 text-sea-600"></i> <span data-i18n="loc_p3">Próximo de cafés, mercados e restaurantes</span></div>
                 </div>
             </div>
             <div class="h-80 rounded-2xl overflow-hidden relative border border-sea-200 shadow-inner bg-sand-100">
@@ -401,19 +408,19 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-navy-800 text-sm">
                 <div>
                     <span class="text-white font-bold text-base block mb-2">Buarcos & Sea</span>
-                    <p class="text-xs text-slate-400 leading-relaxed">
+                    <p class="text-xs text-slate-400 leading-relaxed" data-i18n="foot_desc">
                         Alojamento Local em Buarcos, Figueira da Foz. Conforto, hospitalidade e proximidade ao mar para as suas férias em família.
                     </p>
                 </div>
                 <div>
-                    <span class="text-white font-bold text-sm block mb-2">Links Úteis & Legal</span>
+                    <span class="text-white font-bold text-sm block mb-2" data-i18n="foot_links">Links Úteis & Legal</span>
                     <ul class="space-y-2 text-xs">
-                        <li><a href="https://www.livroreclamacoes.pt" target="_blank" class="hover:text-white transition-colors flex items-center gap-1.5 text-sea-500 font-semibold"><i data-lucide="book-open" class="w-3.5 h-3.5"></i> Livro de Reclamações Eletrónico</a></li>
-                        <li><a href="termos.html" class="hover:text-white transition-colors">Termos e Condições de Reserva</a></li>
+                        <li><a href="https://www.livroreclamacoes.pt" target="_blank" class="hover:text-white transition-colors flex items-center gap-1.5 text-sea-500 font-semibold"><i data-lucide="book-open" class="w-3.5 h-3.5"></i> <span data-i18n="foot_livro">Livro de Reclamações Eletrónico</span></a></li>
+                        <li><a href="termos.html" class="hover:text-white transition-colors" data-i18n="foot_termos">Termos e Condições de Reserva</a></li>
                     </ul>
                 </div>
                 <div>
-                    <span class="text-white font-bold text-sm block mb-2">Contactos</span>
+                    <span class="text-white font-bold text-sm block mb-2" data-i18n="foot_contactos">Contactos</span>
                     <ul class="space-y-2 text-xs">
                         <li><a href="mailto:buarcossea@gmail.com" class="hover:text-white transition-colors flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-sea-500"></i> buarcossea@gmail.com</a></li>
                         <li class="text-slate-400">Avenida do Brasil nº244 / Largo Grupo Caras Direitas, Figueira da Foz</li>
@@ -421,8 +428,8 @@
                 </div>
             </div>
             <div class="pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-400 gap-4">
-                <span>© 2026 Buarcos & Sea. Todos os direitos reservados. AL: 161145/AL & 146454/AL.</span>
-                <span class="text-[11px]">Empresário em Nome Individual - Hélder Cortesão.</span>
+                <span data-i18n="foot_copy">© 2026 Buarcos & Sea. Todos os direitos reservados. AL: 161145/AL & 146454/AL.</span>
+                <span>Empresário em Nome Individual - Hélder Cortesão.</span>
             </div>
         </div>
     </footer>
@@ -431,9 +438,254 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
 
+    <!-- Dicionário de Traduções (PT / EN / FR) -->
+    <script>
+        const traducoes = {
+            pt: {
+                meta_title: "Buarcos & Sea - Alojamento Local em Figueira da Foz",
+                nav_alojamentos: "Alojamentos",
+                nav_simulador: "Simulador & Reservas",
+                nav_pagamentos: "Pagamentos",
+                nav_explorar: "Figueira da Foz",
+                nav_localizacao: "Localização",
+                btn_reservar: "Reservar Já",
+                hero_badge: "Reserva Direta • Melhores tarifas garantidas sem comissões",
+                hero_title_1: "A sua casa à beira-mar em",
+                hero_desc: "Desfrute do conforto dos apartamentos <strong>Cristal Mar</strong> e <strong>Tonay Sol</strong> a escassos passos da praia na Figueira da Foz.",
+                hero_btn_simular: "Simular e Reservar",
+                hero_btn_ver: "Ver Alojamentos",
+                sec_espacos: "Os Nossos Espaços",
+                sec_aloj_titulo: "Alojamentos em Buarcos",
+                sec_aloj_sub: "Explore as comodidades e fotos de cada apartamento antes de simular a sua estadia",
+                cristal_preco: "Desde 65€ / noite",
+                cristal_desc: "Apartamento moderno com excelente exposição solar, vista privilegiada e a poucos passos da praia de Buarcos.",
+                tonay_preco: "Desde 60€ / noite",
+                tonay_desc: "Espaço acolhedor e totalmente renovado, perfeito para famílias que procuram tranquilidade e proximidade ao mar.",
+                com_hospedes: "Até 4 Hóspedes",
+                com_cozinha: "Cozinha Equipada",
+                com_cozinha_comp: "Cozinha Completa",
+                btn_detalhes: "Ver Detalhes, Fotos e Comodidades",
+                btn_simular: "Simular Reserva",
+                sim_etiqueta: "Reserva Direta",
+                sim_titulo: "Simulador de Valores e Reserva",
+                sim_sub: "Selecione as datas no calendário interativo para verificar disponibilidade e calcular o valor exato.",
+                lbl_alojamento: "Alojamento",
+                lbl_periodo: "Período de Estadia (Check-in ➔ Check-out)",
+                lbl_adultos: "Adultos (16+ anos)",
+                lbl_criancas: "Crianças (0-15 anos)",
+                lbl_animais: "Animais de Estimação",
+                pet_nao: "Não trago animais",
+                pet_sim: "Sim (Trazer Pet)",
+                btn_calcular: "Calcular Valor Total",
+                res_titulo: "Resumo da Simulação",
+                res_noites: "Estadia (noites):",
+                res_desconto: "Desconto Reserva Direta:",
+                res_limpeza: "Taxa de Limpeza:",
+                res_pet: "Taxa Animais de Estimação (Pet):",
+                res_taxa: "Taxa Turística F. Foz:",
+                res_total: "Total Final com Taxas:",
+                btn_pagar: "Prosseguir para Pagamento Seguro",
+                pay_titulo: "Formas de Pagamento 100% Seguras",
+                pay_sub: "Selecione o método pretendido para concluir a sua reserva:",
+                pay_cert: "Plataforma Certificada",
+                pay_mbway: "Telemóvel imediato",
+                pay_cartao: "Cartão de Crédito",
+                pay_carteiras: "Pay / Carteiras",
+                info_transp: "Transparência e Segurança",
+                info_metodos: "Formas de Pagamento Aceites",
+                info_desc: "Disponibilizamos os métodos de pagamento mais seguros e cómodos do mercado através de plataforma certificada em Portugal.",
+                tur_etiqueta: "Turismo & Cultura",
+                tur_titulo: "Descubra a Figueira da Foz e Buarcos",
+                tur_desc: "Aproveite a sua estadia para explorar as praias douradas, a gastronomia rica em peixe fresco e os eventos culturais da região. Consulte os portais locais para planear cada dia:",
+                tur_agenda_tit: "Agenda & Eventos",
+                tur_agenda_desc: "Acompanhe os concertos, exposições e novidades locais durante a sua estadia.",
+                loc_etiqueta: "Localização Privilegiada",
+                loc_titulo: "Buarcos, Figueira da Foz",
+                loc_desc: "Situados numa das zonas mais tradicionais e encantadoras da Figueira da Foz. A curta distância a pé da praia de Buarcos, de excelentes restaurantes de peixe fresco, pastelarias e comércio local.",
+                loc_p1: "A 50 metros da frente marítima e praias",
+                loc_p2: "Fácil estacionamento gratuito nas imediações",
+                loc_p3: "Próximo de cafés, mercados e restaurantes",
+                foot_desc: "Alojamento Local em Buarcos, Figueira da Foz. Conforto, hospitalidade e proximidade ao mar para as suas férias em família.",
+                foot_links: "Links Úteis & Legal",
+                foot_livro: "Livro de Reclamações Eletrónico",
+                foot_termos: "Termos e Condições de Reserva",
+                foot_contactos: "Contactos",
+                foot_copy: "© 2026 Buarcos & Sea. Todos os direitos reservados. AL: 161145/AL & 146454/AL."
+            },
+            en: {
+                meta_title: "Buarcos & Sea - Vacation Rentals in Figueira da Foz",
+                nav_alojamentos: "Accommodations",
+                nav_simulador: "Simulator & Booking",
+                nav_pagamentos: "Payments",
+                nav_explorar: "Figueira da Foz",
+                nav_localizacao: "Location",
+                btn_reservar: "Book Now",
+                hero_badge: "Direct Booking • Best rates guaranteed without commissions",
+                hero_title_1: "Your seaside home in",
+                hero_desc: "Enjoy the comfort of <strong>Cristal Mar</strong> and <strong>Tonay Sol</strong> apartments just steps away from Buarcos beach.",
+                hero_btn_simular: "Simulate & Book",
+                hero_btn_ver: "View Apartments",
+                sec_espacos: "Our Spaces",
+                sec_aloj_titulo: "Accommodations in Buarcos",
+                sec_aloj_sub: "Explore amenities and photos of each apartment before simulating your stay",
+                cristal_preco: "From 65€ / night",
+                cristal_desc: "Modern apartment with excellent sun exposure, privileged views, and just steps from Buarcos beach.",
+                tonay_sol_preco: "From 60€ / night",
+                tonay_desc: "Cozy and fully renovated space, perfect for families seeking tranquility and proximity to the sea.",
+                com_hospedes: "Up to 4 Guests",
+                com_cozinha: "Equipped Kitchen",
+                com_cozinha_comp: "Full Kitchen",
+                btn_detalhes: "View Details, Photos & Amenities",
+                btn_simular: "Simulate Booking",
+                sim_etiqueta: "Direct Booking",
+                sim_titulo: "Pricing Simulator & Booking",
+                sim_sub: "Select dates on the interactive calendar to check availability and calculate the exact price.",
+                lbl_alojamento: "Accommodation",
+                lbl_periodo: "Stay Period (Check-in ➔ Check-out)",
+                lbl_adultos: "Adults (16+ yrs)",
+                lbl_criancas: "Children (0-15 yrs)",
+                lbl_animais: "Pets",
+                pet_nao: "No pets",
+                pet_sim: "Yes (Bring Pet)",
+                btn_calcular: "Calculate Total Price",
+                res_titulo: "Simulation Summary",
+                res_noites: "Stay (nights):",
+                res_desconto: "Direct Booking Discount:",
+                res_limpeza: "Cleaning Fee:",
+                res_pet: "Pet Fee:",
+                res_taxa: "Tourist Tax F. Foz:",
+                res_total: "Final Total with Taxes:",
+                btn_pagar: "Proceed to Secure Payment",
+                pay_titulo: "100% Secure Payment Methods",
+                pay_sub: "Select your preferred method to complete your booking:",
+                pay_cert: "Certified Platform",
+                pay_mbway: "Instant Mobile Pay",
+                pay_cartao: "Credit Card",
+                pay_carteiras: "Pay / Wallets",
+                info_transp: "Transparency & Security",
+                info_metodos: "Accepted Payment Methods",
+                info_desc: "We offer the safest and most convenient payment methods through a certified platform in Portugal.",
+                tur_etiqueta: "Tourism & Culture",
+                tur_titulo: "Discover Figueira da Foz and Buarcos",
+                tur_desc: "Make the most of your stay exploring golden beaches, fresh seafood gastronomy, and local cultural events. Check local portals to plan each day:",
+                tur_agenda_tit: "Agenda & Events",
+                tur_agenda_desc: "Keep up with concerts, exhibitions, and local news during your stay.",
+                loc_etiqueta: "Privileged Location",
+                loc_titulo: "Buarcos, Figueira da Foz",
+                loc_desc: "Located in one of the most traditional and charming areas of Figueira da Foz. Within walking distance of Buarcos beach, excellent fresh fish restaurants, bakeries, and local shops.",
+                loc_p1: "50 meters from the seafront and beaches",
+                loc_p2: "Easy free parking nearby",
+                loc_p3: "Close to cafes, markets, and restaurants",
+                foot_desc: "Vacation rental in Buarcos, Figueira da Foz. Comfort, hospitality, and proximity to the sea for your family holidays.",
+                foot_links: "Useful Links & Legal",
+                foot_livro: "Electronic Complaints Book",
+                foot_termos: "Booking Terms & Conditions",
+                foot_contactos: "Contacts",
+                foot_copy: "© 2026 Buarcos & Sea. All rights reserved. AL: 161145/AL & 146454/AL."
+            },
+            fr: {
+                meta_title: "Buarcos & Sea - Location de Vacances à Figueira da Foz",
+                nav_alojamentos: "Logements",
+                nav_simulador: "Simulateur & Réservation",
+                nav_pagamentos: "Paiements",
+                nav_explorar: "Figueira da Foz",
+                nav_localizacao: "Emplacement",
+                btn_reservar: "Réserver",
+                hero_badge: "Réservation directe • Meilleurs tarifs garantis sans commissions",
+                hero_title_1: "Votre maison en bord de mer à",
+                hero_desc: "Profitez du confort des appartements <strong>Cristal Mar</strong> et <strong>Tonay Sol</strong> à quelques pas de la plage de Buarcos.",
+                hero_btn_simular: "Simuler et Réserver",
+                hero_btn_ver: "Voir les Logements",
+                sec_espacos: "Nos Espaces",
+                sec_aloj_titulo: "Logements à Buarcos",
+                sec_aloj_sub: "Découvrez les équipements et photos de chaque appartement avant de simuler votre séjour",
+                cristal_preco: "À partir de 65€ / nuit",
+                cristal_desc: "Appartement moderne avec excellente exposition au soleil, vue privilégiée et à quelques pas de la plage de Buarcos.",
+                tonay_sol_preco: "À partir de 60€ / nuit",
+                tonay_desc: "Espace chaleureux et entièrement rénové, idéal pour les familles cherchant tranquillité et proximité de la mer.",
+                com_hospedes: "Jusqu'à 4 Voyageurs",
+                com_cozinha: "Cuisine Équipée",
+                com_cozinha_comp: "Cuisine Complète",
+                btn_detalhes: "Voir Détails, Photos & Équipements",
+                btn_simular: "Simuler Réservation",
+                sim_etiqueta: "Réservation Directe",
+                sim_titulo: "Simulateur de Tarifs et Réservation",
+                sim_sub: "Sélectionnez les dates sur le calendrier interactif pour vérifier la disponibilité et calculer le prix exact.",
+                lbl_alojamento: "Logement",
+                lbl_periodo: "Période de Séjour (Arrivée ➔ Départ)",
+                lbl_adultos: "Adultes (16+ ans)",
+                lbl_criancas: "Enfants (0-15 ans)",
+                lbl_animais: "Animaux de compagnie",
+                pet_nao: "Sans animaux",
+                pet_sim: "Oui (Avec animal)",
+                btn_calcular: "Calculer le Total",
+                res_titulo: "Résumé de la Simulation",
+                res_noites: "Séjour (nuits):",
+                res_desconto: "Remise Réservation Directe:",
+                res_limpeza: "Frais de Ménage:",
+                res_pet: "Taxe Animaux:",
+                res_taxa: "Taxe de Séjour F. Foz:",
+                res_total: "Total Final avec Taxes:",
+                btn_pagar: "Procéder au Paiement Sécurisé",
+                pay_titulo: "Modes de Paiement 100% Sécurisés",
+                pay_sub: "Sélectionnez votre méthode préférée pour finaliser la réservation :",
+                pay_cert: "Plateforme Certifiée",
+                pay_mbway: "Paiement Mobile",
+                pay_cartao: "Carte de Crédit",
+                pay_carteiras: "Pay / Portefeuilles",
+                info_transp: "Transparence & Sécurité",
+                info_metodos: "Modes de Paiement Acceptés",
+                info_desc: "Nous proposons les modes de paiement les plus sûrs via une plateforme certifiée au Portugal.",
+                tur_etiqueta: "Tourisme & Culture",
+                tur_titulo: "Découvrez Figueira da Foz et Buarcos",
+                tur_desc: "Profitez de votre séjour pour explorer les plages de sable fin, la gastronomie de poisson frais et les événements culturels locaux :",
+                tur_agenda_tit: "Agenda & Événements",
+                tur_agenda_desc: "Suivez les concerts, expositions et actualités locales pendant votre séjour.",
+                loc_etiqueta: "Emplacement Privilégié",
+                loc_titulo: "Buarcos, Figueira da Foz",
+                loc_desc: "Situés dans l'un des quartiers les plus traditionnels de Figueira da Foz. À distance de marche de la plage de Buarcos, d'excellents restaurants et commerces.",
+                loc_p1: "À 50 mètres du front de mer et des plages",
+                loc_p2: "Parking gratuit facile à proximité",
+                loc_p3: "Proche des cafés, marchés et restaurants",
+                foot_desc: "Location de vacances à Buarcos, Figueira da Foz. Confort, hospitalité et proximité de la mer pour vos vacances en famille.",
+                foot_links: "Liens Utiles & Légal",
+                foot_livro: "Livre de Réclamations Électronique",
+                foot_termos: "Termes et Conditions de Réservation",
+                foot_contactos: "Contacts",
+                foot_copy: "© 2026 Buarcos & Sea. Tous droits réservés. AL: 161145/AL & 146454/AL."
+            }
+        };
+
+        function mudarIdioma(lang) {
+            const elementos = document.querySelectorAll('[data-i18n]');
+            elementos.forEach(el => {
+                const chave = el.getAttribute('data-i18n');
+                if (traducoes[lang] && traducoes[lang][chave]) {
+                    el.innerHTML = traducoes[lang][chave];
+                }
+            });
+            localStorage.setItem('buarcos_lang', lang);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const idiomaSalvo = localStorage.getItem('buarcos_lang') || 'pt';
+            const seletor = document.getElementById('seletor-idioma');
+            if (seletor) seletor.value = idiomaSalvo;
+            mudarIdioma(idiomaSalvo);
+            inicializarCalendario();
+        });
+    </script>
+
     <!-- Scripts de Interação -->
     <script>
         lucide.createIcons();
+
+        function formatarDataLocal(dateObj) {
+            const ano = dateObj.getFullYear();
+            const mes = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const dia = String(dateObj.getDate()).padStart(2, '0');
+            return `${ano}-${mes}-${dia}`;
+        }
 
         const alojamentosDados = {
             cristal_mar: {
@@ -559,10 +811,6 @@
             inicializarCalendario();
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            inicializarCalendario();
-        });
-
         function selecionarApartamento(id) {
             const select = document.getElementById('apt-select');
             if (select) {
@@ -618,9 +866,9 @@
             let taxaTuristicaTotal = 0;
             const noitesTaxaLimite = Math.min(noites, 7);
 
-            let dt = new Date(checkin);
+            let dt = new Date(checkin.getFullYear(), checkin.getMonth(), checkin.getDate());
             for (let i = 0; i < noites; i++) {
-                const dataStr = dt.toISOString().split('T')[0];
+                const dataStr = formatarDataLocal(dt);
                 const dadosDia = mapaPrecos[apt] && mapaPrecos[apt][dataStr];
 
                 if (dadosDia && dadosDia.bloqueado) {
@@ -635,7 +883,7 @@
                 if (dadosDia && dadosDia.descontoExtra) percentagemDescontoExtra = dadosDia.descontoExtra;
 
                 if (i < noitesTaxaLimite) {
-                    const mes = dt.getMonth();
+                    const mes = dt.getMonth(); // 5 = Junho, 6 = Julho, 7 = Agosto, 8 = Setembro
                     const eEpocaAlta = (mes >= 5 && mes <= 8);
                     const valorNoiteTaxa = eEpocaAlta ? 2.00 : 1.50;
                     taxaTuristicaTotal += valorNoiteTaxa * adultos;
