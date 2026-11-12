@@ -33,114 +33,271 @@
     </script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
 </head>
-<body class="bg-sand-50 text-navy-900 font-sans antialiased min-h-screen p-6">
-    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-sm border border-sea-200/70 p-8">
-        <div class="flex justify-between items-center mb-8 pb-4 border-b border-sea-100">
+<body class="bg-sand-50 text-navy-900 font-sans antialiased min-h-screen p-4 sm:p-6">
+
+    <!-- Ecrã de Proteção por PIN -->
+    <div id="pin-screen" class="fixed inset-0 z-50 bg-navy-950/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl border border-sea-200 text-center">
+            <div class="w-12 h-12 bg-sea-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="lock" class="w-6 h-6 text-sea-600"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-navy-900 mb-2">Área Restrita</h2>
+            <p class="text-xs text-navy-800/70 mb-6">Insira o PIN de administrador para aceder à gestão do painel.</p>
+            
+            <form onsubmit="verificarPin(event)" class="space-y-4">
+                <input type="password" id="admin-pin-input" placeholder="Insira o PIN..." required class="w-full text-center tracking-widest text-lg bg-sand-50 border border-sea-200 rounded-xl px-4 py-3 focus:outline-none focus:border-sea-500 font-bold">
+                <button type="submit" class="w-full bg-navy-900 hover:bg-navy-800 text-white font-bold py-3.5 rounded-xl transition-all shadow-md text-sm flex items-center justify-center gap-2 cursor-pointer">
+                    <i data-lucide="key-round" class="w-4 h-4 text-sea-500"></i> Autenticar
+                </button>
+            </form>
+            <div class="mt-4">
+                <a href="index.html" class="text-xs text-sea-600 hover:underline font-semibold">Voltar ao site principal</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conteúdo Principal do Admin (Oculto até inserir o PIN correto) -->
+    <div id="admin-content" class="hidden max-w-5xl mx-auto bg-white rounded-3xl shadow-sm border border-sea-200/70 p-6 sm:p-8">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-4 border-b border-sea-100 gap-4">
             <div>
                 <span class="text-sea-600 font-semibold text-xs uppercase tracking-widest">Painel de Controlo</span>
-                <h1 class="text-2xl font-bold text-navy-900 mt-1">Configurações e Taxas Globais</h1>
+                <h1 class="text-2xl font-bold text-navy-900 mt-1">Gestão de Preços, Bloqueios e Taxas</h1>
             </div>
-            <a href="index.html" class="bg-sand-100 hover:bg-sea-100 text-navy-900 text-xs font-semibold px-4 py-2.5 rounded-xl transition-colors border border-sea-200/60 flex items-center gap-2">
-                <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Site
-            </a>
+            <div class="flex items-center gap-3">
+                <button type="button" onclick="bloquearSessao()" class="bg-sand-100 hover:bg-sea-100 text-navy-900 text-xs font-semibold px-4 py-2.5 rounded-xl transition-colors border border-sea-200/60 flex items-center gap-2 cursor-pointer">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Sair / Bloquear
+                </button>
+                <a href="index.html" class="bg-navy-900 hover:bg-navy-800 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all shadow-sm flex items-center gap-2">
+                    <i data-lucide="external-link" class="w-4 h-4 text-sea-500"></i> Ver Site
+                </a>
+            </div>
         </div>
 
-        <form id="admin-form" onsubmit="guardarConfiguracoes(event)" class="space-y-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <!-- Taxas de Limpeza por Estadia -->
-                <div class="bg-sand-50 p-6 rounded-2xl border border-sea-200/60">
+        <form id="admin-form" onsubmit="guardarPainel(event)" class="space-y-8">
+            <!-- Secção de Taxas Globais por Estadia (Limpeza e Pet) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-sand-50 p-6 rounded-2xl border border-sea-200/60">
+                <div>
                     <h3 class="font-bold text-navy-900 mb-4 text-sm flex items-center gap-2">
                         <i data-lucide="sparkles" class="w-4 h-4 text-sea-600"></i> Taxa de Limpeza por Estadia
                     </h3>
-                    <div class="space-y-4">
+                    <div class="space-y-3">
                         <div>
                             <label class="block text-xs font-semibold text-navy-800 mb-1">Cristal Mar (€)</label>
-                            <input type="number" id="limpeza-cristal" step="0.5" class="w-full bg-white border border-sea-200 rounded-xl p-3 text-sm focus:outline-none focus:border-sea-500" required>
+                            <input type="number" id="limpeza-cristal" step="0.5" class="w-full bg-white border border-sea-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sea-500" required>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-navy-800 mb-1">Tonay Sol (€)</label>
-                            <input type="number" id="limpeza-tonay" step="0.5" class="w-full bg-white border border-sea-200 rounded-xl p-3 text-sm focus:outline-none focus:border-sea-500" required>
+                            <input type="number" id="limpeza-tonay" step="0.5" class="w-full bg-white border border-sea-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sea-500" required>
                         </div>
                     </div>
                 </div>
 
-                <!-- Taxa de Animais de Estimação (Pet) por Estadia -->
-                <div class="bg-sand-50 p-6 rounded-2xl border border-sea-200/60">
+                <div>
                     <h3 class="font-bold text-navy-900 mb-4 text-sm flex items-center gap-2">
-                        <i data-lucide="dog" class="w-4 h-4 text-sea-600"></i> Taxa de Animais (Pet)
+                        <i data-lucide="dog" class="w-4 h-4 text-sea-600"></i> Taxa de Animais (Pet) por Estadia
                     </h3>
-                    <div class="space-y-4">
+                    <div class="space-y-3">
                         <div>
                             <label class="block text-xs font-semibold text-navy-800 mb-1">Valor por Animal / Estadia (€)</label>
-                            <input type="number" id="pet-estadia" step="0.5" class="w-full bg-white border border-sea-200 rounded-xl p-3 text-sm focus:outline-none focus:border-sea-500" required>
-                            <p class="text-[11px] text-navy-800/70 mt-1.5 leading-relaxed">Aplicado uma única vez por estadia e multiplicado automaticamente pelo número de animais selecionados no simulador.</p>
+                            <input type="number" id="pet-estadia" step="0.5" class="w-full bg-white border border-sea-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sea-500" required>
+                            <p class="text-[11px] text-navy-800/70 mt-1">Aplicado uma única vez por estadia e multiplicado pelo nº de pets.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="pt-4 border-t border-sea-100 flex justify-end">
+            <!-- Secção de Preços Específicos e Bloqueio por Dias -->
+            <div class="bg-sand-50 p-6 rounded-2xl border border-sea-200/60 space-y-4">
+                <h3 class="font-bold text-navy-900 text-sm flex items-center gap-2">
+                    <i data-lucide="calendar-range" class="w-4 h-4 text-sea-600"></i> Gestão de Preços Diários e Bloqueio de Datas
+                </h3>
+                <p class="text-xs text-navy-800/70">Selecione o alojamento, defina o preço específico para determinadas noites ou bloqueie datas em que o apartamento esteja indisponível.</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-navy-800 mb-1">Alojamento</label>
+                        <select id="admin-apt-select" class="w-full bg-white border border-sea-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sea-500 cursor-pointer">
+                            <option value="cristal_mar">Cristal Mar</option>
+                            <option value="tonay_sol">Tonay Sol</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-navy-800 mb-1">Selecionar Intervalo de Datas</label>
+                        <input type="text" id="admin-campo-datas" placeholder="Clique para selecionar..." class="w-full bg-white border border-sea-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sea-500 cursor-pointer font-semibold text-sea-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-navy-800 mb-1">Novo Preço por Noite (€)</label>
+                        <input type="number" id="admin-novo-preco" placeholder="Ex: 85" step="1" class="w-full bg-white border border-sea-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sea-500">
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between pt-2 gap-3">
+                    <label class="flex items-center gap-2 text-xs font-semibold text-navy-900 cursor-pointer bg-white px-3 py-2 rounded-xl border border-sea-200">
+                        <input type="checkbox" id="admin-bloquear-check" class="w-4 h-4 text-sea-600 rounded"> Bloquear datas selecionadas (Indisponível)
+                    </label>
+                    <button type="button" onclick="aplicarRegrasDatas()" class="bg-sea-600 hover:bg-sea-500 text-white font-bold px-5 py-2.5 rounded-xl transition-all text-xs flex items-center gap-2 cursor-pointer shadow-sm">
+                        <i data-lucide="check" class="w-4 h-4"></i> Aplicar Regra às Datas
+                    </button>
+                </div>
+            </div>
+
+            <!-- Botão Guardar Global -->
+            <div class="pt-2 flex justify-end">
                 <button type="submit" class="bg-navy-900 hover:bg-navy-800 text-white font-bold px-8 py-3.5 rounded-xl transition-all shadow-lg text-sm flex items-center gap-2 cursor-pointer">
-                    <i data-lucide="save" class="w-4 h-4 text-sea-500"></i> Guardar Configurações
+                    <i data-lucide="save" class="w-4 h-4 text-sea-500"></i> Guardar Alterações no Servidor
                 </button>
             </div>
         </form>
     </div>
 
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+
     <script>
         lucide.createIcons();
 
-        async function carregarConfiguracoes() {
+        // PIN de segurança atualizado
+        const PIN_ADMIN = "buarcos2026";
+
+        function verificarPin(e) {
+            e.preventDefault();
+            const pinInserido = document.getElementById('admin-pin-input').value;
+            if (pinInserido === PIN_ADMIN) {
+                sessionStorage.setItem('buarcos_admin_auth', 'true');
+                mostrarPainel();
+            } else {
+                alert('PIN incorreto. Tente novamente.');
+                document.getElementById('admin-pin-input').value = '';
+            }
+        }
+
+        function mostrarPainel() {
+            document.getElementById('pin-screen').classList.add('hidden');
+            document.getElementById('admin-content').classList.remove('hidden');
+            inicializarAdminCalendario();
+            carregarDadosServidor();
+        }
+
+        function bloquearSessao() {
+            sessionStorage.removeItem('buarcos_admin_auth');
+            location.reload();
+        }
+
+        let adminCalendarioPicker = null;
+        let dadosGlobaisServidor = { precos: {}, limpezaGlobal: {}, petGlobal: 15 };
+
+        function inicializarAdminCalendario() {
+            adminCalendarioPicker = flatpickr("#admin-campo-datas", {
+                mode: "range",
+                locale: "pt",
+                minDate: "today",
+                dateFormat: "Y-m-d",
+                conjunction: " a "
+            });
+        }
+
+        async function carregarDadosServidor() {
             try {
                 const res = await fetch('/api/precos');
                 const json = await res.json();
                 if (json.success) {
+                    dadosGlobaisServidor.precos = json.data || {};
                     if (json.limpezaGlobal) {
+                        dadosGlobaisServidor.limpezaGlobal = json.limpezaGlobal;
                         document.getElementById('limpeza-cristal').value = json.limpezaGlobal.cristal_mar || 35;
                         document.getElementById('limpeza-tonay').value = json.limpezaGlobal.tonay_sol || 35;
                     }
                     if (json.petGlobal !== undefined) {
+                        dadosGlobaisServidor.petGlobal = json.petGlobal;
                         document.getElementById('pet-estadia').value = json.petGlobal;
-                    } else {
-                        document.getElementById('pet-estadia').value = 15; // Valor predefinido padrão
                     }
                 }
             } catch(err) {
-                // Valores de fallback caso a API demore ou offline
                 document.getElementById('limpeza-cristal').value = 35;
                 document.getElementById('limpeza-tonay').value = 35;
                 document.getElementById('pet-estadia').value = 15;
             }
         }
 
-        async function guardarConfiguracoes(e) {
+        function aplicarRegrasDatas() {
+            const datasSelecionadas = adminCalendarioPicker.selectedDates;
+            if (datasSelecionadas.length < 2) {
+                alert('Por favor selecione um intervalo de datas no calendário.');
+                return;
+            }
+
+            const apt = document.getElementById('admin-apt-select').value;
+            const novoPreco = parseFloat(document.getElementById('admin-novo-preco').value);
+            const bloquear = document.getElementById('admin-bloquear-check').checked;
+
+            let dt = new Date(datasSelecionadas[0]);
+            const fim = new Date(datasSelecionadas[datasSelecionadas.length - 1]);
+
+            if (!dadosGlobaisServidor.precos[apt]) {
+                dadosGlobaisServidor.precos[apt] = {};
+            }
+
+            while (dt <= fim) {
+                const ano = dt.getFullYear();
+                const mes = String(dt.getMonth() + 1).padStart(2, '0');
+                const dia = String(dt.getDate()).padStart(2, '0');
+                const dataStr = `${ano}-${mes}-${dia}`;
+
+                if (!dadosGlobaisServidor.precos[apt][dataStr]) {
+                    dadosGlobaisServidor.precos[apt][dataStr] = {};
+                }
+
+                if (!isNaN(novoPreco)) {
+                    dadosGlobaisServidor.precos[apt][dataStr].preco = novoPreco;
+                }
+                dadosGlobaisServidor.precos[apt][dataStr].bloqueado = bloquear;
+
+                dt.setDate(dt.getDate() + 1);
+            }
+
+            alert('Regras aplicadas com sucesso no painel local! Clique em "Guardar Alterações no Servidor" para gravar.');
+        }
+
+        async function guardarPainel(e) {
             e.preventDefault();
             const limpezaCristal = parseFloat(document.getElementById('limpeza-cristal').value);
             const limpezaTonay = parseFloat(document.getElementById('limpeza-tonay').value);
             const petEstadia = parseFloat(document.getElementById('pet-estadia').value);
+
+            dadosGlobaisServidor.limpezaGlobal = { cristal_mar: limpezaCristal, tonay_sol: limpezaTonay };
+            dadosGlobaisServidor.petGlobal = petEstadia;
 
             try {
                 const res = await fetch('/api/precos', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        limpezaGlobal: { cristal_mar: limpezaCristal, tonay_sol: limpezaTonay },
-                        petGlobal: petEstadia
+                        data: dadosGlobaisServidor.precos,
+                        limpezaGlobal: dadosGlobaisServidor.limpezaGlobal,
+                        petGlobal: dadosGlobaisServidor.petGlobal
                     })
                 });
                 const json = await res.json();
                 if (json.success) {
-                    alert('Configurações guardadas com sucesso!');
+                    alert('Todas as alterações, preços, bloqueios e taxas foram guardados com sucesso!');
                 } else {
-                    alert('Erro ao guardar configurações.');
+                    alert('Erro ao gravar no servidor.');
                 }
             } catch(err) {
-                alert('Erro de ligação ao servidor.');
+                alert('Erro de ligação ao servidor ao tentar guardar.');
             }
         }
 
-        window.addEventListener('DOMContentLoaded', carregarConfiguracoes);
+        window.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('buarcos_admin_auth') === 'true') {
+                mostrarPainel();
+            }
+        });
     </script>
 </body>
 </html>
