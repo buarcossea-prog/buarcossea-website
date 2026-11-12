@@ -167,12 +167,12 @@
             <div class="text-center mb-10">
                 <span class="text-sky-400 font-semibold text-sm uppercase tracking-wider">Reserva Direta</span>
                 <h2 class="text-3xl font-bold mt-1">Simulador de Valores e Reserva</h2>
-                <p class="text-slate-400 mt-2">Inclui automaticamente a Taxa Turística de Figueira da Foz e Taxa de Limpeza.</p>
+                <p class="text-slate-400 mt-2">Inclui automaticamente a Taxa Turística de Figueira da Foz, Limpeza e extras.</p>
             </div>
 
             <div class="bg-slate-800 border border-slate-700 rounded-3xl p-6 sm:p-8 shadow-2xl">
                 <form id="booking-form" onsubmit="calcularReserva(event)" class="space-y-6">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                         <div>
                             <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Alojamento</label>
                             <select id="apt-select" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-500 text-sm">
@@ -188,9 +188,24 @@
                             <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Check-out</label>
                             <input type="date" id="checkout" required class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-500 text-sm">
                         </div>
+                    </div>
+
+                    <!-- Campos Adicionais: Hóspedes, Crianças e Pets -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-2 border-t border-slate-700/60">
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Hóspedes (>16 anos)</label>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Adultos (16+ anos)</label>
                             <input type="number" id="hospedes" value="2" min="1" max="4" required class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-500 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Crianças (0-15 anos)</label>
+                            <input type="number" id="criancas" value="0" min="0" max="3" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-500 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Animais de Estimação</label>
+                            <select id="tem-pet" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-sky-500 text-sm">
+                                <option value="nao">Não trago animais</option>
+                                <option value="sim">Sim (Trazer Pet)</option>
+                            </select>
                         </div>
                     </div>
 
@@ -211,16 +226,20 @@
                             <span id="label-noites">Estadia (noites):</span>
                             <span id="valor-noites" class="font-semibold text-white">0.00 €</span>
                         </div>
-                        <div class="flex justify-between text-emerald-400">
-                            <span>Desconto Reserva Direta (10%):</span>
+                        <div id="linha-desconto" class="flex justify-between text-emerald-400">
+                            <span id="label-desc-texto">Desconto Reserva Direta (10%):</span>
                             <span id="valor-desconto" class="font-semibold">-0.00 €</span>
                         </div>
                         <div class="flex justify-between">
                             <span>Taxa de Limpeza:</span>
                             <span id="valor-limpeza" class="font-semibold text-white">35.00 €</span>
                         </div>
+                        <div id="linha-pet" class="flex justify-between hidden text-amber-300">
+                            <span>Taxa Animais de Estimação (Pet):</span>
+                            <span id="valor-pet-total" class="font-semibold">0.00 €</span>
+                        </div>
                         <div class="flex justify-between">
-                            <span id="label-taxa-turistica">Taxa Turística F. Foz (Isenta de desconto):</span>
+                            <span id="label-taxa-turistica">Taxa Turística F. Foz:</span>
                             <span id="valor-taxa-turistica" class="font-semibold text-white">0.00 €</span>
                         </div>
                         <div class="flex justify-between pt-3 border-t border-slate-800 text-lg font-bold text-white">
@@ -266,305 +285,3 @@
     </section>
 
     <!-- Secção: Explorar a Região -->
-    <section id="explorar" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div class="bg-sky-50 rounded-3xl p-8 border border-sky-100 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-            <div class="md:col-span-2">
-                <span class="text-sky-600 font-semibold text-sm uppercase tracking-wider">Turismo & Lazer</span>
-                <h2 class="text-2xl font-bold text-slate-900 mt-1 mb-3">Descubra a Figueira da Foz e Buarcos</h2>
-                <p class="text-slate-600 text-sm leading-relaxed mb-4">
-                    Aproveite a sua estadia para explorar as magníficas praias, a gastronomia rica em peixe fresco e os trilhos à beira-mar. Planeie a sua visita com o apoio do portal oficial de turismo.
-                </p>
-                <div class="flex flex-wrap gap-4">
-                    <a href="https://www.visitfigueiradafoz.com" target="_blank" class="inline-flex items-center gap-2 bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-colors shadow-sm">
-                        <i data-lucide="globe" class="w-4 h-4"></i> Visit Figueira da Foz <i data-lucide="external-link" class="w-3 h-3 ml-1"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-sky-100 text-center">
-                <i data-lucide="compass" class="w-10 h-10 text-sky-600 mx-auto mb-2"></i>
-                <h3 class="font-bold text-slate-900 text-sm">Sugestões Locais</h3>
-                <p class="text-xs text-slate-500 mt-1">Gastronomia, desportos náuticos e património histórico à sua espera.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Localização Section com Google Maps -->
-    <section id="localizacao" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-200 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div>
-                <span class="text-sky-600 font-semibold text-sm uppercase tracking-wider">Localização Exata</span>
-                <h2 class="text-3xl font-bold text-slate-900 mt-1 mb-4">Buarcos, Figueira da Foz</h2>
-                <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                    Situados numa das zonas mais tradicionais e encantadoras da Figueira da Foz. A curta distância a pé da praia de Buarcos, de excelentes restaurantes de peixe fresco, pastelarias e comércio local.
-                </p>
-                <div class="space-y-3 text-sm text-slate-700">
-                    <div class="flex items-center gap-3"><i data-lucide="map-pin" class="w-5 h-5 text-sky-600"></i> <span>A 50 metros da frente marítima e praias</span></div>
-                    <div class="flex items-center gap-3"><i data-lucide="car" class="w-5 h-5 text-sky-600"></i> <span>Fácil estacionamento gratuito nas imediações</span></div>
-                    <div class="flex items-center gap-3"><i data-lucide="utensils" class="w-5 h-5 text-sky-600"></i> <span>Próximo de cafés, mercados e restaurantes</span></div>
-                </div>
-            </div>
-            <div class="h-80 rounded-2xl overflow-hidden relative border shadow-inner bg-slate-100">
-                <iframe class="w-full h-full border-0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.1121!2d-8.865!3d40.155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsKwMDknMD3InCBS!5e0!3m2!1spt-PT!2spt!4v1650000000000!5m2!1spt-PT!2spt" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-        </div>
-    </section>
-
-    <!-- Rodapé -->
-    <footer class="bg-slate-950 text-slate-400 py-12 mt-auto border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-slate-800 text-sm">
-                <div>
-                    <span class="text-white font-bold text-base block mb-2">Buarcos & Sea Accommodation</span>
-                    <p class="text-xs text-slate-500 leading-relaxed">
-                        Alojamento Local de excelência em Buarcos, Figueira da Foz. Conforto e tranquilidade para as suas férias em família.
-                    </p>
-                </div>
-                <div>
-                    <span class="text-white font-bold text-sm block mb-2">Links Úteis & Legal</span>
-                    <ul class="space-y-2 text-xs">
-                        <li><a href="https://www.livroreclamacoes.pt" target="_blank" class="hover:text-white transition-colors flex items-center gap-1.5 text-sky-400 font-semibold"><i data-lucide="book-open" class="w-3.5 h-3.5"></i> Livro de Reclamações Eletrónico</a></li>
-                        <li><a href="termos.html" class="hover:text-white transition-colors">Termos e Condições de Reserva</a></li>
-                        <li><a href="https://www.visitfigueiradafoz.com" target="_blank" class="hover:text-white transition-colors">Visit Figueira da Foz</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <span class="text-white font-bold text-sm block mb-2">Contactos</span>
-                    <ul class="space-y-2 text-xs">
-                        <li><a href="mailto:buarcossea@gmail.com" class="hover:text-white transition-colors flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-sky-500"></i> buarcossea@gmail.com</a></li>
-                        <li class="text-slate-500">Avenida do Brasil nº244 / Largo Grupo Caras Direitas, Figueira da Foz</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-4">
-                <span>© 2026 Buarcos&Sea. Todos os direitos reservados. AL: 161145/AL & 146454/AL.</span>
-                <span class="text-[11px]">Empresário em Nome Individual - Hélder Cortesão.</span>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts de Interação (Comodidades e Simulador Dinâmico) -->
-    <script>
-        lucide.createIcons();
-
-        const alojamentosDados = {
-            cristal_mar: {
-                nome: "Cristal Mar",
-                al: "161145/AL",
-                preco: "Desde 65€ / noite",
-                descricao: "Apartamento moderno com excelente exposição solar, vista privilegiada e a poucos passos da praia de Buarcos.",
-                fotos: [
-                    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
-                    "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80"
-                ],
-                comodidades: [
-                    "Wi-Fi Fibra Alta Velocidade",
-                    "Smart TV 4K com Streaming",
-                    "Vista Panorâmica de Mar",
-                    "Cozinha Totalmente Equipada",
-                    "Máquina de Café Expresso",
-                    "Roupa de Cama e Banho Incluída",
-                    "Secador de Cabelo",
-                    "Ferro de Engomar"
-                ]
-            },
-            tonay_sol: {
-                nome: "Tonay Sol",
-                al: "146454/AL",
-                preco: "Desde 60€ / noite",
-                descricao: "Espaço acolhedor e totalmente renovado, perfeito para famílias que procuram tranquilidade e proximidade ao mar.",
-                fotos: [
-                    "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80",
-                    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80"
-                ],
-                comodidades: [
-                    "Wi-Fi Grátis",
-                    "Smart TV",
-                    "Proximidade à Praia (50m)",
-                    "Cozinha Completa",
-                    "Máquina de Lavar Roupa",
-                    "Varanda Solarenga",
-                    "Artigos de Higiene Pessoal",
-                    "Estacionamento Gratuito Próximo"
-                ]
-            }
-        };
-
-        function abrirDetalhes(id) {
-            const apt = alojamentosDados[id];
-            const modal = document.getElementById('modal-detalhes');
-            const conteudo = document.getElementById('modal-conteudo');
-
-            let fotosHtml = apt.fotos.map(f => `<img src="${f}" class="w-full h-48 object-cover rounded-xl shadow-sm">`).join('');
-            let comodidadesHtml = apt.comodidades.map(c => `<li class="flex items-center gap-2 text-sm text-slate-700"><span class="w-2 h-2 rounded-full bg-sky-600"></span> ${c}</li>`).join('');
-
-            conteudo.innerHTML = `
-                <div class="flex justify-between items-start border-b pb-4">
-                    <div>
-                        <span class="text-xs font-mono bg-slate-100 px-2 py-0.5 rounded text-slate-600">Registo AL: ${apt.al}</span>
-                        <h3 class="text-2xl font-bold text-slate-900 mt-1">${apt.nome}</h3>
-                    </div>
-                    <span class="text-sky-600 font-bold text-lg">${apt.preco}</span>
-                </div>
-                <p class="text-slate-600 text-sm leading-relaxed">${apt.descricao}</p>
-                <div>
-                    <h4 class="font-bold text-slate-900 mb-3 text-sm uppercase tracking-wider">Galeria de Fotos</h4>
-                    <div class="grid grid-cols-2 gap-3">${fotosHtml}</div>
-                </div>
-                <div>
-                    <h4 class="font-bold text-slate-900 mb-3 text-sm uppercase tracking-wider">Comodidades do Alojamento</h4>
-                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2">${comodidadesHtml}</ul>
-                </div>
-                <div class="pt-4 border-t">
-                    <button type="button" onclick="fecharDetalhes(); selecionarApartamento('${id}');" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 rounded-xl transition-all text-sm flex items-center justify-center gap-2 shadow cursor-pointer">
-                        <i data-lucide="calendar" class="w-4 h-4"></i> Simular Reserva para este Apartamento
-                    </button>
-                </div>
-            `;
-
-            modal.classList.remove('hidden');
-            lucide.createIcons();
-        }
-
-        function fecharDetalhes() {
-            document.getElementById('modal-detalhes').classList.add('hidden');
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const hoje = new Date();
-            const amanha = new Date(hoje);
-            amanha.setDate(amanha.getDate() + 2);
-            
-            const checkinEl = document.getElementById('checkin');
-            const checkoutEl = document.getElementById('checkout');
-            
-            if (checkinEl && checkoutEl) {
-                checkinEl.valueAsDate = hoje;
-                checkoutEl.valueAsDate = amanha;
-            }
-        });
-
-        function selecionarApartamento(id) {
-            const select = document.getElementById('apt-select');
-            if (select) select.value = id;
-            const simulador = document.getElementById('simulador');
-            if (simulador) simulador.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        async function calcularReserva(e) {
-            e.preventDefault();
-            const apt = document.getElementById('apt-select').value;
-            const checkinVal = document.getElementById('checkin').value;
-            const checkoutVal = document.getElementById('checkout').value;
-            const hospedes = parseInt(document.getElementById('hospedes').value) || 1;
-
-            if (!checkinVal || !checkoutVal) {
-                alert('Por favor selecione as datas de check-in e check-out.');
-                return;
-            }
-
-            const checkin = new Date(checkinVal);
-            const checkout = new Date(checkoutVal);
-            const diffTime = checkout - checkin;
-            const noites = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-            if (noites <= 0) {
-                alert('A data de check-out tem de ser posterior ao check-in.');
-                return;
-            }
-
-            // Buscar mapa de preços dinâmicos da API
-            let mapaPrecos = {};
-            try {
-                const res = await fetch('/api/precos');
-                const json = await res.json();
-                if (json.success) mapaPrecos = json.data;
-            } catch(err) {}
-
-            const precoBaseDefault = apt === 'cristal_mar' ? 65 : 60;
-            let subtotalNoites = 0;
-            let temBloqueio = false;
-
-            let dt = new Date(checkin);
-            for (let i = 0; i < noites; i++) {
-                const dataStr = dt.toISOString().split('T')[0];
-                const dadosDia = mapaPrecos[apt] && mapaPrecos[apt][dataStr];
-
-                if (dadosDia && dadosDia.bloqueado) {
-                    temBloqueio = true;
-                    break;
-                }
-
-                const precoDia = (dadosDia && dadosDia.preco) ? dadosDia.preco : precoBaseDefault;
-                subtotalNoites += precoDia;
-                dt.setDate(dt.getDate() + 1);
-            }
-
-            if (temBloqueio) {
-                alert('Infelizmente algumas das datas selecionadas não estão disponíveis para reserva.');
-                return;
-            }
-
-            const desconto = subtotalNoites * 0.10;
-            const noitesComDesconto = subtotalNoites - desconto;
-            const taxaLimpeza = 35.00;
-
-            const noitesTaxa = Math.min(noites, 7);
-            const mesCheckin = checkin.getMonth();
-            const eEpocaAlta = (mesCheckin >= 5 && mesCheckin <= 8);
-            const valorTaxaPorNoite = eEpocaAlta ? 2.00 : 1.50;
-            const taxaTuristica = noitesTaxa * hospedes * valorTaxaPorNoite;
-
-            const totalFinal = noitesComDesconto + taxaLimpeza + taxaTuristica;
-
-            document.getElementById('label-noites').innerText = `Estadia (${noites} noites):`;
-            document.getElementById('valor-noites').innerText = `${subtotalNoites.toFixed(2)} €`;
-            document.getElementById('valor-desconto').innerText = `-${desconto.toFixed(2)} €`;
-            document.getElementById('valor-limpeza').innerText = `${taxaLimpeza.toFixed(2)} €`;
-            document.getElementById('label-taxa-turistica').innerText = `Taxa Turística F. Foz (${noitesTaxa} noites x ${hospedes} hósp. x ${valorTaxaPorNoite.toFixed(2)}€ - Isenta):`;
-            document.getElementById('valor-taxa-turistica').innerText = `${taxaTuristica.toFixed(2)} €`;
-            document.getElementById('valor-total').innerText = `${totalFinal.toFixed(2)} €`;
-
-            document.getElementById('resultado-simulacao').classList.remove('hidden');
-            document.getElementById('modal-ifthenpay').classList.add('hidden');
-            document.getElementById('resultado-simulacao').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function abrirPagamento() {
-            const modalPay = document.getElementById('modal-ifthenpay');
-            if (modalPay) {
-                modalPay.classList.remove('hidden');
-                modalPay.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        function gerarMBWay() {
-            const total = document.getElementById('valor-total').innerText;
-            const container = document.getElementById('detalhes-pagamento');
-            container.classList.remove('hidden');
-            container.innerHTML = `
-                <div class="font-bold text-slate-800">Pagamento por MB WAY</div>
-                <p class="text-xs text-slate-600">Introduza o seu telemóvel para receber o pedido no valor de <strong>${total}</strong>.</p>
-                <div class="mt-3 flex gap-2">
-                    <input type="tel" placeholder="9xxxxxxxx" class="border p-2 rounded text-sm flex-1">
-                    <button type="button" onclick="alert('Notificação MB WAY enviada com sucesso! (Modo Simulação)')" class="bg-red-600 text-white text-xs px-4 py-2 rounded font-bold cursor-pointer">Enviar Pedido</button>
-                </div>
-            `;
-        }
-
-        function gerarMultibanco() {
-            const total = document.getElementById('valor-total').innerText;
-            const container = document.getElementById('detalhes-pagamento');
-            container.classList.remove('hidden');
-            container.innerHTML = `
-                <div class="font-bold text-slate-800 mb-2">Dados de Pagamento Multibanco</div>
-                <div class="space-y-1 font-mono text-xs bg-white p-3 rounded border">
-                    <div class="flex justify-between"><span>Entidade:</span> <strong>11683</strong></div>
-                    <div class="flex justify-between"><span>Referência:</span> <strong>987 654 321</strong></div>
-                    <div class="flex justify-between"><span>Valor:</span> <strong>${total}</strong></div>
-                </div>
-                <p class="text-xs text-slate-500 mt-2">Disponível em qualquer Multibanco ou Homebanking.</p>
-            `;
-        }
-    </script>
-</body>
-</html>
