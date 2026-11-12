@@ -615,6 +615,9 @@
             let percentagemDescontoExtra = 10; 
             let temBloqueio = false;
 
+            let taxaTuristicaTotal = 0;
+            const noitesTaxaLimite = Math.min(noites, 7);
+
             let dt = new Date(checkin);
             for (let i = 0; i < noites; i++) {
                 const dataStr = dt.toISOString().split('T')[0];
@@ -631,6 +634,13 @@
                 if (dadosDia && dadosDia.pet) taxaPetDiaria = dadosDia.pet;
                 if (dadosDia && dadosDia.descontoExtra) percentagemDescontoExtra = dadosDia.descontoExtra;
 
+                if (i < noitesTaxaLimite) {
+                    const mes = dt.getMonth();
+                    const eEpocaAlta = (mes >= 5 && mes <= 8);
+                    const valorNoiteTaxa = eEpocaAlta ? 2.00 : 1.50;
+                    taxaTuristicaTotal += valorNoiteTaxa * adultos;
+                }
+
                 dt.setDate(dt.getDate() + 1);
             }
 
@@ -645,13 +655,7 @@
             
             const totalTaxaPet = temPet ? (taxaPetDiaria > 0 ? taxaPetDiaria * noites : 10 * noites) : 0;
 
-            const noitesTaxa = Math.min(noites, 7);
-            const mesCheckin = checkin.getMonth();
-            const eEpocaAlta = (mesCheckin >= 5 && mesCheckin <= 8);
-            const valorTaxaPorNoite = eEpocaAlta ? 2.00 : 1.50;
-            const taxaTuristica = noitesTaxa * adultos * valorTaxaPorNoite;
-
-            const totalFinal = noitesComDesconto + taxaLimpezaFinal + totalTaxaPet + taxaTuristica;
+            const totalFinal = noitesComDesconto + taxaLimpezaFinal + totalTaxaPet + taxaTuristicaTotal;
 
             document.getElementById('label-noites').innerText = `Estadia (${noites} noites):`;
             document.getElementById('valor-noites').innerText = `${subtotalNoites.toFixed(2)} €`;
@@ -669,8 +673,8 @@
                 linhaPet.classList.add('hidden');
             }
 
-            document.getElementById('label-taxa-turistica').innerText = `Taxa Turística F. Foz (${noitesTaxa} noites x ${adultos} adultos):`;
-            document.getElementById('valor-taxa-turistica').innerText = `${taxaTuristica.toFixed(2)} €`;
+            document.getElementById('label-taxa-turistica').innerText = `Taxa Turística F. Foz (${noitesTaxaLimite} noites x ${adultos} adultos):`;
+            document.getElementById('valor-taxa-turistica').innerText = `${taxaTuristicaTotal.toFixed(2)} €`;
             
             document.getElementById('valor-total').innerText = `${totalFinal.toFixed(2)} €`;
 
