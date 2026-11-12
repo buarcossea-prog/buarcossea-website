@@ -25,8 +25,15 @@ export default async function handler(req, res) {
     }
   }
 
-  // POST: Atualizar dados (Acesso livre para teste e configuração)
+  // POST: Protegido pelo PIN 'buarcos2026'
   if (req.method === 'POST') {
+    const authHeader = req.headers.authorization || '';
+    const tokenInformado = authHeader.replace('Bearer ', '').trim();
+
+    if (tokenInformado !== 'buarcos2026') {
+      return res.status(401).json({ success: false, error: 'Palavra-passe incorreta.' });
+    }
+
     try {
       const body = req.body || {};
 
