@@ -9,25 +9,8 @@
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans antialiased min-h-screen flex flex-col items-center justify-center p-4">
 
-    <!-- Caixa de Login / PIN -->
-    <div id="login-box" class="bg-slate-800 border border-slate-700 rounded-3xl p-8 max-w-md w-full shadow-2xl text-center">
-        <div class="bg-sky-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-            <i data-lucide="lock" class="w-6 h-6"></i>
-        </div>
-        <h2 class="text-2xl font-bold text-white mb-2">Painel Restrito</h2>
-        <p class="text-slate-400 text-sm mb-6">Introduz a palavra-passe de acesso para gerir tarifas e disponibilidade.</p>
-        
-        <form onsubmit="verificarPassword(event)" class="space-y-4">
-            <input type="password" id="input-password" placeholder="Palavra-passe..." required class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 text-center tracking-widest focus:outline-none focus:border-sky-500 text-sm">
-            <button type="submit" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 rounded-xl transition-all shadow cursor-pointer text-sm flex items-center justify-center gap-2">
-                <i data-lucide="key-round" class="w-4 h-4"></i> Entrar no Painel
-            </button>
-        </form>
-        <p id="erro-msg" class="text-red-400 text-xs mt-3 hidden">Palavra-passe incorreta. Tenta novamente.</p>
-    </div>
-
-    <!-- Conteúdo do Painel com Calendário e Configurações Globais -->
-    <div id="painel-conteudo" class="hidden w-full max-w-4xl mx-auto py-10 space-y-8">
+    <!-- Conteúdo do Painel ABERTO Diretamente (Sem Login) -->
+    <div id="painel-conteudo" class="w-full max-w-4xl mx-auto py-10 space-y-8">
         
         <header class="bg-slate-950 border border-slate-800 text-white shadow-md rounded-2xl px-6 py-4 flex items-center justify-between">
             <div class="flex items-center space-x-3">
@@ -44,9 +27,6 @@
                 <a href="index.html" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-4 py-2 rounded-xl border border-slate-700 flex items-center gap-2">
                     <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Ver Site
                 </a>
-                <button onclick="logout()" class="bg-red-950/60 hover:bg-red-900/60 text-red-300 text-xs font-semibold px-4 py-2 rounded-xl border border-red-800/50 flex items-center gap-2 cursor-pointer">
-                    <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Sair
-                </button>
             </div>
         </header>
 
@@ -125,5 +105,119 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Cristal Mar - Limpeza (€)</label>
-                        <input type="number" id="limpeza-cristal" min="0" value="35" required class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-sky-500
-                            
+                        <input type="number" id="limpeza-cristal" min="0" value="35" required class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-sky-500 font-bold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Tonay Sol - Limpeza (€)</label>
+                        <input type="number" id="limpeza-tonay" min="0" value="35" required class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-sky-500 font-bold">
+                    </div>
+                </div>
+                <div class="pt-2 flex items-center justify-between">
+                    <span id="msg-status-limpeza" class="text-xs font-medium hidden"></span>
+                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl transition-all shadow text-sm flex items-center gap-2 cursor-pointer ml-auto">
+                        <i data-lucide="check" class="w-4 h-4"></i> Atualizar Taxas de Limpeza
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        async function salvarIntervalo(e) {
+            e.preventDefault();
+            const apt = document.getElementById('select-apt').value;
+            const dInicio = new Date(document.getElementById('data-inicio').value);
+            const dFim = new Date(document.getElementById('data-fim').value);
+            const preco = document.getElementById('valor-diaria').value;
+            const pet = document.getElementById('valor-pet').value;
+            const descontoExtra = document.getElementById('valor-desconto-extra').value;
+            const bloqueado = document.getElementById('check-bloqueado').checked;
+            const nota = document.getElementById('nota-epoca').value;
+            const status = document.getElementById('msg-status');
+
+            if (dFim < dInicio) {
+                alert("A data final deve ser igual ou posterior à data inicial.");
+                return;
+            }
+
+            let datas = [];
+            let dt = new Date(dInicio);
+            while (dt <= dFim) {
+                datas.push(dt.toISOString().split('T')[0]);
+                dt.setDate(dt.getDate() + 1);
+            }
+
+            status.className = "text-xs font-medium text-sky-400";
+            status.innerText = "A guardar dados...";
+            status.classList.remove('hidden');
+
+            try {
+                const res = await fetch('/api/precos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        acao: 'salvar_datas',
+                        alojamento: apt, 
+                        datas, 
+                        preco, 
+                        pet: pet ? Number(pet) : 0,
+                        descontoExtra: descontoExtra ? Number(descontoExtra) : 0,
+                        bloqueado,
+                        nota
+                    })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    status.className = "text-xs font-medium text-emerald-400 flex items-center gap-1";
+                    status.innerText = "✓ Configurações de datas guardadas com sucesso!";
+                } else {
+                    status.className = "text-xs font-medium text-red-400";
+                    status.innerText = "Erro ao guardar.";
+                }
+            } catch (err) {
+                status.className = "text-xs font-medium text-red-400";
+                status.innerText = "Erro de ligação ao servidor.";
+            }
+        }
+
+        async function salvarLimpezaGlobal(e) {
+            e.preventDefault();
+            const limpezaCristal = document.getElementById('limpeza-cristal').value;
+            const limpezaTonay = document.getElementById('limpeza-tonay').value;
+            const status = document.getElementById('msg-status-limpeza');
+
+            status.className = "text-xs font-medium text-sky-400";
+            status.innerText = "A atualizar taxas de limpeza...";
+            status.classList.remove('hidden');
+
+            try {
+                const res = await fetch('/api/precos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        acao: 'salvar_limpeza',
+                        limpezaCristal: Number(limpezaCristal),
+                        limpezaTonay: Number(limpezaTonay)
+                    })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    status.className = "text-xs font-medium text-emerald-400 flex items-center gap-1";
+                    status.innerText = "✓ Taxas de limpeza atualizadas com sucesso!";
+                } else {
+                    status.className = "text-xs font-medium text-red-400";
+                    status.innerText = "Erro ao atualizar.";
+                }
+            } catch (err) {
+                status.className = "text-xs font-medium text-red-400";
+                status.innerText = "Erro de ligação ao servidor.";
+            }
+        }
+    </script>
+</body>
+</html>
