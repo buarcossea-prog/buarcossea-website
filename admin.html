@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendário & Tarifas - Buarcos & Sea</title>
+    <title>Gestão Avançada - Buarcos & Sea</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -26,17 +26,17 @@
         <p id="erro-msg" class="text-red-400 text-xs mt-3 hidden">Palavra-passe incorreta. Tenta novamente.</p>
     </div>
 
-    <!-- Conteúdo do Painel com Calendário -->
-    <div id="painel-conteudo" class="hidden w-full max-w-5xl mx-auto py-10 space-y-8">
+    <!-- Conteúdo do Painel com Calendário e Gestão Completa -->
+    <div id="painel-conteudo" class="hidden w-full max-w-4xl mx-auto py-10 space-y-8">
         
         <header class="bg-slate-950 border border-slate-800 text-white shadow-md rounded-2xl px-6 py-4 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="bg-sky-600 text-white p-2.5 rounded-xl">
-                    <i data-lucide="calendar-range" class="w-6 h-6"></i>
+                    <i data-lucide="sliders" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <span class="text-lg font-bold tracking-tight block leading-tight">Gestão Dinâmica de Tarifas e Datas</span>
-                    <span class="text-xs text-sky-400 font-medium tracking-wide uppercase">Buarcos & Sea • Painel de Controlo</span>
+                    <span class="text-lg font-bold tracking-tight block leading-tight">Painel de Controlo & Preços Dinâmicos</span>
+                    <span class="text-xs text-sky-400 font-medium tracking-wide uppercase">Buarcos & Sea • Gestão de Alojamento</span>
                 </div>
             </div>
             
@@ -50,19 +50,20 @@
             </div>
         </header>
 
-        <!-- Formulário de Atualização por Período -->
+        <!-- Formulário de Gestão por Período -->
         <div class="bg-slate-800 border border-slate-700 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
             <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <i data-lucide="edit-3" class="w-5 h-5 text-sky-400"></i> Alterar Preço por Intervalo de Datas
+                <i data-lucide="calendar-range" class="w-5 h-5 text-sky-400"></i> Configurar Intervalo de Datas
             </h3>
 
             <form onsubmit="salvarIntervalo(event)" class="space-y-6">
+                <!-- Alojamento e Datas -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Alojamento</label>
                         <select id="select-apt" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-sky-500">
-                            <option value="cristal_mar">Cristal Mar (44002/AL)</option>
-                            <option value="tonay_sol">Tonay Sol (44004/AL)</option>
+                            <option value="cristal_mar">Cristal Mar (161145/AL)</option>
+                            <option value="tonay_sol">Tonay Sol (146454/AL)</option>
                         </select>
                     </div>
 
@@ -77,27 +78,60 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <!-- Tarifas, Taxas e Descontos Específicos -->
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 pt-2 border-t border-slate-700/60">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Novo Preço / Noite (€)</label>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Preço Noite (€)</label>
                         <input type="number" id="valor-diaria" min="0" placeholder="Ex: 85" required class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-sky-500 font-bold">
                     </div>
 
-                    <div class="flex items-end pb-3">
-                        <label class="inline-flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" id="check-bloqueado" class="w-5 h-5 accent-red-600 rounded">
-                            <span class="text-sm font-semibold text-slate-300">Bloquear estas datas para reserva</span>
-                        </label>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Taxa Limpeza (€)</label>
+                        <input type="number" id="valor-limpeza" min="0" placeholder="Padrão: 35" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-sky-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Taxa Pet / Noite (€)</label>
+                        <input type="number" id="valor-pet" min="0" placeholder="Ex: 10" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-sky-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Desconto Extra (%)</label>
+                        <input type="number" id="valor-desconto-extra" min="0" max="100" placeholder="Ex: 15" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-sky-500 text-emerald-400 font-bold">
+                    </div>
+                </div>
+
+                <!-- Opções Adicionais e Estado -->
+                <div class="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-slate-700/60">
+                    <label class="inline-flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="check-bloqueado" class="w-5 h-5 accent-red-600 rounded">
+                        <span class="text-sm font-semibold text-red-400">Bloquear datas no calendário (Indisponível)</span>
+                    </label>
+
+                    <div class="flex-1 max-w-xs">
+                        <input type="text" id="nota-epoca" placeholder="Nota interna (Ex: Época Alta / Carnaval)" class="w-full bg-slate-900 border border-slate-700 text-slate-300 rounded-xl px-4 py-2 text-xs focus:outline-none focus:border-sky-500">
                     </div>
                 </div>
 
                 <div class="pt-4 border-t border-slate-700 flex items-center justify-between">
                     <span id="msg-status" class="text-xs font-medium hidden"></span>
                     <button type="submit" class="bg-sky-600 hover:bg-sky-500 text-white font-bold px-6 py-3 rounded-xl transition-all shadow text-sm flex items-center gap-2 cursor-pointer ml-auto">
-                        <i data-lucide="save" class="w-4 h-4"></i> Aplicar Tarifas ao Calendário
+                        <i data-lucide="save" class="w-4 h-4"></i> Guardar Configuração no Sistema
                     </button>
                 </div>
             </form>
+        </div>
+
+        <!-- Sugestões de Melhorias Futuras integradas no painel -->
+        <div class="bg-slate-800/60 border border-slate-700/80 rounded-3xl p-6 text-xs text-slate-400 space-y-2">
+            <h4 class="font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                <i data-lucide="lightbulb" class="w-4 h-4 text-amber-400"></i> Sugestões úteis para otimizar o seu Alojamento
+            </h4>
+            <ul class="list-disc pl-5 space-y-1">
+                <li><strong>Estadias Mínimas:</strong> Podemos adicionar um campo opcional para definir que em julho/agosto a estadia mínima seja de 5 ou 7 noites.</li>
+                <li><strong>Promoção de Última Hora:</strong> Aplicar automaticamente um desconto de última hora caso a data esteja a menos de 5 dias e desocupada.</li>
+                <li>Se quiser ativar alguma destas sugestões no seu simulador, basta pedir!</li>
+            </ul>
         </div>
 
     </div>
@@ -130,7 +164,11 @@
             const dInicio = new Date(document.getElementById('data-inicio').value);
             const dFim = new Date(document.getElementById('data-fim').value);
             const preco = document.getElementById('valor-diaria').value;
+            const limpeza = document.getElementById('valor-limpeza').value;
+            const pet = document.getElementById('valor-pet').value;
+            const descontoExtra = document.getElementById('valor-desconto-extra').value;
             const bloqueado = document.getElementById('check-bloqueado').checked;
+            const nota = document.getElementById('nota-epoca').value;
             const status = document.getElementById('msg-status');
 
             if (dFim < dInicio) {
@@ -138,7 +176,6 @@
                 return;
             }
 
-            // Gerar lista de datas
             let datas = [];
             let dt = new Date(dInicio);
             while (dt <= dFim) {
@@ -147,7 +184,7 @@
             }
 
             status.className = "text-xs font-medium text-sky-400";
-            status.innerText = "A a gravar alterações...";
+            status.innerText = "A guardar dados na base de dados...";
             status.classList.remove('hidden');
 
             try {
@@ -157,20 +194,29 @@
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${currentPin}`
                     },
-                    body: JSON.stringify({ alojamento: apt, datas, preco, bloqueado })
+                    body: JSON.stringify({ 
+                        alojamento: apt, 
+                        datas, 
+                        preco, 
+                        limpeza: limpeza ? Number(limpeza) : null,
+                        pet: pet ? Number(pet) : 0,
+                        descontoExtra: descontoExtra ? Number(descontoExtra) : 0,
+                        bloqueado,
+                        nota
+                    })
                 });
 
                 const data = await res.json();
                 if (data.success) {
                     status.className = "text-xs font-medium text-emerald-400 flex items-center gap-1";
-                    status.innerText = "✓ Preços e disponibilidades guardados com sucesso!";
+                    status.innerText = "✓ Configurações aplicadas com sucesso para o período selecionado!";
                 } else {
                     status.className = "text-xs font-medium text-red-400";
                     status.innerText = "Erro: " + (data.error || "Palavra-passe incorreta.");
                 }
             } catch (err) {
                 status.className = "text-xs font-medium text-red-400";
-                status.innerText = "Erro ao ligar ao servidor.";
+                status.innerText = "Erro de ligação ao servidor.";
             }
         }
     </script>
