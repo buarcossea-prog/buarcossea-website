@@ -4,48 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Administração - Buarcos & Sea</title>
+    <!-- Tailwind CSS Play CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            800: '#23425c',
+                            900: '#193247',
+                            950: '#102231',
+                        },
+                        sea: {
+                            100: '#e6f0ef',
+                            200: '#cce0de',
+                            500: '#7ca39f',
+                            600: '#648c88',
+                        },
+                        sand: {
+                            50: '#faf9f6',
+                            100: '#f3f1eb',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen p-6">
-    <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-md p-8">
-        <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
-            <h1 class="text-2xl font-bold text-slate-900">Painel de Controlo & Configurações</h1>
-            <a href="index.html" class="text-xs bg-slate-200 hover:bg-slate-300 px-4 py-2 rounded-lg font-semibold transition-colors">Voltar ao Site</a>
+<body class="bg-sand-50 text-navy-900 font-sans antialiased min-h-screen p-6">
+    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-sm border border-sea-200/70 p-8">
+        <div class="flex justify-between items-center mb-8 pb-4 border-b border-sea-100">
+            <div>
+                <span class="text-sea-600 font-semibold text-xs uppercase tracking-widest">Painel de Controlo</span>
+                <h1 class="text-2xl font-bold text-navy-900 mt-1">Configurações e Taxas Globais</h1>
+            </div>
+            <a href="index.html" class="bg-sand-100 hover:bg-sea-100 text-navy-900 text-xs font-semibold px-4 py-2.5 rounded-xl transition-colors border border-sea-200/60 flex items-center gap-2">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao Site
+            </a>
         </div>
 
         <form id="admin-form" onsubmit="guardarConfiguracoes(event)" class="space-y-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <!-- Taxas Globais por Estadia -->
-                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                    <h3 class="font-bold text-slate-900 mb-4 text-sm uppercase tracking-wider">Taxa de Limpeza por Estadia</h3>
-                    <div class="space-y-3">
+                <!-- Taxas de Limpeza por Estadia -->
+                <div class="bg-sand-50 p-6 rounded-2xl border border-sea-200/60">
+                    <h3 class="font-bold text-navy-900 mb-4 text-sm flex items-center gap-2">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-sea-600"></i> Taxa de Limpeza por Estadia
+                    </h3>
+                    <div class="space-y-4">
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Cristal Mar (€)</label>
-                            <input type="number" id="limpeza-cristal" step="0.5" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white" required>
+                            <label class="block text-xs font-semibold text-navy-800 mb-1">Cristal Mar (€)</label>
+                            <input type="number" id="limpeza-cristal" step="0.5" class="w-full bg-white border border-sea-200 rounded-xl p-3 text-sm focus:outline-none focus:border-sea-500" required>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Tonay Sol (€)</label>
-                            <input type="number" id="limpeza-tonay" step="0.5" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white" required>
+                            <label class="block text-xs font-semibold text-navy-800 mb-1">Tonay Sol (€)</label>
+                            <input type="number" id="limpeza-tonay" step="0.5" class="w-full bg-white border border-sea-200 rounded-xl p-3 text-sm focus:outline-none focus:border-sea-500" required>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
-                    <h3 class="font-bold text-slate-900 mb-4 text-sm uppercase tracking-wider">Taxa de Animais (Pet) por Estadia</h3>
-                    <div class="space-y-3">
+                <!-- Taxa de Animais de Estimação (Pet) por Estadia -->
+                <div class="bg-sand-50 p-6 rounded-2xl border border-sea-200/60">
+                    <h3 class="font-bold text-navy-900 mb-4 text-sm flex items-center gap-2">
+                        <i data-lucide="dog" class="w-4 h-4 text-sea-600"></i> Taxa de Animais (Pet)
+                    </h3>
+                    <div class="space-y-4">
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Valor por Animal / Estadia (€)</label>
-                            <input type="number" id="pet-estadia" step="0.5" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white" required>
-                            <p class="text-[11px] text-slate-500 mt-1">Aplicado por cada animal de estimação durante toda a estadia.</p>
+                            <label class="block text-xs font-semibold text-navy-800 mb-1">Valor por Animal / Estadia (€)</label>
+                            <input type="number" id="pet-estadia" step="0.5" class="w-full bg-white border border-sea-200 rounded-xl p-3 text-sm focus:outline-none focus:border-sea-500" required>
+                            <p class="text-[11px] text-navy-800/70 mt-1.5 leading-relaxed">Aplicado uma única vez por estadia e multiplicado automaticamente pelo número de animais selecionados no simulador.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="pt-4 flex justify-end">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl transition-all shadow text-sm cursor-pointer">
-                    Guardar Configurações
+            <div class="pt-4 border-t border-sea-100 flex justify-end">
+                <button type="submit" class="bg-navy-900 hover:bg-navy-800 text-white font-bold px-8 py-3.5 rounded-xl transition-all shadow-lg text-sm flex items-center gap-2 cursor-pointer">
+                    <i data-lucide="save" class="w-4 h-4 text-sea-500"></i> Guardar Configurações
                 </button>
             </div>
         </form>
@@ -66,10 +103,11 @@
                     if (json.petGlobal !== undefined) {
                         document.getElementById('pet-estadia').value = json.petGlobal;
                     } else {
-                        document.getElementById('pet-estadia').value = 15; // Valor predefinido
+                        document.getElementById('pet-estadia').value = 15; // Valor predefinido padrão
                     }
                 }
             } catch(err) {
+                // Valores de fallback caso a API demore ou offline
                 document.getElementById('limpeza-cristal').value = 35;
                 document.getElementById('limpeza-tonay').value = 35;
                 document.getElementById('pet-estadia').value = 15;
