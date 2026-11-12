@@ -1,78 +1,62 @@
-async function calcularReserva(e) {
-    e.preventDefault();
-    const apt = document.getElementById('apt-select').value;
-    const checkinVal = document.getElementById('checkin').value;
-    const checkoutVal = document.getElementById('checkout').value;
-    const hospedes = parseInt(document.getElementById('hospedes').value) || 1;
-
-    if (!checkinVal || !checkoutVal) {
-        alert('Por favor selecione as datas de check-in e check-out.');
-        return;
-    }
-
-    const checkin = new Date(checkinVal);
-    const checkout = new Date(checkoutVal);
-    const diffTime = checkout - checkin;
-    const noites = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    if (noites <= 0) {
-        alert('A data de check-out tem de ser posterior ao check-in.');
-        return;
-    }
-
-    // Buscar mapa de preços da API
-    let mapaPrecos = {};
-    try {
-        const res = await fetch('/api/precos');
-        const json = await res.json();
-        if (json.success) mapaPrecos = json.data;
-    } catch(err) {}
-
-    const precoBaseDefault = apt === 'cristal_mar' ? 65 : 60;
-    let subtotalNoites = 0;
-    let temBloqueio = false;
-
-    let dt = new Date(checkin);
-    for (let i = 0; i < noites; i++) {
-        const dataStr = dt.toISOString().split('T')[0];
-        const dadosDia = mapaPrecos[apt] && mapaPrecos[apt][dataStr];
-
-        if (dadosDia && dadosDia.bloqueado) {
-            temBloqueio = true;
-            break;
+<!DOCTYPE html>
+<html lang="pt" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buarcos & Sea Accommodation - Alojamento Local em Buarcos, Figueira da Foz</title>
+    <!-- Tailwind CSS Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        sand: '#fdfbf7'
+                    }
+                }
+            }
         }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
 
-        const precoDia = (dadosDia && dadosDia.preco) ? dadosDia.preco : precoBaseDefault;
-        subtotalNoites += precoDia;
-        dt.setDate(dt.getDate() + 1);
-    }
+    <!-- Header / Navbar com Logótipo Real -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <a href="index.html" class="flex items-center gap-3">
+                    <img src="logo.png" alt="Buarcos & Sea" class="h-12 w-auto object-contain">
+                </a>
+            </div>
+            
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-600">
+                <a href="#alojamentos" class="hover:text-sky-600 transition-colors">Alojamentos</a>
+                <a href="#simulador" class="hover:text-sky-600 transition-colors">Simulador & Reservas</a>
+                <a href="#explorar" class="hover:text-sky-600 transition-colors">Explorar Região</a>
+                <a href="#localizacao" class="hover:text-sky-600 transition-colors">Localização</a>
+            </nav>
 
-    if (temBloqueio) {
-        alert('Infelizmente algumas das datas selecionadas não estão disponíveis para reserva.');
-        return;
-    }
+            <div class="flex items-center gap-3">
+                <a href="#simulador" class="bg-sky-600 hover:bg-sky-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all shadow-sm flex items-center gap-2 cursor-pointer">
+                    <i data-lucide="calendar" class="w-4 h-4"></i> Reservar Já
+                </a>
+            </div>
+        </div>
+    </header>
 
-    const desconto = subtotalNoites * 0.10;
-    const noitesComDesconto = subtotalNoites - desconto;
-    const taxaLimpeza = 35.00;
-
-    const noitesTaxa = Math.min(noites, 7);
-    const mesCheckin = checkin.getMonth();
-    const eEpocaAlta = (mesCheckin >= 5 && mesCheckin <= 8);
-    const valorTaxaPorNoite = eEpocaAlta ? 2.00 : 1.50;
-    const taxaTuristica = noitesTaxa * hospedes * valorTaxaPorNoite;
-
-    const totalFinal = noitesComDesconto + taxaLimpeza + taxaTuristica;
-
-    document.getElementById('label-noites').innerText = `Estadia (${noites} noites):`;
-    document.getElementById('valor-noites').innerText = `${subtotalNoites.toFixed(2)} €`;
-    document.getElementById('valor-desconto').innerText = `-${desconto.toFixed(2)} €`;
-    document.getElementById('valor-limpeza').innerText = `${taxaLimpeza.toFixed(2)} €`;
-    document.getElementById('label-taxa-turistica').innerText = `Taxa Turística F. Foz (${noitesTaxa} noites x ${hospedes} hósp. x ${valorTaxaPorNoite.toFixed(2)}€ - Isenta):`;
-    document.getElementById('valor-taxa-turistica').innerText = `${taxaTuristica.toFixed(2)} €`;
-    document.getElementById('valor-total').innerText = `${totalFinal.toFixed(2)} €`;
-
-    document.getElementById('resultado-simulacao').classList.remove('hidden');
-    document.getElementById('modal-ifthenpay').classList.add('hidden');
-    document.getElementById('resultado-simulacao').scrollIntoView({ behavior: 'smooth' });
-}
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-b from-sky-50 to-slate-50 py-16 lg:py-24 overflow-hidden border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800 mb-4">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Melhores tarifas garantidas sem
