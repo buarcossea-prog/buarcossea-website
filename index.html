@@ -437,6 +437,8 @@
     <!-- Flatpickr (Biblioteca de Calendário) JS -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/en.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
 
     <!-- Dicionário de Traduções (PT / EN / FR) -->
     <script>
@@ -510,7 +512,11 @@
                 foot_livro: "Livro de Reclamações Eletrónico",
                 foot_termos: "Termos e Condições de Reserva",
                 foot_contactos: "Contactos",
-                foot_copy: "© 2026 Buarcos & Sea. Todos os direitos reservados. AL: 161145/AL & 146454/AL."
+                foot_copy: "© 2026 Buarcos & Sea. Todos os direitos reservados. AL: 161145/AL & 146454/AL.",
+                // Textos específicos para a janela de detalhes dos apartamentos
+                galeria_fotos: "Galeria de Fotos",
+                comodidades_apt: "Comodidades do Alojamento",
+                btn_simular_modal: "Simular Reserva para este Apartamento"
             },
             en: {
                 meta_title: "Buarcos & Sea - Vacation Rentals in Figueira da Foz",
@@ -530,7 +536,7 @@
                 sec_aloj_sub: "Explore amenities and photos of each apartment before simulating your stay",
                 cristal_preco: "From 65€ / night",
                 cristal_desc: "Modern apartment with excellent sun exposure, privileged views, and just steps from Buarcos beach.",
-                tonay_sol_preco: "From 60€ / night",
+                tonay_preco: "From 60€ / night",
                 tonay_desc: "Cozy and fully renovated space, perfect for families seeking tranquility and proximity to the sea.",
                 com_hospedes: "Up to 4 Guests",
                 com_cozinha: "Equipped Kitchen",
@@ -581,7 +587,10 @@
                 foot_livro: "Electronic Complaints Book",
                 foot_termos: "Booking Terms & Conditions",
                 foot_contactos: "Contacts",
-                foot_copy: "© 2026 Buarcos & Sea. All rights reserved. AL: 161145/AL & 146454/AL."
+                foot_copy: "© 2026 Buarcos & Sea. All rights reserved. AL: 161145/AL & 146454/AL.",
+                galeria_fotos: "Photo Gallery",
+                comodidades_apt: "Apartment Amenities",
+                btn_simular_modal: "Simulate Booking for this Apartment"
             },
             fr: {
                 meta_title: "Buarcos & Sea - Location de Vacances à Figueira da Foz",
@@ -601,7 +610,7 @@
                 sec_aloj_sub: "Découvrez les équipements et photos de chaque appartement avant de simuler votre séjour",
                 cristal_preco: "À partir de 65€ / nuit",
                 cristal_desc: "Appartement moderne avec excellente exposition au soleil, vue privilégiée et à quelques pas de la plage de Buarcos.",
-                tonay_sol_preco: "À partir de 60€ / nuit",
+                tonay_preco: "À partir de 60€ / nuit",
                 tonay_desc: "Espace chaleureux et entièrement rénové, idéal pour les familles cherchant tranquillité et proximité de la mer.",
                 com_hospedes: "Jusqu'à 4 Voyageurs",
                 com_cozinha: "Cuisine Équipée",
@@ -652,7 +661,10 @@
                 foot_livro: "Livre de Réclamations Électronique",
                 foot_termos: "Termes et Conditions de Réservation",
                 foot_contactos: "Contacts",
-                foot_copy: "© 2026 Buarcos & Sea. Tous droits réservés. AL: 161145/AL & 146454/AL."
+                foot_copy: "© 2026 Buarcos & Sea. Tous droits réservés. AL: 161145/AL & 146454/AL.",
+                galeria_fotos: "Galerie Photos",
+                comodidades_apt: "Équipements de l'Appartement",
+                btn_simular_modal: "Simuler la réservation pour cet appartement"
             }
         };
 
@@ -665,6 +677,11 @@
                 }
             });
             localStorage.setItem('buarcos_lang', lang);
+            
+            // Atualizar o calendário para o novo idioma
+            if (typeof inicializarCalendario === 'function') {
+                inicializarCalendario();
+            }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -672,7 +689,6 @@
             const seletor = document.getElementById('seletor-idioma');
             if (seletor) seletor.value = idiomaSalvo;
             mudarIdioma(idiomaSalvo);
-            inicializarCalendario();
         });
     </script>
 
@@ -692,7 +708,7 @@
                 nome: "Cristal Mar",
                 al: "161145/AL",
                 preco: "Desde 65€ / noite",
-                descricao: "Apartamento moderno com excelente exposição solar, vista privilegiada e a poucos passos da praia de Buarcos.",
+                descricao_key: "cristal_desc",
                 fotos: [
                     "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
                     "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80"
@@ -712,7 +728,7 @@
                 nome: "Tonay Sol",
                 al: "146454/AL",
                 preco: "Desde 60€ / noite",
-                descricao: "Espaço acolhedor e totalmente renovado, perfeito para famílias que procuram tranquilidade e proximidade ao mar.",
+                descricao_key: "tonay_desc",
                 fotos: [
                     "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80",
                     "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80"
@@ -734,7 +750,10 @@
             const apt = alojamentosDados[id];
             const modal = document.getElementById('modal-detalhes');
             const conteudo = document.getElementById('modal-conteudo');
+            const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
+            const t = traducoes[langAtual];
 
+            const descTexto = t[apt.descricao_key] || apt.descricao_key;
             let fotosHtml = apt.fotos.map(f => `<img src="${f}" class="w-full h-48 object-cover rounded-xl shadow-sm">`).join('');
             let comodidadesHtml = apt.comodidades.map(c => `<li class="flex items-center gap-2 text-sm text-navy-900"><span class="w-2 h-2 rounded-full bg-sea-600"></span> ${c}</li>`).join('');
 
@@ -746,18 +765,18 @@
                     </div>
                     <span class="text-sea-600 font-bold text-lg">${apt.preco}</span>
                 </div>
-                <p class="text-navy-800/80 text-sm leading-relaxed">${apt.descricao}</p>
+                <p class="text-navy-800/80 text-sm leading-relaxed">${descTexto}</p>
                 <div>
-                    <h4 class="font-bold text-navy-900 mb-3 text-xs uppercase tracking-wider">Galeria de Fotos</h4>
+                    <h4 class="font-bold text-navy-900 mb-3 text-xs uppercase tracking-wider">${t.galeria_fotos}</h4>
                     <div class="grid grid-cols-2 gap-3">${fotosHtml}</div>
                 </div>
                 <div>
-                    <h4 class="font-bold text-navy-900 mb-3 text-xs uppercase tracking-wider">Comodidades do Alojamento</h4>
+                    <h4 class="font-bold text-navy-900 mb-3 text-xs uppercase tracking-wider">${t.comodidades_apt}</h4>
                     <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2">${comodidadesHtml}</ul>
                 </div>
                 <div class="pt-4 border-t border-sea-100">
                     <button type="button" onclick="fecharDetalhes(); selecionarApartamento('${id}');" class="w-full bg-navy-900 hover:bg-navy-800 text-white font-bold py-3 rounded-xl transition-all text-sm flex items-center justify-center gap-2 shadow cursor-pointer">
-                        <i data-lucide="calendar" class="w-4 h-4 text-sea-500"></i> Simular Reserva para este Apartamento
+                        <i data-lucide="calendar" class="w-4 h-4 text-sea-500"></i> ${t.btn_simular_modal}
                     </button>
                 </div>
             `;
@@ -792,6 +811,7 @@
 
             const aptAtual = document.getElementById('apt-select').value;
             const diasIndisponiveis = datasBloqueadasPorApto[aptAtual] || [];
+            const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
 
             if (calendarioPicker) {
                 calendarioPicker.destroy();
@@ -799,7 +819,7 @@
 
             calendarioPicker = flatpickr("#campo-datas", {
                 mode: "range",
-                locale: "pt",
+                locale: langAtual, // Aplica o idioma ativo (pt, en ou fr) ao calendário
                 minDate: "today",
                 dateFormat: "Y-m-d",
                 disable: diasIndisponiveis,
