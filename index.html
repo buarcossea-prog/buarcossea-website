@@ -286,40 +286,73 @@
                     </div>
                 </div>
 
-                <!-- Checkout / Métodos de Pagamento -->
-                <div id="modal-ifthenpay" class="hidden mt-8 p-6 bg-white text-navy-900 rounded-2xl shadow-xl space-y-6">
+                                <!-- Checkout: Dados do Hóspede + Métodos de Pagamento -->
+                <div id="modal-ifthenpay" class="hidden mt-8 p-6 sm:p-8 bg-white text-navy-900 rounded-2xl shadow-xl space-y-6">
                     <div class="flex justify-between items-center pb-3 border-b border-sea-100">
                         <div>
-                            <h4 class="font-bold text-lg text-navy-900" data-i18n="pay_titulo">Formas de Pagamento 100% Seguras</h4>
-                            <p class="text-xs text-navy-800/70" data-i18n="pay_sub">Selecione o método pretendido para concluir a sua reserva:</p>
+                            <h4 class="font-bold text-lg text-navy-900" data-i18n="chk_titulo">Dados do Hóspede & Pagamento</h4>
+                            <p class="text-xs text-navy-800/70" data-i18n="chk_sub">Preencha os seus dados para receber a confirmação da reserva:</p>
                         </div>
                         <span class="text-xs bg-sea-100 text-navy-900 px-3 py-1 rounded-full font-semibold" data-i18n="pay_cert">Plataforma Certificada</span>
                     </div>
 
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        <button type="button" onclick="selecionarMetodoPagamento('mbway')" class="p-3 border-2 border-sea-100 rounded-xl hover:border-sea-500 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer text-center bg-sand-50">
-                            <span class="font-extrabold text-red-600 text-sm">MB WAY</span>
-                            <span class="text-[10px] text-navy-800/70" data-i18n="pay_mbway">Telemóvel imediato</span>
-                        </button>
-                        <button type="button" onclick="selecionarMetodoPagamento('multibanco')" class="p-3 border-2 border-sea-100 rounded-xl hover:border-sea-500 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer text-center bg-sand-50">
-                            <span class="font-bold text-navy-900 text-sm">MULTIBANCO</span>
-                            <span class="text-[10px] text-navy-800/70" data-i18n="pay_multibanco">ATM / Homebanking</span>
-                        </button>
-                        <button type="button" onclick="selecionarMetodoPagamento('cartao')" class="p-3 border-2 border-sea-100 rounded-xl hover:border-sea-500 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer text-center bg-sand-50">
-                            <span class="font-bold text-navy-800 text-sm">VISA / MC</span>
-                            <span class="text-[10px] text-navy-800/70" data-i18n="pay_cartao">Cartão de Crédito</span>
-                        </button>
-                        <button type="button" onclick="selecionarMetodoPagamento('carteiras')" class="p-3 border-2 border-sea-100 rounded-xl hover:border-sea-500 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer text-center bg-sand-50">
-                            <span class="font-bold text-navy-900 text-sm">Apple / Google</span>
-                            <span class="text-[10px] text-navy-800/70" data-i18n="pay_carteiras">Pay / Carteiras</span>
-                        </button>
+                    <!-- Formulário de Dados do Hóspede -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-sand-50 p-4 rounded-xl border border-sea-200/70">
+                        <div>
+                            <label class="block text-xs font-bold text-navy-900 mb-1" data-i18n="lbl_nome">Nome Completo *</label>
+                            <input type="text" id="hospede-nome" required placeholder="Ex: João Silva" class="w-full border border-sea-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-sea-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-navy-900 mb-1" data-i18n="lbl_email">Email (para confirmação) *</label>
+                            <input type="email" id="hospede-email" required placeholder="email@exemplo.com" class="w-full border border-sea-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-sea-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-navy-900 mb-1" data-i18n="lbl_telefone">Telemóvel / WhatsApp *</label>
+                            <input type="tel" id="hospede-telefone" required placeholder="+351 912 345 678" class="w-full border border-sea-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-sea-500">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-xs font-bold text-navy-900 mb-1" data-i18n="lbl_pais">País *</label>
+                                <input type="text" id="hospede-pais" required value="Portugal" class="w-full border border-sea-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-sea-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-navy-900 mb-1" data-i18n="lbl_nif">NIF (Opcional)</label>
+                                <input type="text" id="hospede-nif" placeholder="123456789" class="w-full border border-sea-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-sea-500">
+                            </div>
+                        </div>
+                        <div class="sm:col-span-2 pt-1">
+                            <label class="flex items-start gap-2 text-xs text-navy-800 cursor-pointer">
+                                <input type="checkbox" id="aceitar-termos" required class="mt-0.5 rounded border-sea-300 text-sea-600 focus:ring-sea-500">
+                                <span data-i18n="chk_termos">Li e aceito os <a href="termos.html" target="_blank" class="text-sea-600 underline font-semibold">Termos e Condições de Reserva</a> e a Política de Privacidade.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Seleção do Método de Pagamento -->
+                    <div>
+                        <p class="text-xs font-bold text-navy-900 uppercase tracking-wider mb-3" data-i18n="pay_sub">Selecione o método pretendido para concluir a sua reserva:</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <button type="button" onclick="selecionarMetodoPagamento('mbway')" class="p-3 border-2 border-sea-100 rounded-xl hover:border-sea-500 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer text-center bg-sand-50">
+                                <span class="font-extrabold text-red-600 text-sm">MB WAY</span>
+                                <span class="text-[10px] text-navy-800/70" data-i18n="pay_mbway">Telemóvel imediato</span>
+                            </button>
+                            <button type="button" onclick="selecionarMetodoPagamento('multibanco')" class="p-3 border-2 border-sea-100 rounded-xl hover:border-sea-500 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer text-center bg-sand-50">
+                                <span class="font-bold text-navy-900 text-sm">MULTIBANCO</span>
+                                <span class="text-[10px] text-navy-800/70" data-i18n="pay_multibanco">ATM / Homebanking</span>
+                            </button>
+                            <button type="button" onclick="selecionarMetodoPagamento('cartao')" class="p-3 border-2 border-sea-100 rounded-xl hover:border-sea-500 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer text-center bg-sand-50">
+                                <span class="font-bold text-navy-800 text-sm">VISA / MC</span>
+                                <span class="text-[10px] text-navy-800/70" data-i18n="pay_cartao">Cartão de Crédito</span>
+                            </button>
+                            <button type="button" onclick="selecionarMetodoPagamento('carteiras')" class="p-3 border-2 border-sea-100 rounded-xl hover:border-sea-500 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer text-center bg-sand-50">
+                                <span class="font-bold text-navy-900 text-sm">Apple / Google</span>
+                                <span class="text-[10px] text-navy-800/70" data-i18n="pay_carteiras">Pay / Carteiras</span>
+                            </button>
+                        </div>
                     </div>
 
                     <div id="detalhes-pagamento" class="hidden bg-sand-50 p-4 rounded-xl border border-sea-200 text-sm space-y-3"></div>
                 </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Secção Informativa de Pagamentos -->
     <section id="pagamentos" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
