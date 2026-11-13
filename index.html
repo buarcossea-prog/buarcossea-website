@@ -388,7 +388,7 @@
         </div>
     </section>
 
-    <!-- Localização Section com Google Maps -->
+    <!-- Localização Section com Google Maps Exato -->
     <section id="localizacao" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="bg-white rounded-3xl p-8 shadow-sm border border-sea-200/70 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
@@ -403,8 +403,9 @@
                     <div class="flex items-center gap-3"><i data-lucide="utensils" class="w-5 h-5 text-sea-600"></i> <span data-i18n="loc_p3">Próximo de cafés, mercados e restaurantes</span></div>
                 </div>
             </div>
+            <!-- Google Maps com coordenadas exatas de Buarcos (Avenida do Brasil / Grupo Caras Direitas) -->
             <div class="h-80 rounded-2xl overflow-hidden relative border border-sea-200 shadow-inner bg-sand-100">
-                <iframe class="w-full h-full border-0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.1121!2d-8.865!3d40.155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsKwMDknMD3InCBS!5e0!3m2!1spt-PT!2spt!4v1650000000000!5m2!1spt-PT!2spt" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe class="w-full h-full border-0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3036.85!2d-8.8635!3d40.1605!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd22854964687b89%3A0xf639a04a39783f9!2sAv.%20do%20Brasil%2C%20Figueira%20da%20Foz!5e0!3m2!1spt-PT!2spt!4v1650000000000!5m2!1spt-PT!2spt" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
     </section>
@@ -441,8 +442,8 @@
         </div>
     </footer>
 
-    <!-- Botão Flutuante do WhatsApp -->
-    <a href="https://wa.me/351925846193?text=Olá,%20gostaria%20de%20obter%20mais%20informações%20sobre%20a%20disponibilidade%20no%20Buarcos%20&%20Sea." 
+    <!-- Botão Flutuante do WhatsApp Dinâmico -->
+    <a id="btn-whatsapp" href="https://wa.me/351925846193" 
        target="_blank" 
        aria-label="Falar por WhatsApp"
        class="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center">
@@ -551,7 +552,8 @@
                 ts_6: "Varanda Solarenga",
                 ts_7: "Artigos de Higiene Pessoal",
                 ts_8: "Estacionamento Gratuito Próximo",
-                erro_datas: "Por favor selecione o período de check-in e check-out no calendário."
+                erro_datas: "Por favor selecione o período de check-in e check-out no calendário.",
+                whatsapp_msg: "Olá, gostaria de obter mais informações sobre a disponibilidade no Buarcos & Sea."
             },
             en: {
                 meta_title: "Buarcos & Sea - Vacation Rentals in Figueira da Foz",
@@ -643,7 +645,8 @@
                 ts_6: "Sunny Balcony",
                 ts_7: "Personal Hygiene Products",
                 ts_8: "Free Parking Nearby",
-                erro_datas: "Please select the check-in and check-out dates in the calendar."
+                erro_datas: "Please select the check-in and check-out dates in the calendar.",
+                whatsapp_msg: "Hello, I would like to get more information about availability at Buarcos & Sea."
             },
             fr: {
                 meta_title: "Buarcos & Sea - Location de Vacances à Figueira da Foz",
@@ -735,7 +738,8 @@
                 ts_6: "Balcon Ensoleillé",
                 ts_7: "Produits d'Hygiène Personnelle",
                 ts_8: "Parking Gratuit à Proximité",
-                erro_datas: "Veuillez sélectionner les dates d'arrivée et de départ dans le calendrier."
+                erro_datas: "Veuillez sélectionner les dates d'arrivée et de départ dans le calendrier.",
+                whatsapp_msg: "Bonjour, j'aimerais obtenir plus d'informations sur la disponibilité au Buarcos & Sea."
             },
             es: {
                 meta_title: "Buarcos & Sea - Alquiler Vacacional en Figueira da Foz",
@@ -767,7 +771,7 @@
                 lbl_alojamento: "Alojamiento",
                 lbl_periodo: "Período de Estancia (Check-in ➔ Check-out)",
                 lbl_adultos: "Adultos (16+ años)",
-                lbl_criancas: "Niños (0-15 yrs)",
+                lbl_criancas: "Niños (0-15 años)",
                 lbl_animais: "Mascotas",
                 lbl_numpets: "Cant. Mascotas",
                 pet_nao: "No",
@@ -827,7 +831,8 @@
                 ts_6: "Balcón Soleado",
                 ts_7: "Productos de Higiene Personal",
                 ts_8: "Aparcamiento Gratuito Cercano",
-                erro_datas: "Por favor seleccione el período de entrada y salida en el calendario."
+                erro_datas: "Por favor seleccione el período de entrada y salida en el calendario.",
+                whatsapp_msg: "Hola, me gustaría obtener más información sobre la disponibilidad en Buarcos & Sea."
             }
         };
 
@@ -841,6 +846,13 @@
             });
             localStorage.setItem('buarcos_lang', lang);
             
+            // Atualiza o link do WhatsApp dinamicamente consoante o idioma escolhido
+            const btnWhatsapp = document.getElementById('btn-whatsapp');
+            if (btnWhatsapp && traducoes[lang] && traducoes[lang].whatsapp_msg) {
+                const textoCodificado = encodeURIComponent(traducoes[lang].whatsapp_msg);
+                btnWhatsapp.href = `https://wa.me/351925846193?text=${textoCodificado}`;
+            }
+
             if (typeof inicializarCalendario === 'function') {
                 inicializarCalendario();
             }
