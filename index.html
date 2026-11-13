@@ -56,11 +56,13 @@
 
             <div class="flex items-center gap-3">
                 <!-- Seletor de Idiomas -->
-                <select id="seletor-idioma" onchange="mudarIdioma(this.value)" class="bg-sand-100 border border-sea-200 text-navy-900 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:border-sea-500 cursor-pointer">
+                                <select id="seletor-idioma" onchange="mudarIdioma(this.value)" class="bg-sand-100 border border-sea-200 text-navy-900 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:border-sea-500 cursor-pointer">
                     <option value="pt">🇵🇹 PT</option>
                     <option value="en">🇬🇧 EN</option>
                     <option value="fr">🇫🇷 FR</option>
+                    <option value="es">🇪🇸 ES</option>
                 </select>
+
 
                 <a href="#simulador" class="hidden sm:flex bg-navy-900 hover:bg-navy-800 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all shadow-sm items-center gap-2 cursor-pointer">
                     <i data-lucide="calendar" class="w-4 h-4 text-sea-500"></i> <span data-i18n="btn_reservar">Reservar Já</span>
@@ -735,6 +737,98 @@
                 ts_8: "Parking Gratuit à Proximité",
                 erro_datas: "Veuillez sélectionner les dates d'arrivée et de départ dans le calendrier."
             }
+                        es: {
+                meta_title: "Buarcos & Sea - Alquiler Vacacional en Figueira da Foz",
+                nav_alojamentos: "Alojamientos",
+                nav_simulador: "Simulador y Reservas",
+                nav_pagamentos: "Pagos",
+                nav_explorar: "Figueira da Foz",
+                nav_localizacao: "Ubicación",
+                btn_reservar: "Reservar Ahora",
+                hero_badge: "Reserva Directa • Mejores tarifas garantizadas sin comisiones",
+                hero_title_1: "Su casa junto al mar en",
+                hero_desc: "Disfrute del confort de los apartamentos <strong>Cristal Mar</strong> y <strong>Tonay Sol</strong> a pocos pasos de la playa en Buarcos.",
+                hero_btn_simular: "Simular y Reservar",
+                hero_btn_ver: "Ver Alojamientos",
+                sec_espacos: "Nuestros Espacios",
+                sec_aloj_titulo: "Alojamientos en Buarcos",
+                sec_aloj_sub: "Explore las comodidades y fotos de cada apartamento antes de simular su estancia",
+                cristal_preco: "Desde 65€ / noche",
+                cristal_desc: "Apartamento moderno con excelente exposición solar, vistas privilegiadas y a pocos pasos de la playa de Buarcos.",
+                tonay_desc: "Espacio acogedor y totalmente renovado, perfecto para familias que buscan tranquilidad y proximidad al mar.",
+                com_hospedes: "Hasta 4 Huéspedes",
+                com_cozinha: "Cocina Equipada",
+                com_cozinha_comp: "Cocina Completa",
+                btn_detalhes: "Ver Detalles, Fotos y Comodidades",
+                btn_simular: "Simular Reserva",
+                sim_etiqueta: "Reserva Directa",
+                sim_titulo: "Simulador de Precios y Reserva",
+                sim_sub: "Seleccione las fechas en el calendario interactivo para verificar disponibilidad y calcular el precio exacto.",
+                lbl_alojamento: "Alojamiento",
+                lbl_periodo: "Período de Estancia (Check-in ➔ Check-out)",
+                lbl_adultos: "Adultos (16+ años)",
+                lbl_criancas: "Niños (0-15 años)",
+                lbl_animais: "Mascotas",
+                lbl_numpets: "Cant. Mascotas",
+                pet_nao: "No",
+                pet_sim: "Sí",
+                btn_calcular: "Calcular Precio Total",
+                res_titulo: "Resumen de la Simulación",
+                res_noites: "Estancia (noches):",
+                res_desconto: "Descuento Reserva Directa:",
+                res_limpeza: "Tarifa de Limpieza:",
+                res_pet: "Tarifa Mascotas:",
+                res_taxa: "Tasa Turística F. Foz:",
+                res_total: "Total Final con Tasas:",
+                btn_pagar: "Proceder al Pago Seguro",
+                pay_titulo: "Métodos de Pago 100% Seguros",
+                pay_sub: "Seleccione su método preferido para completar su reserva:",
+                pay_cert: "Plataforma Certificada",
+                pay_mbway: "Pago Móvil Inmediato",
+                pay_multibanco: "ATM / Homebanking",
+                pay_cartao: "Tarjeta de Crédito",
+                pay_carteiras: "Pay / Monederos",
+                info_transp: "Transparencia y Seguridad",
+                info_metodos: "Métodos de Pago Aceptados",
+                info_desc: "Ofrecemos los métodos de pago más seguros y cómodos a través de una plataforma certificada en Portugal.",
+                tur_etiqueta: "Turismo y Cultura",
+                tur_titulo: "Descubra Figueira da Foz y Buarcos",
+                tur_desc: "Aproveche su estancia para explorar las playas doradas, la gastronomía de pescado fresco y los eventos culturales locales:",
+                tur_agenda_tit: "Agenda y Eventos",
+                tur_agenda_desc: "Siga los conciertos, exposiciones y noticias locales durante su estancia.",
+                loc_etiqueta: "Ubicación Privilegiada",
+                loc_titulo: "Buarcos, Figueira da Foz",
+                loc_desc: "Situados en una de las zonas más tradicionales y encantadoras de Figueira da Foz. A poca distancia a pie de la playa de Buarcos, excelentes restaurantes de pescado fresco y comercios.",
+                loc_p1: "A 50 metros del paseo marítimo y las playas",
+                loc_p2: "Fácil aparcamiento gratuito en las inmediaciones",
+                loc_p3: "Cerca de cafés, mercados y restaurantes",
+                foot_desc: "Alquiler vacacional en Buarcos, Figueira da Foz. Confort, hospitalidad y proximidad al mar para sus vacaciones en familia.",
+                foot_links: "Enlaces Útiles y Legal",
+                foot_livro: "Libro de Reclamaciones Electrónico",
+                foot_termos: "Términos y Condiciones de Reserva",
+                foot_contactos: "Contactos",
+                foot_copy: "© 2026 Buarcos & Sea. Todos los derechos reservados. AL: 161145/AL & 146454/AL.",
+                galeria_fotos: "Galería de Fotos",
+                comodidades_apt: "Comodidades del Alojamento",
+                btn_simular_modal: "Simular Reserva para este Apartamento",
+                cm_1: "Wi-Fi Fibra Alta Velocidad",
+                cm_2: "Smart TV 4K con Streaming",
+                cm_3: "Vista Panorámica al Mar",
+                cm_4: "Cocina Totalmente Equipada",
+                cm_5: "Cafetera Expresso",
+                cm_6: "Ropa de Cama y Toallas Incluidas",
+                cm_7: "Secador de Pelo",
+                cm_8: "Plancha",
+                ts_1: "Wi-Fi Gratis",
+                ts_2: "Smart TV",
+                ts_3: "Proximidad a la Playa (50m)",
+                ts_4: "Cocina Completa",
+                ts_5: "Lavadora",
+                ts_6: "Balcón Soleado",
+                ts_7: "Productos de Higiene Personal",
+                ts_8: "Aparcamiento Gratuito Cercano",
+                erro_datas: "Por favor seleccione el período de entrada y salida en el calendario."
+            }
         };
 
         function mudarIdioma(lang) {
@@ -907,10 +1001,13 @@
             const apt = document.getElementById('apt-select').value;
             const datasSelecionadas = calendarioPicker.selectedDates;
 
-            if (datasSelecionadas.length < 2) {
-                alert('Por favor selecione o período de check-in e check-out no calendário.');
+                        if (datasSelecionadas.length < 2) {
+                const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
+                const msgErro = (traducoes[langAtual] && traducoes[langAtual].erro_datas) || traducoes['pt'].erro_datas;
+                alert(msgErro);
                 return;
             }
+
 
             const checkin = datasSelecionadas[0];
             const checkout = datasSelecionadas[datasSelecionadas.length - 1];
