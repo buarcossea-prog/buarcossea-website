@@ -388,7 +388,7 @@
         </div>
     </section>
 
-    <!-- Localização Section com Google Maps Exato -->
+    <!-- Localização Section com Google Maps Exato (Avenida do Brasil / Buarcos) -->
     <section id="localizacao" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="bg-white rounded-3xl p-8 shadow-sm border border-sea-200/70 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
@@ -403,7 +403,6 @@
                     <div class="flex items-center gap-3"><i data-lucide="utensils" class="w-5 h-5 text-sea-600"></i> <span data-i18n="loc_p3">Próximo de cafés, mercados e restaurantes</span></div>
                 </div>
             </div>
-            <!-- Google Maps com coordenadas exatas de Buarcos (Avenida do Brasil / Grupo Caras Direitas) -->
             <div class="h-80 rounded-2xl overflow-hidden relative border border-sea-200 shadow-inner bg-sand-100">
                 <iframe class="w-full h-full border-0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3036.85!2d-8.8635!3d40.1605!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd22854964687b89%3A0xf639a04a39783f9!2sAv.%20do%20Brasil%2C%20Figueira%20da%20Foz!5e0!3m2!1spt-PT!2spt!4v1650000000000!5m2!1spt-PT!2spt" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
@@ -792,7 +791,7 @@
                 pay_multibanco: "ATM / Homebanking",
                 pay_cartao: "Tarjeta de Crédito",
                 pay_carteiras: "Pay / Monederos",
-                info_transp: "Transparencia y Seguridad",
+                info_transp: "Transparência y Seguridad",
                 info_metodos: "Métodos de Pago Aceptados",
                 info_desc: "Ofrecemos los métodos de pago más seguros y cómodos a través de una plataforma certificada en Portugal.",
                 tur_etiqueta: "Turismo y Cultura",
@@ -809,7 +808,7 @@
                 foot_desc: "Alquiler vacacional en Buarcos, Figueira da Foz. Confort, hospitalidad y proximidad al mar para sus vacaciones en familia.",
                 foot_links: "Enlaces Útiles y Legal",
                 foot_livro: "Libro de Reclamaciones Electrónico",
-                foot_termos: "Términos y Condiciones de Reserva",
+                foot_termos: "Termos e Condições de Reserva",
                 foot_contactos: "Contactos",
                 foot_copy: "© 2026 Buarcos & Sea. Todos los derechos reservados. AL: 161145/AL & 146454/AL.",
                 galeria_fotos: "Galería de Fotos",
@@ -846,7 +845,6 @@
             });
             localStorage.setItem('buarcos_lang', lang);
             
-            // Atualiza o link do WhatsApp dinamicamente consoante o idioma escolhido
             const btnWhatsapp = document.getElementById('btn-whatsapp');
             if (btnWhatsapp && traducoes[lang] && traducoes[lang].whatsapp_msg) {
                 const textoCodificado = encodeURIComponent(traducoes[lang].whatsapp_msg);
