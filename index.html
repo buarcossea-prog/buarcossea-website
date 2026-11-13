@@ -263,4 +263,1035 @@
                         </div>
                         <div class="flex justify-between">
                             <span data-i18n="res_limpeza">Taxa de Limpeza:</span>
-                            <span id="valor-limpeza" class="font-semibold text-white">35.
+                            <span id="valor-limpeza" class="font-semibold text-white">35.00 €</span>
+                        </div>
+                        <div id="linha-pet" class="flex justify-between hidden text-amber-300">
+                            <span data-i18n="res_pet">Taxa Animais de Estimação (Pet):</span>
+                            <span id="valor-pet-total" class="font-semibold">0.00 €</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span id="label-taxa-turistica" data-i18n="res_taxa">Taxa Turística F. Foz:</span>
+                            <span id="valor-taxa-turistica" class="font-semibold text-white">0.00 €</span>
+                        </div>
+                        <div class="flex justify-between pt-3 border-t border-navy-800 text-lg font-bold text-white">
+                            <span data-i18n="res_total">Total Final com Taxas:</span>
+                            <span id="valor-total" class="text-sea-500">0.00 €</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <button type="button" onclick="abrirPagamento()" class="w-full bg-sea-600 hover:bg-sea-500 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg cursor-pointer">
+                            <i data-lucide="credit-card" class="w-5 h-5"></i> <span data-i18n="btn_pagar">Prosseguir para Pagamento Seguro</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Checkout: Dados do Hóspede + Métodos de Pagamento -->
+                <div id="modal-ifthenpay" class="hidden mt-8 p-6 sm:p-8 bg-white text-navy-900 rounded-2xl shadow-xl space-y-6">
+                    <div class="flex justify-between items-center pb-3 border-b border-sea-100">
+                        <div>
+                            <h4 class="font-bold text-lg text-navy-900" data-i18n="chk_titulo">Dados do Hóspede & Pagamento</h4>
+                            <p class="text-xs text-navy-800/70" data-i18n="chk_sub">Preencha os seus dados para receber a confirmação da reserva:</p>
+                        </div>
+                        <span class="text-xs bg-sea-100 text-navy-900 px-3 py-1 rounded-full font-semibold" data-i18n="pay_cert">Plataforma Certificada</span>
+                    </div>
+
+                    <!-- Formulário de Dados do Hóspede -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-sand-50 p-4 rounded-xl border border-sea-200/70">
+                        <div>
+                            <label class="block text-xs font-bold text-navy-900 mb-1" data-i18n="lbl_nome">Nome Completo *</label>
+                            <input type="text" id="hospede-nome" required placeholder="Ex: João Silva" class="w-full border border-sea-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-sea-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-navy-900 mb-1" data-i18n="lbl_email">Email (para confirmação) *</label>
+                            <input type="email" id="hospede-email" required placeholder="email@exemplo.com" class="w-full border border-sea-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-sea-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-navy-900 mb-1" data-i18n="lbl_telefone">Telemóvel / WhatsApp *</label>
+                            <input type="tel" id="hospede-telefone" required placeholder="+351 912 345 678" class="w-full border border-sea-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-sea-500">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-xs font-bold text-navy-900 mb-1" data-i18n="lbl_pais">País *</label>
+                                <input type="text" id="hospede-pais" required value="Portugal" class="w-full border border-sea-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-sea-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-navy-900 mb-1" data-i18n="lbl_nif">NIF (Opcional)</label>
+                                <input type="text" id="hospede-nif" placeholder="123456789" class="w-full border border-sea-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:border-sea-500">
+                            </div>
+                        </div>
+                        <div class="sm:col-span-2 pt-1">
+                            <label class="flex items-start gap-2 text-xs text-navy-800 cursor-pointer">
+                                <input type="checkbox" id="aceitar-termos" required class="mt-0.5 rounded border-sea-300 text-sea-600 focus:ring-sea-500">
+                                <span data-i18n="chk_termos">Li e aceito os <a href="termos.html" target="_blank" class="text-sea-600 underline font-semibold">Termos e Condições de Reserva</a> e a Política de Privacidade.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Seleção do Método de Pagamento -->
+                    <div>
+                        <p class="text-xs font-bold text-navy-900 uppercase tracking-wider mb-3" data-i18n="pay_sub">Selecione o método pretendido para concluir a sua reserva:</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <button type="button" onclick="selecionarMetodoPagamento('mbway')" class="p-3 border-2 border-sea-100 rounded-xl hover:border-sea-500 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer text-center bg-sand-50">
+                                <span class="font-extrabold text-red-600 text-sm">MB WAY</span>
+                                <span class="text-[10px] text-navy-800/70" data-i18n="pay_mbway">Telemóvel imediato</span>
+                            </button>
+                            <button type="button" onclick="selecionarMetodoPagamento('multibanco')" class="p-3 border-2 border-sea-100 rounded-xl hover:border-sea-500 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer text-center bg-sand-50">
+                                <span class="font-bold text-navy-900 text-sm">MULTIBANCO</span>
+                                <span class="text-[10px] text-navy-800/70" data-i18n="pay_multibanco">ATM / Homebanking</span>
+                            </button>
+                            <button type="button" onclick="selecionarMetodoPagamento('cartao')" class="p-3 border-2 border-sea-100 rounded-xl hover:border-sea-500 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer text-center bg-sand-50">
+                                <span class="font-bold text-navy-800 text-sm">VISA / MC</span>
+                                <span class="text-[10px] text-navy-800/70" data-i18n="pay_cartao">Cartão de Crédito</span>
+                            </button>
+                            <button type="button" onclick="selecionarMetodoPagamento('carteiras')" class="p-3 border-2 border-sea-100 rounded-xl hover:border-sea-500 flex flex-col items-center justify-center gap-1.5 transition-colors cursor-pointer text-center bg-sand-50">
+                                <span class="font-bold text-navy-900 text-sm">Apple / Google</span>
+                                <span class="text-[10px] text-navy-800/70" data-i18n="pay_carteiras">Pay / Carteiras</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="detalhes-pagamento" class="hidden bg-sand-50 p-4 rounded-xl border border-sea-200 text-sm space-y-3"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Secção Informativa de Pagamentos -->
+    <section id="pagamentos" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div class="bg-white rounded-3xl p-8 sm:p-10 shadow-sm border border-sea-200/70 text-center max-w-4xl mx-auto">
+            <span class="text-sea-600 font-semibold text-xs uppercase tracking-widest" data-i18n="info_transp">Transparência e Segurança</span>
+            <h2 class="text-3xl font-bold text-navy-900 mt-1 mb-3" data-i18n="info_metodos">Formas de Pagamento Aceites</h2>
+            <p class="text-navy-800/75 text-sm leading-relaxed mb-8 max-w-2xl mx-auto" data-i18n="info_desc">
+                Disponibilizamos os métodos de pagamento mais seguros e cómodos do mercado através de plataforma certificada em Portugal.
+            </p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 items-center justify-center text-xs font-bold text-navy-900">
+                <div class="p-4 bg-sand-50 border border-sea-100 rounded-2xl flex flex-col items-center gap-2">
+                    <span class="text-red-600 font-extrabold text-sm">MB WAY</span>
+                </div>
+                <div class="p-4 bg-sand-50 border border-sea-100 rounded-2xl flex flex-col items-center gap-2">
+                    <span class="text-navy-900 font-bold text-sm">MULTIBANCO</span>
+                </div>
+                <div class="p-4 bg-sand-50 border border-sea-100 rounded-2xl flex flex-col items-center gap-2">
+                    <span class="text-orange-600 font-bold text-sm">Mastercard</span>
+                </div>
+                <div class="p-4 bg-sand-50 border border-sea-100 rounded-2xl flex flex-col items-center gap-2">
+                    <span class="text-blue-700 font-extrabold text-sm">VISA</span>
+                </div>
+                <div class="p-4 bg-sand-50 border border-sea-100 rounded-2xl flex flex-col items-center gap-2">
+                    <span class="text-navy-950 font-bold text-sm">Apple Pay</span>
+                </div>
+                <div class="p-4 bg-sand-50 border border-sea-100 rounded-2xl flex flex-col items-center gap-2">
+                    <span class="text-navy-800 font-bold text-sm">Google Pay</span>
+                </div>
+                <div class="p-4 bg-sand-50 border border-sea-100 rounded-2xl flex flex-col items-center gap-2 col-span-2 sm:col-span-1">
+                    <span class="text-red-700 font-bold text-sm">PayShop</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Secção: Explorar a Região -->
+    <section id="explorar" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div class="bg-sea-100/60 rounded-3xl p-8 sm:p-10 border border-sea-200 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+            <div class="md:col-span-2">
+                <span class="text-sea-600 font-semibold text-xs uppercase tracking-widest" data-i18n="tur_etiqueta">Turismo & Cultura</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-navy-900 mt-1 mb-3" data-i18n="tur_titulo">Descubra a Figueira da Foz e Buarcos</h2>
+                <p class="text-navy-800/80 text-sm leading-relaxed mb-6" data-i18n="tur_desc">
+                    Aproveite a sua estadia para explorar as praias douradas, a gastronomia rica em peixe fresco e os eventos culturais da região. Consulte os portais locais para planear cada dia:
+                </p>
+                <div class="flex flex-wrap gap-3">
+                    <a href="https://www.visitfigueiradafoz.com" target="_blank" class="inline-flex items-center gap-2 bg-navy-900 hover:bg-navy-800 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-colors shadow-sm">
+                        <i data-lucide="globe" class="w-4 h-4 text-sea-500"></i> Visit Figueira da Foz <i data-lucide="external-link" class="w-3 h-3 ml-1"></i>
+                    </a>
+                    <a href="https://www.figueiranahora.com/" target="_blank" class="inline-flex items-center gap-2 bg-white hover:bg-sand-50 text-navy-900 border border-sea-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition-colors shadow-sm">
+                        <i data-lucide="newspaper" class="w-4 h-4 text-sea-600"></i> Figueira na Hora <i data-lucide="external-link" class="w-3 h-3 ml-1"></i>
+                    </a>
+                    <a href="https://meetfigueira.com/agenda" target="_blank" class="inline-flex items-center gap-2 bg-white hover:bg-sand-50 text-navy-900 border border-sea-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition-colors shadow-sm">
+                        <i data-lucide="calendar-days" class="w-4 h-4 text-sea-600"></i> Meet Figueira Agenda <i data-lucide="external-link" class="w-3 h-3 ml-1"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-sea-200/80 text-center">
+                <div class="w-12 h-12 bg-sea-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                    <i data-lucide="compass" class="w-6 h-6 text-sea-600"></i>
+                </div>
+                <h3 class="font-bold text-navy-900 text-sm" data-i18n="tur_agenda_tit">Agenda & Eventos</h3>
+                <p class="text-xs text-navy-800/70 mt-1 leading-relaxed" data-i18n="tur_agenda_desc">Acompanhe os concertos, exposições e novidades locais durante a sua estadia.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Localização Section com Google Maps Exato -->
+    <section id="localizacao" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div class="bg-white rounded-3xl p-8 shadow-sm border border-sea-200/70 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div>
+                <span class="text-sea-600 font-semibold text-xs uppercase tracking-widest" data-i18n="loc_etiqueta">Localização Privilegiada</span>
+                <h2 class="text-3xl font-bold text-navy-900 mt-1 mb-4" data-i18n="loc_titulo">Buarcos, Figueira da Foz</h2>
+                <p class="text-navy-800/80 text-sm leading-relaxed mb-6" data-i18n="loc_desc">
+                    Situados numa das zonas mais tradicionais e encantadoras da Figueira da Foz. A curta distância a pé da praia de Buarcos, de excelentes restaurantes de peixe fresco, pastelarias e comércio local.
+                </p>
+                <div class="space-y-3 text-sm text-navy-900 font-medium">
+                    <div class="flex items-center gap-3"><i data-lucide="map-pin" class="w-5 h-5 text-sea-600"></i> <span data-i18n="loc_p1">A 50 metros da frente marítima e praias</span></div>
+                    <div class="flex items-center gap-3"><i data-lucide="car" class="w-5 h-5 text-sea-600"></i> <span data-i18n="loc_p2">Fácil estacionamento gratuito nas imediações</span></div>
+                    <div class="flex items-center gap-3"><i data-lucide="utensils" class="w-5 h-5 text-sea-600"></i> <span data-i18n="loc_p3">Próximo de cafés, mercados e restaurantes</span></div>
+                </div>
+            </div>
+            <div class="h-80 rounded-2xl overflow-hidden relative border border-sea-200 shadow-inner bg-sand-100">
+                <iframe class="w-full h-full border-0" src="https://maps.google.com/maps?q=Largo+Grupo+Caras+Direitas+20+Buarcos&t=&z=18&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="bg-navy-950 text-slate-300 py-12 mt-auto border-t border-navy-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-navy-800 text-sm">
+                <div>
+                    <span class="text-white font-bold text-base block mb-2">Buarcos & Sea</span>
+                    <p class="text-xs text-slate-400 leading-relaxed" data-i18n="foot_desc">
+                        Alojamento Local em Buarcos, Figueira da Foz. Conforto, hospitalidade e proximidade ao mar para as suas férias em família.
+                    </p>
+                </div>
+                <div>
+                    <span class="text-white font-bold text-sm block mb-2" data-i18n="foot_links">Links Úteis & Legal</span>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="https://www.livroreclamacoes.pt" target="_blank" class="hover:text-white transition-colors flex items-center gap-1.5 text-sea-500 font-semibold"><i data-lucide="book-open" class="w-3.5 h-3.5"></i> <span data-i18n="foot_livro">Livro de Reclamações Eletrónico</span></a></li>
+                        <li><a href="termos.html" class="hover:text-white transition-colors" data-i18n="foot_termos">Termos e Condições de Reserva</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <span class="text-white font-bold text-sm block mb-2" data-i18n="foot_contactos">Contactos</span>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="mailto:buarcossea@gmail.com" class="hover:text-white transition-colors flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-sea-500"></i> buarcossea@gmail.com</a></li>
+                        <li class="text-slate-400">Avenida do Brasil nº244 / Largo Grupo Caras Direitas, Figueira da Foz</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-400 gap-4">
+                <span data-i18n="foot_copy">© 2026 Buarcos & Sea. Todos os direitos reservados. AL: 161145/AL & 146454/AL.</span>
+                <span>Empresário em Nome Individual - Hélder Cortesão.</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Botão Flutuante do WhatsApp Dinâmico -->
+    <a id="btn-whatsapp" href="https://wa.me/351925846193" 
+       target="_blank" 
+       aria-label="Falar por WhatsApp"
+       class="fixed bottom-6 right-6 z-50 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 fill-current" viewBox="0 0 24 24">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+        </svg>
+    </a>
+
+    <!-- Flatpickr (Biblioteca de Calendário) JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/en.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+
+    <!-- Dicionário de Traduções (PT / EN / FR / ES) -->
+    <script>
+        const traducoes = {
+            pt: {
+                meta_title: "Buarcos & Sea - Alojamento Local em Figueira da Foz",
+                nav_alojamentos: "Alojamentos",
+                nav_simulador: "Simulador & Reservas",
+                nav_pagamentos: "Pagamentos",
+                nav_explorar: "Figueira da Foz",
+                nav_localizacao: "Localização",
+                btn_reservar: "Reservar Já",
+                hero_badge: "Reserva Direta • Melhores tarifas garantidas sem comissões",
+                hero_title_1: "A sua casa à beira-mar em",
+                hero_desc: "Desfrute do conforto dos apartamentos <strong>Cristal Mar</strong> e <strong>Tonay Sol</strong> a escassos passos da praia na Figueira da Foz.",
+                hero_btn_simular: "Simular e Reservar",
+                hero_btn_ver: "Ver Alojamentos",
+                sec_espacos: "Os Nossos Espaços",
+                sec_aloj_titulo: "Alojamentos em Buarcos",
+                sec_aloj_sub: "Explore as comodidades e fotos de cada apartamento antes de simular a sua estadia",
+                cristal_preco: "Desde 65€ / noite",
+                cristal_desc: "Apartamento moderno com excelente exposição solar, vista privilegiada e a poucos passos da praia de Buarcos.",
+                tonay_desc: "Espaço acolhedor e totalmente renovado, perfeito para famílias que procuram tranquilidade e proximidade ao mar.",
+                com_hospedes: "Até 4 Hóspedes",
+                com_cozinha: "Cozinha Equipada",
+                com_cozinha_comp: "Cozinha Completa",
+                btn_detalhes: "Ver Detalhes, Fotos e Comodidades",
+                btn_simular: "Simular Reserva",
+                sim_etiqueta: "Reserva Direta",
+                sim_titulo: "Simulador de Valores e Reserva",
+                sim_sub: "Selecione as datas no calendário interativo para verificar disponibilidade e calcular o valor exato.",
+                lbl_alojamento: "Alojamento",
+                lbl_periodo: "Período de Estadia (Check-in ➔ Check-out)",
+                lbl_adultos: "Adultos (16+ anos)",
+                lbl_criancas: "Crianças (0-15 anos)",
+                lbl_animais: "Animais",
+                lbl_numpets: "Qtd. Pets",
+                pet_nao: "Não",
+                pet_sim: "Sim",
+                btn_calcular: "Calcular Valor Total",
+                res_titulo: "Resumo da Simulação",
+                res_noites: "Estadia (noites):",
+                res_desconto: "Desconto Reserva Direta:",
+                res_limpeza: "Taxa de Limpeza:",
+                res_pet: "Taxa Animais de Estimação (Pet):",
+                res_taxa: "Taxa Turística F. Foz:",
+                res_total: "Total Final com Taxas:",
+                btn_pagar: "Prosseguir para Pagamento Seguro",
+                pay_titulo: "Formas de Pagamento 100% Seguras",
+                pay_sub: "Selecione o método pretendido para concluir a sua reserva:",
+                pay_cert: "Plataforma Certificada",
+                pay_mbway: "Telemóvel imediato",
+                pay_multibanco: "ATM / Homebanking",
+                pay_cartao: "Cartão de Crédito",
+                pay_carteiras: "Pay / Carteiras",
+                chk_titulo: "Dados do Hóspede & Pagamento",
+                chk_sub: "Preencha os seus dados para receber a confirmação da reserva:",
+                lbl_nome: "Nome Completo *",
+                lbl_email: "Email (para confirmação) *",
+                lbl_telefone: "Telemóvel / WhatsApp *",
+                lbl_pais: "País *",
+                lbl_nif: "NIF (Opcional)",
+                chk_termos: "Li e aceito os <a href=\"termos.html\" target=\"_blank\" class=\"text-sea-600 underline font-semibold\">Termos e Condições de Reserva</a> e a Política de Privacidade.",
+                erro_dados_hospede: "Por favor preencha o seu Nome, Email, Telemóvel e aceite os Termos e Condições antes de escolher o pagamento.",
+                info_transp: "Transparência e Segurança",
+                info_metodos: "Formas de Pagamento Aceites",
+                info_desc: "Disponibilizamos os métodos de pagamento mais seguros e cómodos do mercado através de plataforma certificada em Portugal.",
+                tur_etiqueta: "Turismo & Cultura",
+                tur_titulo: "Descubra a Figueira da Foz e Buarcos",
+                tur_desc: "Aproveite a sua estadia para explorar as praias douradas, a gastronomia rica em peixe fresco e os eventos culturais da região. Consulte os portais locais para planear cada dia:",
+                tur_agenda_tit: "Agenda & Eventos",
+                tur_agenda_desc: "Acompanhe os concertos, exposições e novidades locais durante a sua estadia.",
+                loc_etiqueta: "Localização Privilegiada",
+                loc_titulo: "Buarcos, Figueira da Foz",
+                loc_desc: "Situados numa das zonas mais tradicionais e encantadoras da Figueira da Foz. A curta distância a pé da praia de Buarcos, de excelentes restaurantes de peixe fresco, pastelarias e comércio local.",
+                loc_p1: "A 50 metros da frente marítima e praias",
+                loc_p2: "Fácil estacionamento gratuito nas imediações",
+                loc_p3: "Próximo de cafés, mercados e restaurantes",
+                foot_desc: "Alojamento Local em Buarcos, Figueira da Foz. Conforto, hospitalidade e proximidade ao mar para as suas férias em família.",
+                foot_links: "Links Úteis & Legal",
+                foot_livro: "Livro de Reclamações Eletrónico",
+                foot_termos: "Termos e Condições de Reserva",
+                foot_contactos: "Contactos",
+                foot_copy: "© 2026 Buarcos & Sea. Todos os direitos reservados. AL: 161145/AL & 146454/AL.",
+                galeria_fotos: "Galeria de Fotos",
+                comodidades_apt: "Comodidades do Alojamento",
+                btn_simular_modal: "Simular Reserva para este Apartamento",
+                cm_1: "Wi-Fi Fibra Alta Velocidade",
+                cm_2: "Smart TV 4K com Streaming",
+                cm_3: "Vista Panorâmica de Mar",
+                cm_4: "Cozinha Totalmente Equipada",
+                cm_5: "Máquina de Café Expresso",
+                cm_6: "Roupa de Cama e Banho Incluída",
+                cm_7: "Secador de Cabelo",
+                cm_8: "Ferro de Engomar",
+                ts_1: "Wi-Fi Grátis",
+                ts_2: "Smart TV",
+                ts_3: "Proximidade à Praia (50m)",
+                ts_4: "Cozinha Completa",
+                ts_5: "Máquina de Lavar Roupa",
+                ts_6: "Varanda Solarenga",
+                ts_7: "Artigos de Higiene Pessoal",
+                ts_8: "Estacionamento Gratuito Próximo",
+                erro_datas: "Por favor selecione o período de check-in e check-out no calendário.",
+                whatsapp_msg: "Olá, gostaria de obter mais informações sobre a disponibilidade no Buarcos & Sea."
+            },
+            en: {
+                meta_title: "Buarcos & Sea - Vacation Rentals in Figueira da Foz",
+                nav_alojamentos: "Accommodations",
+                nav_simulador: "Simulator & Booking",
+                nav_pagamentos: "Payments",
+                nav_explorar: "Figueira da Foz",
+                nav_localizacao: "Location",
+                btn_reservar: "Book Now",
+                hero_badge: "Direct Booking • Best rates guaranteed without commissions",
+                hero_title_1: "Your seaside home in",
+                hero_desc: "Enjoy the comfort of <strong>Cristal Mar</strong> and <strong>Tonay Sol</strong> apartments just steps away from Buarcos beach.",
+                hero_btn_simular: "Simulate & Book",
+                hero_btn_ver: "View Apartments",
+                sec_espacos: "Our Spaces",
+                sec_aloj_titulo: "Accommodations in Buarcos",
+                sec_aloj_sub: "Explore amenities and photos of each apartment before simulating your stay",
+                cristal_preco: "From 65€ / night",
+                cristal_desc: "Modern apartment with excellent sun exposure, privileged views, and just steps from Buarcos beach.",
+                tonay_desc: "Cozy and fully renovated space, perfect for families seeking tranquility and proximity to the sea.",
+                com_hospedes: "Up to 4 Guests",
+                com_cozinha: "Equipped Kitchen",
+                com_cozinha_comp: "Full Kitchen",
+                btn_detalhes: "View Details, Photos & Amenities",
+                btn_simular: "Simulate Booking",
+                sim_etiqueta: "Direct Booking",
+                sim_titulo: "Pricing Simulator & Booking",
+                sim_sub: "Select dates on the interactive calendar to check availability and calculate the exact price.",
+                lbl_alojamento: "Accommodation",
+                lbl_periodo: "Stay Period (Check-in ➔ Check-out)",
+                lbl_adultos: "Adults (16+ yrs)",
+                lbl_criancas: "Children (0-15 yrs)",
+                lbl_animais: "Pets",
+                lbl_numpets: "Pet Qty",
+                pet_nao: "No",
+                pet_sim: "Yes",
+                btn_calcular: "Calculate Total Price",
+                res_titulo: "Simulation Summary",
+                res_noites: "Stay (nights):",
+                res_desconto: "Direct Booking Discount:",
+                res_limpeza: "Cleaning Fee:",
+                res_pet: "Pet Fee:",
+                res_taxa: "Tourist Tax F. Foz:",
+                res_total: "Final Total with Taxes:",
+                btn_pagar: "Proceed to Secure Payment",
+                pay_titulo: "100% Secure Payment Methods",
+                pay_sub: "Select your preferred method to complete your booking:",
+                pay_cert: "Certified Platform",
+                pay_mbway: "Instant Mobile Pay",
+                pay_multibanco: "ATM / Homebanking",
+                pay_cartao: "Credit Card",
+                pay_carteiras: "Pay / Wallets",
+                chk_titulo: "Guest Details & Payment",
+                chk_sub: "Fill in your details to receive your booking confirmation:",
+                lbl_nome: "Full Name *",
+                lbl_email: "Email (for confirmation) *",
+                lbl_telefone: "Phone / WhatsApp *",
+                lbl_pais: "Country *",
+                lbl_nif: "Tax ID / VAT (Optional)",
+                chk_termos: "I have read and accept the <a href=\"termos.html\" target=\"_blank\" class=\"text-sea-600 underline font-semibold\">Booking Terms & Conditions</a> and Privacy Policy.",
+                erro_dados_hospede: "Please fill in your Name, Email, Phone and accept the Terms & Conditions before selecting payment.",
+                info_transp: "Transparency & Security",
+                info_metodos: "Accepted Payment Methods",
+                info_desc: "We offer the safest and most convenient payment methods through a certified platform in Portugal.",
+                tur_etiqueta: "Tourism & Culture",
+                tur_titulo: "Discover Figueira da Foz and Buarcos",
+                tur_desc: "Make the most of your stay exploring golden beaches, fresh seafood gastronomy, and local cultural events. Check local portals to plan each day:",
+                tur_agenda_tit: "Agenda & Events",
+                tur_agenda_desc: "Keep up with concerts, exhibitions, and local news during your stay.",
+                loc_etiqueta: "Privileged Location",
+                loc_titulo: "Buarcos, Figueira da Foz",
+                loc_desc: "Located in one of the most traditional and charming areas of Figueira da Foz. Within walking distance of Buarcos beach, excellent fresh fish restaurants, bakeries, and local shops.",
+                loc_p1: "50 meters from the seafront and beaches",
+                loc_p2: "Easy free parking nearby",
+                loc_p3: "Close to cafes, markets, and restaurants",
+                foot_desc: "Vacation rental in Buarcos, Figueira da Foz. Comfort, hospitality, and proximity to the sea for your family holidays.",
+                foot_links: "Useful Links & Legal",
+                foot_livro: "Electronic Complaints Book",
+                foot_termos: "Booking Terms & Conditions",
+                foot_contactos: "Contacts",
+                foot_copy: "© 2026 Buarcos & Sea. All rights reserved. AL: 161145/AL & 146454/AL.",
+                galeria_fotos: "Photo Gallery",
+                comodidades_apt: "Apartment Amenities",
+                btn_simular_modal: "Simulate Booking for this Apartment",
+                cm_1: "High-Speed Fiber Wi-Fi",
+                cm_2: "4K Smart TV with Streaming",
+                cm_3: "Panoramic Sea View",
+                cm_4: "Fully Equipped Kitchen",
+                cm_5: "Espresso Coffee Machine",
+                cm_6: "Bed Linen and Towels Included",
+                cm_7: "Hairdryer",
+                cm_8: "Iron",
+                ts_1: "Free Wi-Fi",
+                ts_2: "Smart TV",
+                ts_3: "Proximity to Beach (50m)",
+                ts_4: "Full Kitchen",
+                ts_5: "Washing Machine",
+                ts_6: "Sunny Balcony",
+                ts_7: "Personal Hygiene Products",
+                ts_8: "Free Parking Nearby",
+                erro_datas: "Please select the check-in and check-out dates in the calendar.",
+                whatsapp_msg: "Hello, I would like to get more information about availability at Buarcos & Sea."
+            },
+            fr: {
+                meta_title: "Buarcos & Sea - Location de Vacances à Figueira da Foz",
+                nav_alojamentos: "Logements",
+                nav_simulador: "Simulateur & Réservation",
+                nav_pagamentos: "Paiements",
+                nav_explorar: "Figueira da Foz",
+                nav_localizacao: "Emplacement",
+                btn_reservar: "Réserver",
+                hero_badge: "Réservation directe • Meilleurs tarifs garantis sans commissions",
+                hero_title_1: "Votre maison en bord de mer à",
+                hero_desc: "Profitez du confort des appartements <strong>Cristal Mar</strong> et <strong>Tonay Sol</strong> à quelques pas de la plage de Buarcos.",
+                hero_btn_simular: "Simuler et Réserver",
+                hero_btn_ver: "Voir les Logements",
+                sec_espacos: "Nos Espaces",
+                sec_aloj_titulo: "Logements à Buarcos",
+                sec_aloj_sub: "Découvrez les équipements et photos de chaque appartement avant de simuler votre séjour",
+                cristal_preco: "À partir de 65€ / nuit",
+                cristal_desc: "Appartement moderne avec excellente exposition au soleil, vue privilégiée et à quelques pas de la plage de Buarcos.",
+                tonay_desc: "Espace chaleureux et entièrement rénové, idéal pour les familles cherchant tranquillité et proximité de la mer.",
+                com_hospedes: "Jusqu'à 4 Voyageurs",
+                com_cozinha: "Cuisine Équipée",
+                com_cozinha_comp: "Cuisine Complète",
+                btn_detalhes: "Voir Détails, Photos & Équipements",
+                btn_simular: "Simuler Réservation",
+                sim_etiqueta: "Réservation Directe",
+                sim_titulo: "Simulateur de Tarifs et Réservation",
+                sim_sub: "Sélectionnez les dates sur le calendrier interactif pour vérifier la disponibilité et calculer le prix exact.",
+                lbl_alojamento: "Logement",
+                lbl_periodo: "Période de Séjour (Arrivée ➔ Départ)",
+                lbl_adultos: "Adultes (16+ ans)",
+                lbl_criancas: "Enfants (0-15 ans)",
+                lbl_animais: "Animaux",
+                lbl_numpets: "Nbr. Animaux",
+                pet_nao: "Non",
+                pet_sim: "Oui",
+                btn_calcular: "Calculer le Total",
+                res_titulo: "Résumé de la Simulation",
+                res_noites: "Séjour (nuits):",
+                res_desconto: "Remise Réservation Directe:",
+                res_limpeza: "Frais de Ménage:",
+                res_pet: "Taxe Animaux:",
+                res_taxa: "Taxe de Séjour F. Foz:",
+                res_total: "Total Final avec Taxes:",
+                btn_pagar: "Procéder au Paiement Sécurisé",
+                pay_titulo: "Modes de Paiement 100% Sécurisés",
+                pay_sub: "Sélectionnez votre méthode préférée pour finaliser la réservation :",
+                pay_cert: "Plateforme Certifiée",
+                pay_mbway: "Paiement Mobile",
+                pay_multibanco: "ATM / Homebanking",
+                pay_cartao: "Carte de Crédit",
+                pay_carteiras: "Pay / Portefeuilles",
+                chk_titulo: "Coordonnées du Voyageur & Paiement",
+                chk_sub: "Renseignez vos coordonnées pour recevoir la confirmation :",
+                lbl_nome: "Nom Complet *",
+                lbl_email: "Email (pour confirmation) *",
+                lbl_telefone: "Téléphone / WhatsApp *",
+                lbl_pais: "Pays *",
+                lbl_nif: "N° Fiscal (Optionnel)",
+                chk_termos: "J'ai lu et j'accepte les <a href=\"termos.html\" target=\"_blank\" class=\"text-sea-600 underline font-semibold\">Conditions Générales de Réservation</a> et la Politique de Confidentialité.",
+                erro_dados_hospede: "Veuillez renseigner votre Nom, Email, Téléphone et accepter les Conditions Générales avant de choisir le paiement.",
+                info_transp: "Transparence & Sécurité",
+                info_metodos: "Modes de Paiement Acceptés",
+                info_desc: "Nous proposons les modes de paiement les plus sûrs via une plateforme certifiée au Portugal.",
+                tur_etiqueta: "Tourisme & Culture",
+                tur_titulo: "Découvrez Figueira da Foz et Buarcos",
+                tur_desc: "Profitez de votre séjour pour explorer les plages de sable fin, la gastronomie de poisson frais et les événements culturels locaux :",
+                tur_agenda_tit: "Agenda & Événements",
+                tur_agenda_desc: "Suivez les concerts, expositions et actualités locales pendant votre séjour.",
+                loc_etiqueta: "Emplacement Privilégié",
+                loc_titulo: "Buarcos, Figueira da Foz",
+                loc_desc: "Situés dans l'un des quartiers les plus traditionnels de Figueira da Foz. À distance de marche de la plage de Buarcos, d'excellents restaurants et commerces.",
+                loc_p1: "À 50 mètres du front de mer et des plages",
+                loc_p2: "Parking gratuit facile à proximité",
+                loc_p3: "Proche des cafés, marchés et restaurants",
+                foot_desc: "Location de vacances à Buarcos, Figueira da Foz. Confort, hospitalité et proximité de la mer pour vos vacances en famille.",
+                foot_links: "Liens Utiles & Légal",
+                foot_livro: "Livre de Réclamations Électronique",
+                foot_termos: "Termes et Conditions de Réservation",
+                foot_contactos: "Contacts",
+                foot_copy: "© 2026 Buarcos & Sea. Tous droits réservés. AL: 161145/AL & 146454/AL.",
+                galeria_fotos: "Galerie Photos",
+                comodidades_apt: "Équipements de l'Appartement",
+                btn_simular_modal: "Simuler la réservation pour cet appartement",
+                cm_1: "Wi-Fi Fibre Haute Vitesse",
+                cm_2: "Smart TV 4K avec Streaming",
+                cm_3: "Vue Panoramique sur la Mer",
+                cm_4: "Cuisine Entièrement Équipée",
+                cm_5: "Machine à Café Expresso",
+                cm_6: "Linge de Lit et Serviettes Inclus",
+                cm_7: "Sèche-cheveux",
+                cm_8: "Fer à Repasser",
+                ts_1: "Wi-Fi Gratuit",
+                ts_2: "Smart TV",
+                ts_3: "Proximidade de la Plage (50m)",
+                ts_4: "Cuisine Complète",
+                ts_5: "Lave-linge",
+                ts_6: "Balcon Ensoleillé",
+                ts_7: "Produits d'Hygiène Personnelle",
+                ts_8: "Parking Gratuit à Proximité",
+                erro_datas: "Veuillez sélectionner les dates d'arrivée et de départ dans le calendrier.",
+                whatsapp_msg: "Bonjour, j'aimerais obtenir plus d'informations sur la disponibilité au Buarcos & Sea."
+            },
+            es: {
+                meta_title: "Buarcos & Sea - Alquiler Vacacional en Figueira da Foz",
+                nav_alojamentos: "Alojamientos",
+                nav_simulador: "Simulador y Reservas",
+                nav_pagamentos: "Pagos",
+                nav_explorar: "Figueira da Foz",
+                nav_localizacao: "Ubicación",
+                btn_reservar: "Reservar Ahora",
+                hero_badge: "Reserva Directa • Mejores tarifas garantizadas sin comisiones",
+                hero_title_1: "Su casa junto al mar en",
+                hero_desc: "Disfrute del confort de los apartamentos <strong>Cristal Mar</strong> y <strong>Tonay Sol</strong> a pocos pasos de la playa en Buarcos.",
+                hero_btn_simular: "Simular y Reservar",
+                hero_btn_ver: "Ver Alojamientos",
+                sec_espacos: "Nuestros Espacios",
+                sec_aloj_titulo: "Alojamientos en Buarcos",
+                sec_aloj_sub: "Explore las comodidades y fotos de cada apartamento antes de simular su estancia",
+                cristal_preco: "Desde 65€ / noche",
+                cristal_desc: "Apartamento moderno con excelente exposición solar, vistas privilegiadas y a pocos pasos de la playa de Buarcos.",
+                tonay_desc: "Espacio acogedor y totalmente renovado, perfecto para familias que buscan tranquilidad y proximidad al mar.",
+                com_hospedes: "Hasta 4 Huéspedes",
+                com_cozinha: "Cocina Equipada",
+                com_cozinha_comp: "Cocina Completa",
+                btn_detalhes: "Ver Detalles, Fotos y Comodidades",
+                btn_simular: "Simular Reserva",
+                sim_etiqueta: "Reserva Directa",
+                sim_titulo: "Simulador de Precios y Reserva",
+                sim_sub: "Seleccione las fechas en el calendario interactivo para verificar disponibilidad y calcular el precio exacto.",
+                lbl_alojamento: "Alojamiento",
+                lbl_periodo: "Período de Estancia (Check-in ➔ Check-out)",
+                lbl_adultos: "Adultos (16+ años)",
+                lbl_criancas: "Niños (0-15 años)",
+                lbl_animais: "Mascotas",
+                lbl_numpets: "Cant. Mascotas",
+                pet_nao: "No",
+                pet_sim: "Sí",
+                btn_calcular: "Calcular Precio Total",
+                res_titulo: "Resumen de la Simulación",
+                res_noites: "Estancia (noches):",
+                res_desconto: "Descuento Reserva Directa:",
+                res_limpeza: "Tarifa de Limpieza:",
+                res_pet: "Tarifa Mascotas:",
+                res_taxa: "Tasa Turística F. Foz:",
+                res_total: "Total Final con Tasas:",
+                btn_pagar: "Proceder al Pago Seguro",
+                pay_titulo: "Métodos de Pago 100% Seguros",
+                pay_sub: "Seleccione su método preferido para completar su reserva:",
+                pay_cert: "Plataforma Certificada",
+                pay_mbway: "Pago Móvil Inmediato",
+                pay_multibanco: "ATM / Homebanking",
+                pay_cartao: "Tarjeta de Crédito",
+                pay_carteiras: "Pay / Monederos",
+                chk_titulo: "Datos del Huésped y Pago",
+                chk_sub: "Rellene sus datos para recibir la confirmación de la reserva:",
+                lbl_nome: "Nombre Completo *",
+                lbl_email: "Email (para confirmación) *",
+                lbl_telefone: "Teléfono / WhatsApp *",
+                lbl_pais: "País *",
+                lbl_nif: "NIF / DNI (Opcional)",
+                chk_termos: "He leído y acepto los <a href=\"termos.html\" target=\"_blank\" class=\"text-sea-600 underline font-semibold\">Términos y Condiciones de Reserva</a> y la Política de Privacidad.",
+                erro_dados_hospede: "Por favor rellene su Nombre, Email, Teléfono y acepte los Términos y Condiciones antes de elegir el pago.",
+                info_transp: "Transparência y Seguridad",
+                info_metodos: "Métodos de Pago Aceptados",
+                info_desc: "Ofrecemos los métodos de pago más seguros y cómodos a través de una plataforma certificada en Portugal.",
+                tur_etiqueta: "Turismo y Cultura",
+                tur_titulo: "Descubra Figueira da Foz y Buarcos",
+                tur_desc: "Aproveche su estancia para explorar las playas doradas, la gastronomía de pescado fresco y los eventos culturales locales:",
+                tur_agenda_tit: "Agenda y Eventos",
+                tur_agenda_desc: "Siga los conciertos, exposiciones y noticias locales durante su estancia.",
+                loc_etiqueta: "Ubicación Privilegiada",
+                loc_titulo: "Buarcos, Figueira da Foz",
+                loc_desc: "Situados en una de las zonas más tradicionales y encantadoras de Figueira da Foz. A poca distancia a pie de la playa de Buarcos, excelentes restaurantes de pescado fresco y comercios.",
+                loc_p1: "A 50 metros del paseo marítimo y las playas",
+                loc_p2: "Fácil aparcamiento gratuito en las inmediaciones",
+                loc_p3: "Cerca de cafés, mercados y restaurantes",
+                foot_desc: "Alquiler vacacional en Buarcos, Figueira da Foz. Confort, hospitalidad y proximidad al mar para sus vacaciones en familia.",
+                foot_links: "Enlaces Útiles y Legal",
+                foot_livro: "Libro de Reclamaciones Electrónico",
+                foot_termos: "Termos e Condições de Reserva",
+                foot_contactos: "Contactos",
+                foot_copy: "© 2026 Buarcos & Sea. Todos los derechos reservados. AL: 161145/AL & 146454/AL.",
+                galeria_fotos: "Galería de Fotos",
+                comodidades_apt: "Comodidades del Alojamento",
+                btn_simular_modal: "Simular Reserva para este Apartamento",
+                cm_1: "Wi-Fi Fibra Alta Velocidad",
+                cm_2: "Smart TV 4K con Streaming",
+                cm_3: "Vista Panorámica al Mar",
+                cm_4: "Cocina Totalmente Equipada",
+                cm_5: "Cafetera Expresso",
+                cm_6: "Ropa de Cama y Toallas Incluidas",
+                cm_7: "Secador de Pelo",
+                cm_8: "Plancha",
+                ts_1: "Wi-Fi Gratis",
+                ts_2: "Smart TV",
+                ts_3: "Proximidad a la Playa (50m)",
+                ts_4: "Cocina Completa",
+                ts_5: "Lavadora",
+                ts_6: "Balcón Soleado",
+                ts_7: "Productos de Higiene Personal",
+                ts_8: "Aparcamiento Gratuito Cercano",
+                erro_datas: "Por favor seleccione el período de entrada y salida en el calendario.",
+                whatsapp_msg: "Hola, me gustaría obtener más información sobre la disponibilidad en Buarcos & Sea."
+            }
+        };
+
+        function mudarIdioma(lang) {
+            const elementos = document.querySelectorAll('[data-i18n]');
+            elementos.forEach(el => {
+                const chave = el.getAttribute('data-i18n');
+                if (traducoes[lang] && traducoes[lang][chave]) {
+                    el.innerHTML = traducoes[lang][chave];
+                }
+            });
+            localStorage.setItem('buarcos_lang', lang);
+            
+            const btnWhatsapp = document.getElementById('btn-whatsapp');
+            if (btnWhatsapp && traducoes[lang] && traducoes[lang].whatsapp_msg) {
+                const textoCodificado = encodeURIComponent(traducoes[lang].whatsapp_msg);
+                btnWhatsapp.href = `https://wa.me/351925846193?text=${textoCodificado}`;
+            }
+
+            if (typeof inicializarCalendario === 'function') {
+                inicializarCalendario();
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const idiomaSalvo = localStorage.getItem('buarcos_lang') || 'pt';
+            const seletor = document.getElementById('seletor-idioma');
+            if (seletor) seletor.value = idiomaSalvo;
+            mudarIdioma(idiomaSalvo);
+        });
+    </script>
+
+    <!-- Scripts de Interação -->
+    <script>
+        lucide.createIcons();
+
+        function formatarDataLocal(dateObj) {
+            const ano = dateObj.getFullYear();
+            const mes = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const dia = String(dateObj.getDate()).padStart(2, '0');
+            return `${ano}-${mes}-${dia}`;
+        }
+
+        const alojamentosDados = {
+            cristal_mar: {
+                nome: "Cristal Mar",
+                al: "161145/AL",
+                preco: "Desde 65€ / noite",
+                descricao_key: "cristal_desc",
+                fotos: [
+                    "imagens/cristal/IMG_20261005_152808.jpg",
+                    "imagens/cristal/IMG_20261005_152824.jpg"
+                ],
+                comodidades_keys: ["cm_1", "cm_2", "cm_3", "cm_4", "cm_5", "cm_6", "cm_7", "cm_8"]
+            },
+            tonay_sol: {
+                nome: "Tonay Sol",
+                al: "146454/AL",
+                preco: "Desde 60€ / noite",
+                descricao_key: "tonay_desc",
+                fotos: [
+                    "imagens/tonay/IMG_20261005_112644.jpg",
+                    "imagens/tonay/IMG_20261005_113430.jpg",
+                    "imagens/tonay/IMG_20261005_113439.jpg",
+                    "imagens/tonay/IMG_20261005_113453.jpg",
+                    "imagens/tonay/IMG_20261005_113549.jpg",
+                    "imagens/tonay/IMG_20261005_113817.jpg",
+                    "imagens/tonay/IMG_20261005_113822.jpg",
+                    "imagens/tonay/IMG_20261005_113825.jpg",
+                    "imagens/tonay/IMG_20261005_113856.jpg"
+                ],
+                comodidades_keys: ["ts_1", "ts_2", "ts_3", "ts_4", "ts_5", "ts_6", "ts_7", "ts_8"]
+            }
+        };
+
+        function abrirDetalhes(id) {
+            const apt = alojamentosDados[id];
+            const modal = document.getElementById('modal-detalhes');
+            const conteudo = document.getElementById('modal-conteudo');
+            const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
+            const t = traducoes[langAtual];
+
+            const descTexto = t[apt.descricao_key] || apt.descricao_key;
+            let fotosHtml = apt.fotos.map(f => `<img src="${f}" class="w-full h-48 object-cover rounded-xl shadow-sm">`).join('');
+            
+            let comodidadesHtml = apt.comodidades_keys.map(key => {
+                const textoComodidade = t[key] || key;
+                return `<li class="flex items-center gap-2 text-sm text-navy-900"><span class="w-2 h-2 rounded-full bg-sea-600"></span> ${textoComodidade}</li>`;
+            }).join('');
+
+            conteudo.innerHTML = `
+                <div class="flex justify-between items-start border-b border-sea-100 pb-4">
+                    <div>
+                        <span class="text-xs font-mono bg-sea-100 px-2.5 py-0.5 rounded text-navy-800">Registo AL: ${apt.al}</span>
+                        <h3 class="text-2xl font-bold text-navy-900 mt-1">${apt.nome}</h3>
+                    </div>
+                    <span class="text-sea-600 font-bold text-lg">${apt.preco}</span>
+                </div>
+                <p class="text-navy-800/80 text-sm leading-relaxed">${descTexto}</p>
+                <div>
+                    <h4 class="font-bold text-navy-900 mb-3 text-xs uppercase tracking-wider">${t.galeria_fotos}</h4>
+                    <div class="grid grid-cols-2 gap-3">${fotosHtml}</div>
+                </div>
+                <div>
+                    <h4 class="font-bold text-navy-900 mb-3 text-xs uppercase tracking-wider">${t.comodidades_apt}</h4>
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2">${comodidadesHtml}</ul>
+                </div>
+                <div class="pt-4 border-t border-sea-100">
+                    <button type="button" onclick="fecharDetalhes(); selecionarApartamento('${id}');" class="w-full bg-navy-900 hover:bg-navy-800 text-white font-bold py-3 rounded-xl transition-all text-sm flex items-center justify-center gap-2 shadow cursor-pointer">
+                        <i data-lucide="calendar" class="w-4 h-4 text-sea-500"></i> ${t.btn_simular_modal}
+                    </button>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function fecharDetalhes() {
+            document.getElementById('modal-detalhes').classList.add('hidden');
+        }
+
+        let calendarioPicker = null;
+        let datasBloqueadasPorApto = {};
+
+        async function inicializarCalendario() {
+            try {
+                const res = await fetch('/api/precos');
+                const json = await res.json();
+                if (json.success) {
+                    const mapa = json.data;
+                    Object.keys(mapa).forEach(apt => {
+                        datasBloqueadasPorApto[apt] = [];
+                        Object.keys(mapa[apt]).forEach(dataStr => {
+                            if (mapa[apt][dataStr].bloqueado) {
+                                datasBloqueadasPorApto[apt].push(dataStr);
+                            }
+                        });
+                    });
+                }
+            } catch(err) {}
+
+            const aptAtual = document.getElementById('apt-select').value;
+            const diasIndisponiveis = datasBloqueadasPorApto[aptAtual] || [];
+            const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
+
+            if (calendarioPicker) {
+                calendarioPicker.destroy();
+            }
+
+            calendarioPicker = flatpickr("#campo-datas", {
+                mode: "range",
+                locale: langAtual,
+                minDate: "today",
+                dateFormat: "Y-m-d",
+                disable: diasIndisponiveis,
+                conjunction: " a "
+            });
+        }
+
+        function atualizarCalendarioDisponibilidade() {
+            inicializarCalendario();
+        }
+
+        function selecionarApartamento(id) {
+            const select = document.getElementById('apt-select');
+            if (select) {
+                select.value = id;
+                atualizarCalendarioDisponibilidade();
+            }
+            const simulador = document.getElementById('simulador');
+            if (simulador) simulador.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function calcularReserva(e) {
+            e.preventDefault();
+            const apt = document.getElementById('apt-select').value;
+            const datasSelecionadas = calendarioPicker.selectedDates;
+
+            if (datasSelecionadas.length < 2) {
+                const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
+                const msgErro = (traducoes[langAtual] && traducoes[langAtual].erro_datas) || traducoes['pt'].erro_datas;
+                alert(msgErro);
+                return;
+            }
+
+            const checkin = datasSelecionadas[0];
+            const checkout = datasSelecionadas[datasSelecionadas.length - 1];
+            
+            const diffTime = checkout - checkin;
+            const noites = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+            if (noites <= 0) {
+                alert('A data de check-out tem de ser posterior ao check-in.');
+                return;
+            }
+
+            const adultos = parseInt(document.getElementById('hospedes').value) || 1;
+            const criancas = parseInt(document.getElementById('criancas').value) || 0;
+            const temPet = document.getElementById('tem-pet').value === 'sim';
+            const numPets = parseInt(document.getElementById('num-pets').value) || 1;
+
+            let mapaPrecos = {};
+            let limpezaGlobalData = { cristal_mar: 35, tonay_sol: 35 };
+            let petGlobalValor = 15;
+            try {
+                const res = await fetch('/api/precos');
+                const json = await res.json();
+                if (json.success) {
+                    mapaPrecos = json.data;
+                    if (json.limpezaGlobal) limpezaGlobalData = json.limpezaGlobal;
+                    if (json.petGlobal !== undefined) petGlobalValor = json.petGlobal;
+                }
+            } catch(err) {}
+
+            const precoBaseDefault = apt === 'cristal_mar' ? 65 : 60;
+            let subtotalNoites = 0;
+            let percentagemDescontoExtra = 10; 
+            let temBloqueio = false;
+
+            let taxaTuristicaTotal = 0;
+            const noitesTaxaLimite = Math.min(noites, 7);
+
+            let dt = new Date(checkin.getFullYear(), checkin.getMonth(), checkin.getDate());
+            for (let i = 0; i < noites; i++) {
+                const dataStr = formatarDataLocal(dt);
+                const dadosDia = mapaPrecos[apt] && mapaPrecos[apt][dataStr];
+
+                if (dadosDia && dadosDia.bloqueado) {
+                    temBloqueio = true;
+                    break;
+                }
+
+                const precoDia = (dadosDia && dadosDia.preco) ? dadosDia.preco : precoBaseDefault;
+                subtotalNoites += precoDia;
+
+                if (dadosDia && dadosDia.descontoExtra) percentagemDescontoExtra = dadosDia.descontoExtra;
+
+                if (i < noitesTaxaLimite) {
+                    const mes = dt.getMonth(); 
+                    const eEpocaAlta = (mes >= 5 && mes <= 8);
+                    const valorNoiteTaxa = eEpocaAlta ? 2.00 : 1.50;
+                    taxaTuristicaTotal += valorNoiteTaxa * adultos;
+                }
+
+                dt.setDate(dt.getDate() + 1);
+            }
+
+            if (temBloqueio) {
+                alert('Infelizmente algumas das datas selecionadas estão bloqueadas. Por favor escolha outro período.');
+                return;
+            }
+
+            const taxaLimpezaFinal = limpezaGlobalData[apt] !== undefined ? limpezaGlobalData[apt] : 35;
+            const desconto = subtotalNoites * (percentagemDescontoExtra / 100);
+            const noitesComDesconto = subtotalNoites - desconto;
+            
+            const totalTaxaPet = temPet ? (petGlobalValor * numPets) : 0;
+
+            const totalFinal = noitesComDesconto + taxaLimpezaFinal + totalTaxaPet + taxaTuristicaTotal;
+
+            document.getElementById('label-noites').innerText = `Estadia (${noites} noites):`;
+            document.getElementById('valor-noites').innerText = `${subtotalNoites.toFixed(2)} €`;
+            
+            document.getElementById('label-desc-texto').innerText = `Desconto Reserva Direta (${percentagemDescontoExtra}%):`;
+            document.getElementById('valor-desconto').innerText = `-${desconto.toFixed(2)} €`;
+            
+            document.getElementById('valor-limpeza').innerText = `${taxaLimpezaFinal.toFixed(2)} €`;
+
+            const linhaPet = document.getElementById('linha-pet');
+            if (temPet) {
+                linhaPet.classList.remove('hidden');
+                document.getElementById('valor-pet-total').innerText = `${totalTaxaPet.toFixed(2)} € (${numPets} pet)`;
+            } else {
+                linhaPet.classList.add('hidden');
+            }
+
+            document.getElementById('label-taxa-turistica').innerText = `Taxa Turística F. Foz (${noitesTaxaLimite} noites x ${adultos} adultos):`;
+            document.getElementById('valor-taxa-turistica').innerText = `${taxaTuristicaTotal.toFixed(2)} €`;
+            
+            document.getElementById('valor-total').innerText = `${totalFinal.toFixed(2)} €`;
+
+            document.getElementById('resultado-simulacao').classList.remove('hidden');
+            document.getElementById('modal-ifthenpay').classList.add('hidden');
+            document.getElementById('resultado-simulacao').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function validarDadosHospede() {
+            const nome = document.getElementById('hospede-nome').value.trim();
+            const email = document.getElementById('hospede-email').value.trim();
+            const telefone = document.getElementById('hospede-telefone').value.trim();
+            const termos = document.getElementById('aceitar-termos').checked;
+
+            if (!nome || !email || !telefone || !termos) {
+                const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
+                const msg = (traducoes[langAtual] && traducoes[langAtual].erro_dados_hospede) || traducoes['pt'].erro_dados_hospede;
+                alert(msg);
+                return false;
+            }
+            return true;
+        }
+
+        async function submeterReservaBackend(metodo) {
+            const datasSelecionadas = calendarioPicker.selectedDates;
+            const payload = {
+                apartamento: document.getElementById('apt-select').value,
+                checkin: formatarDataLocal(datasSelecionadas[0]),
+                checkout: formatarDataLocal(datasSelecionadas[datasSelecionadas.length - 1]),
+                adultos: document.getElementById('hospedes').value,
+                criancas: document.getElementById('criancas').value,
+                total: document.getElementById('valor-total').innerText,
+                metodoPagamento: metodo,
+                idioma: localStorage.getItem('buarcos_lang') || 'pt',
+                hospede: {
+                    nome: document.getElementById('hospede-nome').value.trim(),
+                    email: document.getElementById('hospede-email').value.trim(),
+                    telefone: document.getElementById('hospede-telefone').value.trim(),
+                    pais: document.getElementById('hospede-pais').value.trim(),
+                    nif: document.getElementById('hospede-nif').value.trim()
+                }
+            };
+
+            try {
+                const res = await fetch('/api/reservar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                return await res.json();
+            } catch (err) {
+                console.error("Erro ao comunicar com API:", err);
+                return { success: false };
+            }
+        }
+
+        async function abrirPagamento() {
+            const modalPay = document.getElementById('modal-ifthenpay');
+            if (modalPay) {
+                modalPay.classList.remove('hidden');
+                modalPay.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        async function selecionarMetodoPagamento(metodo) {
+            if (!validarDadosHospede()) return;
+
+            const total = document.getElementById('valor-total').innerText;
+            const container = document.getElementById('detalhes-pagamento');
+            container.classList.remove('hidden');
+            container.innerHTML = `<p class="text-xs text-navy-800 font-semibold">A processar pedido de reserva e a bloquear datas...</p>`;
+
+            const resposta = await submeterReservaBackend(metodo);
+
+            if (metodo === 'mbway') {
+                const telDefault = document.getElementById('hospede-telefone').value.trim();
+                container.innerHTML = `
+                    <div class="font-bold text-navy-900">Pagamento por MB WAY</div>
+                    <p class="text-xs text-navy-800/80">Confirme o número de telemóvel para receber o pedido no valor de <strong>${total}</strong>:</p>
+                    <div class="mt-3 flex gap-2">
+                        <input type="tel" id="mbway-tel" value="${telDefault}" class="border border-sea-200 p-2 rounded text-sm flex-1 bg-white">
+                        <button type="button" onclick="alert('Pedido MB WAY enviado! A sua reserva foi registada e as datas bloqueadas.')" class="bg-red-600 hover:bg-red-700 text-white text-xs px-4 py-2 rounded font-bold cursor-pointer">Enviar Pedido</button>
+                    </div>
+                `;
+            } else if (metodo === 'multibanco') {
+                const ref = resposta.referencia || '987 654 321';
+                const ent = resposta.entidade || '11683';
+                container.innerHTML = `
+                    <div class="font-bold text-navy-900 mb-1">Referência Multibanco Gerada</div>
+                    <div class="space-y-1 font-mono text-xs bg-white p-3 rounded border border-sea-200 text-navy-900">
+                        <div class="flex justify-between"><span>Entidade:</span> <strong>${ent}</strong></div>
+                        <div class="flex justify-between"><span>Referência:</span> <strong>${ref}</strong></div>
+                        <div class="flex justify-between"><span>Valor:</span> <strong>${total}</strong></div>
+                    </div>
+                    <p class="text-[11px] text-navy-800/70 mt-2">Enviámos também estes dados para o seu email. As datas foram bloqueadas com sucesso.</p>
+                `;
+            } else if (metodo === 'cartao') {
+                container.innerHTML = `
+                    <div class="font-bold text-navy-900">Pagamento por Cartão (VISA / Mastercard)</div>
+                    <p class="text-xs text-navy-800/80">Valor a liquidar: <strong>${total}</strong>.</p>
+                    <button type="button" onclick="alert('A redirecionar para o terminal seguro ifThenPay... Reserva registada!')" class="mt-3 w-full bg-navy-900 hover:bg-navy-800 text-white text-xs py-2.5 rounded font-bold cursor-pointer">Pagar com Cartão</button>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="font-bold text-navy-900">Apple Pay / Google Pay / PayShop</div>
+                    <p class="text-xs text-navy-800/80">Valor a liquidar: <strong>${total}</strong>.</p>
+                    <button type="button" onclick="alert('A iniciar pagamento digital... Reserva registada!')" class="mt-3 bg-navy-900 text-white text-xs px-4 py-2 rounded font-bold cursor-pointer">Continuar Pagamento</button>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
