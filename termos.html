@@ -3,21 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="termos_title">Termos e Condições - Buarcos & Sea</title>
+    <title data-i18n="meta_title">Termos e Condições de Reserva - Buarcos & Sea</title>
+    <!-- Tailwind CSS Play CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        navy: { 800: '#23425c', 900: '#193247', 950: '#102231' },
-                        sea: { 100: '#e6f0ef', 200: '#cce0de', 500: '#7ca39f', 600: '#648c88' },
-                        sand: { 50: '#faf9f6', 100: '#f3f1eb' }
+                        navy: {
+                            800: '#23425c',
+                            900: '#193247',
+                            950: '#102231',
+                        },
+                        sea: {
+                            100: '#e6f0ef',
+                            200: '#cce0de',
+                            500: '#7ca39f',
+                            600: '#648c88',
+                        },
+                        sand: {
+                            50: '#faf9f6',
+                            100: '#f3f1eb',
+                        }
                     }
                 }
             }
         }
     </script>
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="bg-sand-50 text-navy-900 font-sans antialiased min-h-screen flex flex-col">
@@ -29,110 +43,262 @@
                 <img src="logo.png" alt="Buarcos & Sea" class="h-12 w-auto object-contain">
             </a>
             <div class="flex items-center gap-3">
+                <!-- Seletor de Idiomas -->
                 <select id="seletor-idioma" onchange="mudarIdioma(this.value)" class="bg-sand-100 border border-sea-200 text-navy-900 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:border-sea-500 cursor-pointer">
                     <option value="pt">🇵🇹 PT</option>
                     <option value="en">🇬🇧 EN</option>
                     <option value="fr">🇫🇷 FR</option>
                     <option value="es">🇪🇸 ES</option>
                 </select>
-                <a href="index.html" class="bg-navy-900 hover:bg-navy-800 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-all" data-i18n="voltar_home">Voltar ao Início</a>
+
+                <a href="index.html" class="text-sm font-semibold text-navy-900 hover:text-sea-600 flex items-center gap-2 bg-sand-100 px-4 py-2 rounded-xl border border-sea-200 transition-colors">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> <span data-i18n="btn_voltar">Voltar ao Início</span>
+                </a>
             </div>
         </div>
     </header>
 
-    <!-- Conteúdo dos Termos -->
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 space-y-8">
-        <h1 class="text-3xl font-bold text-navy-900" data-i18n="termos_h1">Termos e Condições de Reserva</h1>
-        <p class="text-xs text-navy-800/60" data-i18n="termos_atualizacao">Última atualização: Outubro de 2026</p>
+    <!-- Conteúdo Legal -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1">
+        <div class="bg-white rounded-3xl p-8 sm:p-12 shadow-sm border border-sea-200/70 space-y-8 text-sm leading-relaxed text-navy-800">
+            <div class="border-b border-sea-100 pb-6">
+                <span class="text-sea-600 font-semibold text-xs uppercase tracking-widest" data-i18n="legal_etiqueta">Informação Legal & Regras</span>
+                <h1 class="text-3xl font-bold text-navy-900 mt-1" data-i18n="legal_titulo">Termos e Condições de Reserva e Estadia</h1>
+                <p class="text-xs text-navy-800/60 mt-2" data-i18n="legal_atualizacao">Última atualização: Março de 2026</p>
+            </div>
 
-        <div class="bg-white p-8 rounded-3xl shadow-sm border border-sea-200/70 space-y-6 text-sm leading-relaxed text-navy-800/90">
-            <section>
-                <h2 class="text-lg font-bold text-navy-900 mb-2" data-i18n="t1_tit">1. Objeto e Âmbito</h2>
-                <p data-i18n="t1_desc">Estes termos e condições regulam a reserva e a prestação de serviços de alojamento local nos apartamentos Cristal Mar e Tonay Sol, explorados sob a marca Buarcos & Sea, localizados em Buarcos, Figueira da Foz.</p>
+            <!-- 1. Identificação -->
+            <section class="space-y-2">
+                <h2 class="text-lg font-bold text-navy-900" data-i18n="s1_tit">1. Identificação da Entidade Exploradora</h2>
+                <p data-i18n="s1_p1">Os alojamentos locais <strong>Cristal Mar</strong> (Registo n.º 161145/AL) e <strong>Tonay Sol</strong> (Registo n.º 146454/AL), comercializados sob a marca <strong>Buarcos & Sea</strong>, são explorados por:</p>
+                <div class="bg-sand-50 p-4 rounded-xl border border-sea-100 text-xs font-medium text-navy-900 space-y-1">
+                    <p><strong data-i18n="s1_nome_lbl">Nome / Entidade:</strong> Hélder José Lobato Cortesão (Empresário em Nome Individual)</p>
+                    <p><strong data-i18n="s1_nif_lbl">NIF / NIPC:</strong> 239852400</p>
+                    <p><strong data-i18n="s1_morada_lbl">Morada Fiscal:</strong> Rua de São Lourenço n.º 13, 3140-332 Pereira MMV, Portugal</p>
+                    <p><strong data-i18n="s1_aloj_lbl">Localização dos Alojamentos:</strong> Avenida do Brasil n.º 244 / Largo Grupo Caras Direitas, Buarcos, Figueira da Foz</p>
+                    <p><strong data-i18n="s1_email_lbl">Email de Contacto:</strong> buarcossea@gmail.com | <strong data-i18n="s1_tel_lbl">Telefone:</strong> +351 925 846 193</p>
+                </div>
             </section>
 
-            <section>
-                <h2 class="text-lg font-bold text-navy-900 mb-2" data-i18n="t2_tit">2. Reservas e Pagamentos</h2>
-                <p data-i18n="t2_desc">As reservas efetuadas diretamente através do nosso website beneficiam de tarifas exclusivas. O pagamento pode ser efetuado de forma segura através dos métodos disponibilizados (MB WAY, Multibanco, Cartão de Crédito ou Carteiras Digitais).</p>
+            <!-- 2. Reservas e Pagamentos -->
+            <section class="space-y-2">
+                <h2 class="text-lg font-bold text-navy-900" data-i18n="s2_tit">2. Processo de Reserva e Pagamentos</h2>
+                <p data-i18n="s2_p1">As reservas efetuadas diretamente através deste website beneficiam de desconto exclusivo sobre a tarifa base. A reserva considera-se confirmada após a receção do respetivo pagamento através dos meios disponibilizados (MB WAY, Referência Multibanco, Cartão de Crédito/Débito VISA/Mastercard, Apple Pay, Google Pay ou PayShop) via plataforma certificada <strong>ifThenPay</strong>.</p>
+                <p data-i18n="s2_p2">O valor total apresentado no simulador inclui a estadia (com desconto direto aplicado), a taxa única de limpeza final, a eventual taxa de animais de estimação e a <strong>Taxa Turística Municipal da Figueira da Foz</strong>.</p>
             </section>
 
-            <section>
-                <h2 class="text-lg font-bold text-navy-900 mb-2" data-i18n="t3_tit">3. Check-in e Check-out</h2>
-                <p data-i18n="t3_desc">O horário de check-in e check-out é comunicado no momento da confirmação da reserva. Os dados de acesso aos apartamentos são fornecidos após a validação do registo de hóspedes exigido por lei (AIMA/SIBA).</p>
+            <!-- 3. Taxa Turística -->
+            <section class="space-y-2">
+                <h2 class="text-lg font-bold text-navy-900" data-i18n="s3_tit">3. Taxa Turística Municipal da Figueira da Foz</h2>
+                <p data-i18n="s3_p1">Em cumprimento do Regulamento da Taxa Turística do Município da Figueira da Foz, é cobrado o valor de <strong>2,00 € por noite</strong> (Época Alta: junho a setembro) ou <strong>1,50 € por noite</strong> (Época Baixa: outubro a maio), aplicável a todos os hóspedes com idade igual ou superior a 16 anos, até ao limite máximo de <strong>7 noites consecutivas</strong> por estadia.</p>
             </section>
 
-            <section>
-                <h2 class="text-lg font-bold text-navy-900 mb-2" data-i18n="t4_tit">4. Taxa Turística</h2>
-                <p data-i18n="t4_desc">Conforme os regulamentos municipais aplicáveis na Figueira da Foz, será aplicada a taxa turística local por hóspede e por noite até ao limite máximo estipulado por lei.</p>
+            <!-- 4. Check-in, Check-out e Chaves -->
+            <section class="space-y-2">
+                <h2 class="text-lg font-bold text-navy-900" data-i18n="s4_tit">4. Check-in Autónomo, Check-out e Chaves</h2>
+                <ul class="list-disc pl-5 space-y-1.5">
+                    <li data-i18n="s4_li1"><strong>Check-in (Entrada):</strong> A partir das 15h00. O acesso aos alojamentos é efetuado de forma cómoda e autónoma através de <strong>cofre digital de chaves</strong> junto à entrada, sem custos adicionais, independentemente da hora de chegada.</li>
+                    <li data-i18n="s4_li2"><strong>Check-out (Saída):</strong> Até às 11h00. No momento da saída, as chaves devem ser devidamente recolocadas no cofre digital e a porta do apartamento deixada fechada.</li>
+                    <li data-i18n="s4_li3"><strong>Perda ou Extravio de Chaves:</strong> Em caso de perda, dano ou não devolução das chaves no final da estadia, será cobrado o valor correspondente ao custo real de substituição da fechadura/canhão e de novas cópias, acrescido de eventuais despesas de deslocação técnica ou de serralheiro.</li>
+                    <li data-i18n="s4_li4"><strong>Comunicação Obrigatória de Hóspedes:</strong> Nos termos da legislação portuguesa em vigor (comunicação à AIMA / SIBA), todos os hóspedes de nacionalidade estrangeira devem preencher o boletim de alojamento antes do check-in e apresentar documento de identificação válido (Passaporte ou Cartão de Cidadão).</li>
+                </ul>
+            </section>
+
+            <!-- 5. Política de Cancelamento -->
+            <section class="space-y-2">
+                <h2 class="text-lg font-bold text-navy-900" data-i18n="s5_tit">5. Política de Cancelamento e Alterações</h2>
+                <ul class="list-disc pl-5 space-y-1.5">
+                    <li data-i18n="s5_li1"><strong>Cancelamento Gratuito:</strong> Até 7 dias antes da data prevista de check-in, com reembolso de 100% do valor pago.</li>
+                    <li data-i18n="s5_li2"><strong>Cancelamento Tardio:</strong> Cancelamentos efetuados a menos de 7 dias da data de check-in implicam a retenção de 50% do valor total da estadia.</li>
+                    <li data-i18n="s5_li3"><strong>Não Comparência (No-Show) ou Saída Antecipada:</strong> Não dá lugar a qualquer reembolso.</li>
+                </ul>
+            </section>
+
+            <!-- 6. Regras da Casa, Animais e Responsabilidade -->
+            <section class="space-y-2">
+                <h2 class="text-lg font-bold text-navy-900" data-i18n="s6_tit">6. Regras da Casa, Animais de Estimação e Danos</h2>
+                <ul class="list-disc pl-5 space-y-1.5">
+                    <li data-i18n="s6_li1"><strong>Lotação Máxima:</strong> Cada apartamento tem lotação máxima de 4 hóspedes, não sendo permitida a pernoita de pessoas não registadas na reserva.</li>
+                    <li data-i18n="s6_li2"><strong>Proibição de Fumar e Festas:</strong> É estritamente proibido fumar no interior dos apartamentos, bem como realizar festas ou eventos.</li>
+                    <li data-i18n="s6_li3"><strong>Horário de Silêncio:</strong> Ao abrigo do Regulamento Geral do Ruído, deve ser respeitado o silêncio nas zonas comuns e no interior do alojamento entre as 23h00 e as 07h00.</li>
+                    <li data-i18n="s6_li4"><strong>Animais de Estimação:</strong> São aceites animais de estimação mediante indicação prévia no ato da reserva e pagamento da respetiva taxa suplementar. Os tutores são integralmente responsáveis pelo bem-estar, higiene e eventuais danos causados pelos animais.</li>
+                    <li data-i18n="s6_li5"><strong>Danos e Equipamentos:</strong> Os hóspedes obrigam-se a zelar pela boa conservação do imóvel, mobiliário e equipamentos. Quaisquer danos ou quebras verificados durante a estadia deverão ser comunicados de imediato à gestão e serão imputados ao titular da reserva.</li>
+                </ul>
+            </section>
+
+            <!-- 7. Proteção de Dados e Litígios -->
+            <section class="space-y-2">
+                <h2 class="text-lg font-bold text-navy-900" data-i18n="s7_tit">7. Proteção de Dados (RGPD) e Resolução de Litígios</h2>
+                <p data-i18n="s7_p1">Os dados pessoais recolhidos destinam-se exclusivamente à gestão da reserva, emissão de faturação legal e cumprimento das obrigações legais de comunicação de alojamento, em estrita conformidade com o Regulamento Geral sobre a Proteção de Dados (RGPD).</p>
+                <p data-i18n="s7_p2">Em caso de litígio de consumo, o hóspede pode recorrer ao <a href="https://www.livroreclamacoes.pt" target="_blank" class="text-sea-600 underline font-semibold">Livro de Reclamações Eletrónico</a> ou ao <strong>CACRC - Centro de Arbitragem de Conflitos de Consumo da Região de Coimbra</strong> (<a href="https://www.centrodearbitragemdecoimbra.com" target="_blank" class="text-sea-600 underline">www.centrodearbitragemdecoimbra.com</a>).</p>
             </section>
         </div>
     </main>
 
     <!-- Rodapé -->
-    <footer class="bg-navy-950 text-slate-300 py-8 text-center text-xs">
-        <p data-i18n="foot_copy">© 2026 Buarcos & Sea. Todos os direitos reservados. AL: 161145/AL & 146454/AL.</p>
+    <footer class="bg-navy-950 text-slate-400 py-8 text-center text-xs border-t border-navy-800">
+        <span data-i18n="foot_copy">© 2026 Buarcos & Sea. Todos os direitos reservados. AL: 161145/AL & 146454/AL.</span>
     </footer>
 
+    <!-- Dicionário de Traduções dos Termos (PT / EN / FR / ES) -->
     <script>
+        lucide.createIcons();
+
         const traducoesTermos = {
             pt: {
-                termos_title: "Termos e Condições - Buarcos & Sea",
-                voltar_home: "Voltar ao Início",
-                termos_h1: "Termos e Condições de Reserva",
-                termos_atualizacao: "Última atualização: Outubro de 2026",
-                t1_tit: "1. Objeto e Âmbito",
-                t1_desc: "Estes termos e condições regulam a reserva e a prestação de serviços de alojamento local nos apartamentos Cristal Mar e Tonay Sol, explorados sob a marca Buarcos & Sea, localizados em Buarcos, Figueira da Foz.",
-                t2_tit: "2. Reservas e Pagamentos",
-                t2_desc: "As reservas efetuadas diretamente através do nosso website beneficiam de tarifas exclusivas. O pagamento pode ser efetuado de forma segura através dos métodos disponibilizados (MB WAY, Multibanco, Cartão de Crédito ou Carteiras Digitais).",
-                t3_tit: "3. Check-in e Check-out",
-                t3_desc: "O horário de check-in e check-out é comunicado no momento da confirmação da reserva. Os dados de acesso aos apartamentos são fornecidos após a validação do registo de hóspedes exigido por lei (AIMA/SIBA).",
-                t4_tit: "4. Taxa Turística",
-                t4_desc: "Conforme os regulamentos municipais aplicáveis na Figueira da Foz, será aplicada a taxa turística local por hóspede e por noite até ao limite máximo estipulado por lei.",
+                meta_title: "Termos e Condições de Reserva - Buarcos & Sea",
+                btn_voltar: "Voltar ao Início",
+                legal_etiqueta: "Informação Legal & Regras",
+                legal_titulo: "Termos e Condições de Reserva e Estadia",
+                legal_atualizacao: "Última atualização: Março de 2026",
+                s1_tit: "1. Identificação da Entidade Exploradora",
+                s1_p1: "Os alojamentos locais <strong>Cristal Mar</strong> (Registo n.º 161145/AL) e <strong>Tonay Sol</strong> (Registo n.º 146454/AL), comercializados sob a marca <strong>Buarcos & Sea</strong>, são explorados por:",
+                s1_nome_lbl: "Nome / Entidade:",
+                s1_nif_lbl: "NIF / NIPC:",
+                s1_morada_lbl: "Morada Fiscal:",
+                s1_aloj_lbl: "Localização dos Alojamentos:",
+                s1_email_lbl: "Email de Contacto:",
+                s1_tel_lbl: "Telefone:",
+                s2_tit: "2. Processo de Reserva e Pagamentos",
+                s2_p1: "As reservas efetuadas diretamente através deste website beneficiam de desconto exclusivo sobre a tarifa base. A reserva considera-se confirmada após a receção do respetivo pagamento através dos meios disponibilizados (MB WAY, Referência Multibanco, Cartão de Crédito/Débito VISA/Mastercard, Apple Pay, Google Pay ou PayShop) via plataforma certificada <strong>ifThenPay</strong>.",
+                s2_p2: "O valor total apresentado no simulador inclui a estadia (com desconto direto aplicado), a taxa única de limpeza final, a eventual taxa de animais de estimação e a <strong>Taxa Turística Municipal da Figueira da Foz</strong>.",
+                s3_tit: "3. Taxa Turística Municipal da Figueira da Foz",
+                s3_p1: "Em cumprimento do Regulamento da Taxa Turística do Município da Figueira da Foz, é cobrado o valor de <strong>2,00 € por noite</strong> (Época Alta: junho a setembro) ou <strong>1,50 € por noite</strong> (Época Baixa: outubro a maio), aplicável a todos os hóspedes com idade igual ou superior a 16 anos, até ao limite máximo de <strong>7 noites consecutivas</strong> por estadia.",
+                s4_tit: "4. Check-in Autónomo, Check-out e Chaves",
+                s4_li1: "<strong>Check-in (Entrada):</strong> A partir das 15h00. O acesso aos alojamentos é efetuado de forma cómoda e autónoma através de <strong>cofre digital de chaves</strong> junto à entrada, sem custos adicionais, independentemente da hora de chegada.",
+                s4_li2: "<strong>Check-out (Saída):</strong> Até às 11h00. No momento da saída, as chaves devem ser devidamente recolocadas no cofre digital e a porta do apartamento deixada fechada.",
+                s4_li3: "<strong>Perda ou Extravio de Chaves:</strong> Em caso de perda, dano ou não devolução das chaves no final da estadia, será cobrado o valor correspondente ao custo real de substituição da fechadura/canhão e de novas cópias, acrescido de eventuais despesas de deslocação técnica ou de serralheiro.",
+                s4_li4: "<strong>Comunicação Obrigatória de Hóspedes:</strong> Nos termos da legislação portuguesa em vigor (comunicação à AIMA / SIBA), todos os hóspedes de nacionalidade estrangeira devem preencher o boletim de alojamento antes do check-in e apresentar documento de identificação válido (Passaporte ou Cartão de Cidadão).",
+                s5_tit: "5. Política de Cancelamento e Alterações",
+                s5_li1: "<strong>Cancelamento Gratuito:</strong> Até 7 dias antes da data prevista de check-in, com reembolso de 100% do valor pago.",
+                s5_li2: "<strong>Cancelamento Tardio:</strong> Cancelamentos efetuados a menos de 7 dias da data de check-in implicam a retenção de 50% do valor total da estadia.",
+                s5_li3: "<strong>Não Comparência (No-Show) ou Saída Antecipada:</strong> Não dá lugar a qualquer reembolso.",
+                s6_tit: "6. Regras da Casa, Animais de Estimação e Danos",
+                s6_li1: "<strong>Lotação Máxima:</strong> Cada apartamento tem lotação máxima de 4 hóspedes, não sendo permitida a pernoita de pessoas não registadas na reserva.",
+                s6_li2: "<strong>Proibição de Fumar e Festas:</strong> É estritamente proibido fumar no interior dos apartamentos, bem como realizar festas ou eventos.",
+                s6_li3: "<strong>Horário de Silêncio:</strong> Ao abrigo do Regulamento Geral do Ruído, deve ser respeitado o silêncio nas zonas comuns e no interior do alojamento entre as 23h00 e as 07h00.",
+                s6_li4: "<strong>Animais de Estimação:</strong> São aceites animais de estimação mediante indicação prévia no ato da reserva e pagamento da respetiva taxa suplementar. Os tutores são integralmente responsáveis pelo bem-estar, higiene e eventuais danos causados pelos animais.",
+                s6_li5: "<strong>Danos e Equipamentos:</strong> Os hóspedes obrigam-se a zelar pela boa conservação do imóvel, mobiliário e equipamentos. Quaisquer danos ou quebras verificados durante a estadia deverão ser comunicados de imediato à gestão e serão imputados ao titular da reserva.",
+                s7_tit: "7. Proteção de Dados (RGPD) e Resolução de Litígios",
+                s7_p1: "Os dados pessoais recolhidos destinam-se exclusivamente à gestão da reserva, emissão de faturação legal e cumprimento das obrigações legais de comunicação de alojamento, em estrita conformidade com o Regulamento Geral sobre a Proteção de Dados (RGPD).",
+                s7_p2: "Em caso de litígio de consumo, o hóspede pode recorrer ao <a href=\"https://www.livroreclamacoes.pt\" target=\"_blank\" class=\"text-sea-600 underline font-semibold\">Livro de Reclamações Eletrónico</a> ou ao <strong>CACRC - Centro de Arbitragem de Conflitos de Consumo da Região de Coimbra</strong> (<a href=\"https://www.centrodearbitragemdecoimbra.com\" target=\"_blank\" class=\"text-sea-600 underline\">www.centrodearbitragemdecoimbra.com</a>).",
                 foot_copy: "© 2026 Buarcos & Sea. Todos os direitos reservados. AL: 161145/AL & 146454/AL."
             },
             en: {
-                termos_title: "Terms and Conditions - Buarcos & Sea",
-                voltar_home: "Back to Home",
-                termos_h1: "Booking Terms and Conditions",
-                termos_atualizacao: "Last update: October 2026",
-                t1_tit: "1. Object and Scope",
-                t1_desc: "These terms and conditions govern the reservation and provision of local accommodation services at Cristal Mar and Tonay Sol apartments, operated under the Buarcos & Sea brand in Buarcos, Figueira da Foz.",
-                t2_tit: "2. Bookings and Payments",
-                t2_desc: "Reservations made directly through our website benefit from exclusive rates. Payment can be securely processed via available methods (MB WAY, ATM, Credit Card, or Digital Wallets).",
-                t3_tit: "3. Check-in and Check-out",
-                t3_desc: "Check-in and check-out times are communicated upon booking confirmation. Access details are provided following the validation of the legally required guest registration (AIMA/SIBA).",
-                t4_tit: "4. Tourist Tax",
-                t4_desc: "In accordance with applicable municipal regulations in Figueira da Foz, the local tourist tax will be applied per guest per night up to the legal maximum limit.",
+                meta_title: "Booking Terms & Conditions - Buarcos & Sea",
+                btn_voltar: "Back to Home",
+                legal_etiqueta: "Legal Information & Rules",
+                legal_titulo: "Booking and Stay Terms & Conditions",
+                legal_atualizacao: "Last updated: March 2026",
+                s1_tit: "1. Identification of the Operating Entity",
+                s1_p1: "The local accommodation properties <strong>Cristal Mar</strong> (License No. 161145/AL) and <strong>Tonay Sol</strong> (License No. 146454/AL), marketed under the <strong>Buarcos & Sea</strong> brand, are operated by:",
+                s1_nome_lbl: "Name / Entity:",
+                s1_nif_lbl: "Tax ID (NIF):",
+                s1_morada_lbl: "Tax Address:",
+                s1_aloj_lbl: "Accommodation Location:",
+                s1_email_lbl: "Contact Email:",
+                s1_tel_lbl: "Phone:",
+                s2_tit: "2. Booking Process and Payments",
+                s2_p1: "Bookings made directly through this website benefit from an exclusive discount on the base rate. A booking is considered confirmed upon receipt of payment via the available methods (MB WAY, Multibanco ATM Reference, VISA/Mastercard Credit/Debit Card, Apple Pay, Google Pay, or PayShop) through the certified <strong>ifThenPay</strong> platform.",
+                s2_p2: "The total amount shown in the simulator includes the stay (with the direct discount applied), the one-time final cleaning fee, any applicable pet fee, and the <strong>Figueira da Foz Municipal Tourist Tax</strong>.",
+                s3_tit: "3. Figueira da Foz Municipal Tourist Tax",
+                s3_p1: "In accordance with the Figueira da Foz Municipal Tourist Tax Regulation, a fee of <strong>€2.00 per night</strong> (High Season: June to September) or <strong>€1.50 per night</strong> (Low Season: October to May) is charged to all guests aged 16 and over, up to a maximum limit of <strong>7 consecutive nights</strong> per stay.",
+                s4_tit: "4. Self Check-in, Check-out, and Keys",
+                s4_li1: "<strong>Check-in:</strong> From 3:00 PM (15:00). Access to the apartments is conveniently self-managed via a <strong>digital key lockbox</strong> at the entrance, at no additional cost, regardless of arrival time.",
+                s4_li2: "<strong>Check-out:</strong> Until 11:00 AM (11:00). Upon departure, keys must be placed back inside the digital lockbox and the apartment door securely closed.",
+                s4_li3: "<strong>Lost or Misplaced Keys:</strong> In the event of loss, damage, or failure to return the keys at the end of the stay, the guest will be charged the actual cost of replacing the lock cylinder and new key copies, plus any technical call-out or locksmith fees.",
+                s4_li4: "<strong>Mandatory Guest Registration:</strong> Under Portuguese law (reporting to AIMA / SIBA), all non-Portuguese guests must complete the accommodation form prior to check-in and present a valid identification document (Passport or National ID Card).",
+                s5_tit: "5. Cancellation and Modification Policy",
+                s5_li1: "<strong>Free Cancellation:</strong> Up to 7 days prior to the scheduled check-in date, with a 100% refund of the amount paid.",
+                s5_li2: "<strong>Late Cancellation:</strong> Cancellations made less than 7 days before the check-in date are subject to a 50% retention of the total stay amount.",
+                s5_li3: "<strong>No-Show or Early Departure:</strong> Non-refundable.",
+                s6_tit: "6. House Rules, Pets, and Damages",
+                s6_li1: "<strong>Maximum Occupancy:</strong> Each apartment accommodates a maximum of 4 guests. Overnight stays by unregistered individuals are strictly prohibited.",
+                s6_li2: "<strong>No Smoking and No Parties:</strong> Smoking inside the apartments, as well as hosting parties or events, is strictly prohibited.",
+                s6_li3: "<strong>Quiet Hours:</strong> Pursuant to the General Noise Regulation, quiet hours must be respected in common areas and inside the apartments between 11:00 PM (23:00) and 7:00 AM (07:00).",
+                s6_li4: "<strong>Pets:</strong> Pets are welcome upon prior notice during booking and payment of the corresponding supplementary fee. Owners are fully responsible for the welfare, hygiene, and any damages caused by their pets.",
+                s6_li5: "<strong>Damages and Equipment:</strong> Guests agree to take good care of the property, furniture, and appliances. Any damages or breakages occurring during the stay must be reported immediately to management and will be charged to the booking holder.",
+                s7_tit: "7. Data Protection (GDPR) and Dispute Resolution",
+                s7_p1: "Personal data collected is used exclusively for booking management, legal invoicing, and compliance with statutory guest reporting obligations, in strict accordance with the General Data Protection Regulation (GDPR).",
+                s7_p2: "In the event of a consumer dispute, guests may resort to the <a href=\"https://www.livroreclamacoes.pt\" target=\"_blank\" class=\"text-sea-600 underline font-semibold\">Electronic Complaints Book</a> or the <strong>CACRC - Coimbra Region Consumer Dispute Arbitration Center</strong> (<a href=\"https://www.centrodearbitragemdecoimbra.com\" target=\"_blank\" class=\"text-sea-600 underline\">www.centrodearbitragemdecoimbra.com</a>).",
                 foot_copy: "© 2026 Buarcos & Sea. All rights reserved. AL: 161145/AL & 146454/AL."
             },
             fr: {
-                termos_title: "Termes et Conditions - Buarcos & Sea",
-                voltar_home: "Retour à l'accueil",
-                termos_h1: "Termes et Conditions de Réservation",
-                termos_atualizacao: "Dernière mise à jour : Octobre 2026",
-                t1_tit: "1. Objet et Champ d'Application",
-                t1_desc: "Ces termes et conditions régissent la réservation et la prestation de services d'hébergement dans les appartements Cristal Mar et Tonay Sol, exploités sous la marque Buarcos & Sea à Buarcos, Figueira da Foz.",
-                t2_tit: "2. Réservations et Paiements",
-                t2_desc: "Les réservations effectuées directement sur notre site bénéficient de tarifs exclusifs. Le paiement peut être effectué en toute sécurité via les méthodes disponibles.",
-                t3_tit: "3. Arrivée et Départ",
-                t3_desc: "Les horaires d'arrivée et de départ sont communiqués lors de la confirmation. Les codes d'accès sont fournis après validation de l'enregistrement légal des voyageurs (AIMA/SIBA).",
-                t4_tit: "4. Taxe de Séjour",
-                t4_desc: "Conformément aux règlements municipaux en vigueur à Figueira da Foz, la taxe de séjour locale sera appliquée par voyageur et par nuit jusqu'à la limite légale.",
+                meta_title: "Conditions Générales de Réservation - Buarcos & Sea",
+                btn_voltar: "Retour à l'accueil",
+                legal_etiqueta: "Informations Légales & Règlement",
+                legal_titulo: "Conditions Générales de Réservation et de Séjour",
+                legal_atualizacao: "Dernière mise à jour : Mars 2026",
+                s1_tit: "1. Identification de l'Entité Exploitante",
+                s1_p1: "Les hébergements touristiques locaux <strong>Cristal Mar</strong> (Licence n° 161145/AL) et <strong>Tonay Sol</strong> (Licence n° 146454/AL), commercialisés sous la marque <strong>Buarcos & Sea</strong>, sont exploités par :",
+                s1_nome_lbl: "Nom / Entité :",
+                s1_nif_lbl: "N° Fiscal (NIF) :",
+                s1_morada_lbl: "Adresse Fiscale :",
+                s1_aloj_lbl: "Adresse des Logements :",
+                s1_email_lbl: "Email de Contact :",
+                s1_tel_lbl: "Téléphone :",
+                s2_tit: "2. Processus de Réservation et Paiements",
+                s2_p1: "Les réservations effectuées directement sur ce site bénéficient d'une remise exclusive sur le tarif de base. La réservation est confirmée dès réception du paiement via les moyens disponibles (MB WAY, Référence Multibanco, Carte Bancaire VISA/Mastercard, Apple Pay, Google Pay ou PayShop) via la plateforme certifiée <strong>ifThenPay</strong>.",
+                s2_p2: "Le montant total affiché dans le simulateur comprend le séjour (remise directe appliquée), les frais uniques de ménage de fin de séjour, les éventuels frais pour animaux et la <strong>Taxe de Séjour Municipale de Figueira da Foz</strong>.",
+                s3_tit: "3. Taxe de Séjour Municipale de Figueira da Foz",
+                s3_p1: "Conformément au Règlement de la Taxe de Séjour de la Municipalité de Figueira da Foz, un montant de <strong>2,00 € par nuit</strong> (Haute Saison : juin à septembre) ou de <strong>1,50 € par nuit</strong> (Basse Saison : octobre à mai) est facturé à tout voyageur âgé de 16 ans et plus, dans la limite de <strong>7 nuits consécutives</strong> par séjour.",
+                s4_tit: "4. Arrivée Autonome, Départ et Clés",
+                s4_li1: "<strong>Arrivée (Check-in) :</strong> À partir de 15h00. L'accès aux appartements s'effectue de manière autonome via une <strong>boîte à clés numérique</strong> à l'entrée, sans frais supplémentaires, quelle que soit l'heure d'arrivée.",
+                s4_li2: "<strong>Départ (Check-out) :</strong> Jusqu'à 11h00. Au moment du départ, les clés doivent être replacées dans la boîte numérique et la porte de l'appartement fermée.",
+                s4_li3: "<strong>Perte ou Oubli des Clés :</strong> En cas de perte, de détérioration ou de non-restitution des clés en fin de séjour, les frais réels de remplacement du cylindre/serrure et de reproduction des clés, ainsi que les éventuels frais de déplacement d'un serrurier, seront facturés au voyageur.",
+                s4_li4: "<strong>Enregistrement Obligatoire des Voyageurs :</strong> Conformément à la législation portugaise (déclaration auprès de l'AIMA / SIBA), tous les voyageurs de nationalité étrangère doivent remplir le bulletin d'hébergement avant l'arrivée et présenter une pièce d'identité valide (Passeport ou Carte Nationale d'Identité).",
+                s5_tit: "5. Politique d'Annulation et de Modification",
+                s5_li1: "<strong>Annulation Gratuite :</strong> Jusqu'à 7 jours avant la date d'arrivée prévue, avec remboursement à 100 % du montant versé.",
+                s5_li2: "<strong>Annulation Tardive :</strong> Toute annulation effectuée moins de 7 jours avant l'arrivée entraîne une retenue de 50 % du montant total du séjour.",
+                s5_li3: "<strong>Non-présentation (No-Show) ou Départ Anticipé :</strong> Ne donne lieu à aucun remboursement.",
+                s6_tit: "6. Règlement Intérieur, Animaux et Dommages",
+                s6_li1: "<strong>Capacité Maximale :</strong> Chaque appartement peut accueillir au maximum 4 personnes. L'hébergement de personnes non inscrites sur la réservation est interdit.",
+                s6_li2: "<strong>Interdiction de Fumer et Fêtes :</strong> Il est strictement interdit de fumer à l'intérieur des appartements ainsi que d'organiser des fêtes ou événements.",
+                s6_li3: "<strong>Heures de Calme :</strong> Conformément au Règlement Général sur le Bruit, le silence doit être respecté dans les parties communes et à l'intérieur du logement entre 23h00 et 07h00.",
+                s6_li4: "<strong>Animaux de Compagnie :</strong> Les animaux sont acceptés sur demande préalable lors de la réservation et moyennant le paiement du supplément applicable. Les propriétaires sont entièrement responsables du bien-être, de l'hygiène et des éventuels dommages causés par leurs animaux.",
+                s6_li5: "<strong>Dommages et Équipements :</strong> Les voyageurs s'engagent à prendre soin du logement, du mobilier et des équipements. Tout dommage ou casse survenu durant le séjour doit être signalé immédiatement à la direction et sera facturé au titulaire de la réservation.",
+                s7_tit: "7. Protection des Données (RGPD) et Litiges",
+                s7_p1: "Les données personnelles collectées sont destinées exclusivement à la gestion de la réservation, à la facturation légale et au respect des obligations légales de déclaration des voyageurs, conformément au Règlement Général sur la Protection des Données (RGPD).",
+                s7_p2: "En cas de litige de consommation, le voyageur peut recourir au <a href=\"https://www.livroreclamacoes.pt\" target=\"_blank\" class=\"text-sea-600 underline font-semibold\">Livre de Réclamations Électronique</a> ou au <strong>CACRC - Centre d'Arbitrage des Conflits de Consommation de la Région de Coimbra</strong> (<a href=\"https://www.centrodearbitragemdecoimbra.com\" target=\"_blank\" class=\"text-sea-600 underline\">www.centrodearbitragemdecoimbra.com</a>).",
                 foot_copy: "© 2026 Buarcos & Sea. Tous droits réservés. AL: 161145/AL & 146454/AL."
             },
             es: {
-                termos_title: "Términos y Condiciones - Buarcos & Sea",
-                voltar_home: "Volver al Inicio",
-                termos_h1: "Términos y Condiciones de Reserva",
-                termos_atualizacao: "Última actualización: Octubre de 2026",
-                t1_tit: "1. Objeto y Alcance",
-                t1_desc: "Estos términos y condiciones regulan la reserva y prestación de servicios de alojamiento en los apartamentos Cristal Mar y Tonay Sol, operados bajo la marca Buarcos & Sea en Buarcos, Figueira da Foz.",
-                t2_tit: "2. Reservas y Pagos",
-                t2_desc: "Las reservas realizadas directamente a través de nuestro sitio web se benefician de tarifas exclusivas. El pago se puede realizar de forma segura mediante los métodos disponibles.",
-                t3_tit: "3. Check-in y Check-out",
-                t3_desc: "Los horarios de entrada y salida se comunican al confirmar la reserva. Los datos de acceso se facilitan tras la validación del registro de huéspedes exigido por ley (AIMA/SIBA).",
-                t4_tit: "4. Tasa Turística",
-                t4_desc: "De acuerdo con las normativas municipales aplicables en Figueira da Foz, se aplicará la tasa turística local por huésped y noche hasta el límite máximo establecido por ley.",
+                meta_title: "Términos y Condiciones de Reserva - Buarcos & Sea",
+                btn_voltar: "Volver al Inicio",
+                legal_etiqueta: "Información Legal y Normas",
+                legal_titulo: "Términos y Condiciones de Reserva y Estancia",
+                legal_atualizacao: "Última actualización: Marzo de 2026",
+                s1_tit: "1. Identificación de la Entidad Explotadora",
+                s1_p1: "Los alojamientos turísticos locales <strong>Cristal Mar</strong> (Licencia n.º 161145/AL) y <strong>Tonay Sol</strong> (Licencia n.º 146454/AL), comercializados bajo la marca <strong>Buarcos & Sea</strong>, son explotados por:",
+                s1_nome_lbl: "Nombre / Entidad:",
+                s1_nif_lbl: "NIF / NIPC:",
+                s1_morada_lbl: "Domicilio Fiscal:",
+                s1_aloj_lbl: "Ubicación de los Alojamientos:",
+                s1_email_lbl: "Correo Electrónico:",
+                s1_tel_lbl: "Teléfono:",
+                s2_tit: "2. Proceso de Reserva y Pagos",
+                s2_p1: "Las reservas realizadas directamente a través de este sitio web disfrutan de un descuento exclusivo sobre la tarifa base. La reserva se considera confirmada tras la recepción del pago correspondiente mediante los métodos disponibles (MB WAY, Referencia Multibanco, Tarjeta de Crédito/Débito VISA/Mastercard, Apple Pay, Google Pay o PayShop) a través de la plataforma certificada <strong>ifThenPay</strong>.",
+                s2_p2: "El importe total mostrado en el simulador incluye la estancia (con el descuento directo aplicado), la tarifa única de limpieza final, el posible suplemento por mascotas y la <strong>Tasa Turística Municipal de Figueira da Foz</strong>.",
+                s3_tit: "3. Tasa Turística Municipal de Figueira da Foz",
+                s3_p1: "En cumplimiento del Reglamento de la Tasa Turística del Municipio de Figueira da Foz, se aplica un importe de <strong>2,00 € por noche</strong> (Temporada Alta: junio a septiembre) o <strong>1,50 € por noche</strong> (Temporada Baja: octubre a mayo) a todos los huéspedes mayores de 16 años, hasta un límite máximo de <strong>7 noches consecutivas</strong> por estancia.",
+                s4_tit: "4. Check-in Autónomo, Check-out y Llaves",
+                s4_li1: "<strong>Check-in (Entrada):</strong> A partir de las 15:00 h. El acceso a los alojamientos se realiza de forma cómoda y autónoma mediante <strong>caja fuerte digital de llaves</strong> situada en la entrada, sin costes adicionales, independientemente de la hora de llegada.",
+                s4_li2: "<strong>Check-out (Salida):</strong> Hasta las 11:00 h. En el momento de la salida, las llaves deben volver a depositarse en la caja digital y la puerta del apartamento debe quedar cerrada.",
+                s4_li3: "<strong>Pérdida o Extravío de Llaves:</strong> En caso de pérdida, deterioro o no devolución de las llaves al finalizar la estancia, se cobrará el coste real de sustitución de la cerradura/bombín y nuevas copias, además de los posibles gastos de desplazamiento técnico o cerrajero.",
+                s4_li4: "<strong>Registro Obligatorio de Huéspedes:</strong> De acuerdo con la legislación portuguesa vigente (comunicación a AIMA / SIBA), todos los huéspedes de nacionalidad extranjera deben cumplimentar el parte de alojamiento antes del check-in y presentar un documento de identidad válido (Pasaporte o DNI).",
+                s5_tit: "5. Política de Cancelación y Modificaciones",
+                s5_li1: "<strong>Cancelación Gratuita:</strong> Hasta 7 días antes de la fecha prevista de check-in, con reembolso del 100 % del importe abonado.",
+                s5_li2: "<strong>Cancelación Tardía:</strong> Las cancelaciones efectuadas con menos de 7 días de antelación conllevan la retención del 50 % del importe total de la estancia.",
+                s5_li3: "<strong>No Presentación (No-Show) o Salida Anticipada:</strong> No dará derecho a reembolso alguno.",
+                s6_tit: "6. Normas de la Casa, Mascotas y Daños",
+                s6_li1: "<strong>Capacidad Máxima:</strong> Cada apartamento tiene una capacidad máxima de 4 huéspedes, no estando permitida la pernoctación de personas no registradas en la reserva.",
+                s6_li2: "<strong>Prohibición de Fumar y Fiestas:</strong> Está terminantemente prohibido fumar en el interior de los apartamentos, así como celebrar fiestas o eventos.",
+                s6_li3: "<strong>Horario de Silencio:</strong> En virtud del Reglamento General del Ruido, se debe respetar el silencio en las zonas comunes y en el interior del alojamiento entre las 23:00 h y las 07:00 h.",
+                s6_li4: "<strong>Mascotas:</strong> Se admiten mascotas previa notificación en el momento de la reserva y pago del suplemento correspondiente. Los propietarios son íntegramente responsables del bienestar, higiene y posibles daños ocasionados por sus mascotas.",
+                s6_li5: "<strong>Daños y Equipamiento:</strong> Los huéspedes se comprometen a velar por el buen estado de conservación del inmueble, mobiliario y electrodomésticos. Cualquier daño o rotura durante la estancia deberá comunicarse de inmediato a la administración y será imputado al titular de la reserva.",
+                s7_tit: "7. Protección de Datos (RGPD) y Resolución de Litigios",
+                s7_p1: "Los datos personales recogidos se destinan exclusivamente a la gestión de la reserva, emisión de facturación legal y cumplimiento de las obligaciones legales de registro de viajeros, en estricto cumplimiento del Reglamento General de Protección de Datos (RGPD).",
+                s7_p2: "En caso de litigio de consumo, el huésped puede acudir al <a href=\"https://www.livroreclamacoes.pt\" target=\"_blank\" class=\"text-sea-600 underline font-semibold\">Libro de Reclamaciones Electrónico</a> o al <strong>CACRC - Centro de Arbitraje de Conflictos de Consumo de la Región de Coimbra</strong> (<a href=\"https://www.centrodearbitragemdecoimbra.com\" target=\"_blank\" class=\"text-sea-600 underline\">www.centrodearbitragemdecoimbra.com</a>).",
                 foot_copy: "© 2026 Buarcos & Sea. Todos los derechos reservados. AL: 161145/AL & 146454/AL."
             }
         };
