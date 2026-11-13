@@ -56,13 +56,12 @@
 
             <div class="flex items-center gap-3">
                 <!-- Seletor de Idiomas -->
-                                <select id="seletor-idioma" onchange="mudarIdioma(this.value)" class="bg-sand-100 border border-sea-200 text-navy-900 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:border-sea-500 cursor-pointer">
+                <select id="seletor-idioma" onchange="mudarIdioma(this.value)" class="bg-sand-100 border border-sea-200 text-navy-900 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:border-sea-500 cursor-pointer">
                     <option value="pt">🇵🇹 PT</option>
                     <option value="en">🇬🇧 EN</option>
                     <option value="fr">🇫🇷 FR</option>
                     <option value="es">🇪🇸 ES</option>
                 </select>
-
 
                 <a href="#simulador" class="hidden sm:flex bg-navy-900 hover:bg-navy-800 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all shadow-sm items-center gap-2 cursor-pointer">
                     <i data-lucide="calendar" class="w-4 h-4 text-sea-500"></i> <span data-i18n="btn_reservar">Reservar Já</span>
@@ -457,8 +456,9 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/en.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 
-    <!-- Dicionário de Traduções (PT / EN / FR) -->
+    <!-- Dicionário de Traduções (PT / EN / FR / ES) -->
     <script>
         const traducoes = {
             pt: {
@@ -736,8 +736,8 @@
                 ts_7: "Produits d'Hygiène Personnelle",
                 ts_8: "Parking Gratuit à Proximité",
                 erro_datas: "Veuillez sélectionner les dates d'arrivée et de départ dans le calendrier."
-            }
-                        es: {
+            },
+            es: {
                 meta_title: "Buarcos & Sea - Alquiler Vacacional en Figueira da Foz",
                 nav_alojamentos: "Alojamientos",
                 nav_simulador: "Simulador y Reservas",
@@ -767,7 +767,7 @@
                 lbl_alojamento: "Alojamiento",
                 lbl_periodo: "Período de Estancia (Check-in ➔ Check-out)",
                 lbl_adultos: "Adultos (16+ años)",
-                lbl_criancas: "Niños (0-15 años)",
+                lbl_criancas: "Niños (0-15 yrs)",
                 lbl_animais: "Mascotas",
                 lbl_numpets: "Cant. Mascotas",
                 pet_nao: "No",
@@ -865,7 +865,7 @@
             return `${ano}-${mes}-${dia}`;
         }
 
-                const alojamentosDados = {
+        const alojamentosDados = {
             cristal_mar: {
                 nome: "Cristal Mar",
                 al: "161145/AL",
@@ -1001,13 +1001,12 @@
             const apt = document.getElementById('apt-select').value;
             const datasSelecionadas = calendarioPicker.selectedDates;
 
-                        if (datasSelecionadas.length < 2) {
+            if (datasSelecionadas.length < 2) {
                 const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
                 const msgErro = (traducoes[langAtual] && traducoes[langAtual].erro_datas) || traducoes['pt'].erro_datas;
                 alert(msgErro);
                 return;
             }
-
 
             const checkin = datasSelecionadas[0];
             const checkout = datasSelecionadas[datasSelecionadas.length - 1];
