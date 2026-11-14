@@ -201,12 +201,24 @@
             });
         }
 
-        async function carregarDadosServidor() {
+                async function carregarDadosServidor() {
             try {
-                const res = await fetch('/api/precos');
+                const res = await fetch(`/api/precos?t=${Date.now()}`);
                 const json = await res.json();
                 if (json.success) {
-                    dadosGlobaisServidor.precos = json.data || {};
+                    // Compatibilidade total com qualquer formato guardado no Redis
+                    let mapaDados = {};
+                    if (json.data) {
+                        mapaDados = json.data;
+                    } else {
+                        mapaDados = json;
+                        delete mapaDados.success;
+                        delete mapaDados.limpezaGlobal;
+                        delete mapaDados.petGlobal;
+                    }
+
+                    dadosGlobaisServidor.precos = mapaDados || {};
+
                     if (json.limpezaGlobal) {
                         dadosGlobaisServidor.limpezaGlobal = json.limpezaGlobal;
                         document.getElementById('limpeza-cristal').value = json.limpezaGlobal.cristal_mar || 35;
@@ -218,11 +230,13 @@
                     }
                 }
             } catch(err) {
+                console.error("Erro ao carregar dados no admin:", err);
                 document.getElementById('limpeza-cristal').value = 35;
                 document.getElementById('limpeza-tonay').value = 35;
                 document.getElementById('pet-estadia').value = 15;
             }
         }
+
 
         function aplicarRegrasDatas() {
             const datasSelecionadas = adminCalendarioPicker.selectedDates;
