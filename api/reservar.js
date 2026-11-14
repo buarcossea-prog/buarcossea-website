@@ -13,6 +13,11 @@ export default async function handler(req, res) {
     const redisToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
     const resendKey = process.env.RESEND_API_KEY;
 
+    // Define validade de 24 horas a partir de agora
+    const agora = Date.now();
+    const expiraEm = agora + (24 * 60 * 60 * 1000);
+    const dataLimiteFormatada = new Date(expiraEm).toLocaleString('pt-PT', { timeZone: 'Europe/Lisbon' });
+
     try {
         if (redisUrl && redisToken) {
             const getRes = await fetch(`${redisUrl}/get/precos_buarcos`, {
@@ -46,7 +51,9 @@ export default async function handler(req, res) {
                 storedData.data[apartamento][dataStr] = {
                     ...(storedData.data[apartamento][dataStr] || {}),
                     bloqueado: true,
-                    motivo: `Reserva Site - ${hospede.nome}`
+                    estadoPagamento: 'pendente',
+                    expiraEm: expiraEm,
+                    motivo: `Pré-Reserva (${hospede.nome}) - Expira: ${dataLimiteFormatada}`
                 };
 
                 dtAtual.setDate(dtAtual.getDate() + 1);
@@ -75,15 +82,16 @@ export default async function handler(req, res) {
                 body: JSON.stringify({
                     from: 'Buarcos & Sea <onboarding@resend.dev>',
                     to: ['buarcossea@gmail.com'],
-                    subject: `Nova Pré-Reserva: ${nomeApt} (${checkin} a ${checkout})`,
+                    subject: `Nova Pré-Reserva (24h): ${nomeApt} (${checkin} a ${checkout})`,
                     html: `
-                        <h2>Nova Reserva Recebida no Site</h2>
+                        <h2>Nova Pré-Reserva Recebida no Site</h2>
                         <p><strong>Alojamento:</strong> ${nomeApt}</p>
                         <p><strong>Check-in:</strong> ${checkin}</p>
                         <p><strong>Check-out:</strong> ${checkout}</p>
                         <p><strong>Hóspedes:</strong> ${adultos} Adultos, ${criancas} Crianças</p>
                         <p><strong>Valor Total:</strong> ${total}</p>
                         <p><strong>Método Escolhido:</strong> ${metodoPagamento.toUpperCase()}</p>
+                        <p style="color: #b45309;"><strong>⏳ Prazo de Pagamento (24h):</strong> As datas ficam bloqueadas automaticamente até <strong>${dataLimiteFormatada}</strong>. Se não for confirmado pagamento, serão libertadas.</p>
                         <hr>
                         <h3>Dados do Hóspede</h3>
                         <p><strong>Nome:</strong> ${hospede.nome}</p>
@@ -101,6 +109,7 @@ export default async function handler(req, res) {
         return res.status(200).json({ 
             success: true, 
             emailEnviado,
+            expiraEm: dataLimiteFormatada,
             entidade: '11683',
             referencia: Math.floor(100000000 + Math.random() * 900000000).toString().replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3')
         });
@@ -110,4 +119,3 @@ export default async function handler(req, res) {
         return res.status(500).json({ success: false, error: error.message });
     }
 }
-
