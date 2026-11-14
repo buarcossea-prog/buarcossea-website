@@ -77,6 +77,39 @@
             </div>
         </div>
 
+        <!-- Secção de Métricas e Resumo Financeiro do Mês (Ponto 3) -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-sand-50 p-5 rounded-2xl border border-sea-200/60 flex items-center gap-4">
+                <div class="w-12 h-12 bg-sea-100 text-sea-600 rounded-xl flex items-center justify-center shrink-0">
+                    <i data-lucide="euro" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="text-[11px] font-bold text-navy-800/70 uppercase tracking-wider">Faturação Prevista (Mês)</span>
+                    <h3 id="stat-faturacao" class="text-xl font-extrabold text-navy-900 mt-0.5">0,00 €</h3>
+                </div>
+            </div>
+
+            <div class="bg-sand-50 p-5 rounded-2xl border border-sea-200/60 flex items-center gap-4">
+                <div class="w-12 h-12 bg-sea-100 text-sea-600 rounded-xl flex items-center justify-center shrink-0">
+                    <i data-lucide="pie-chart" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="text-[11px] font-bold text-navy-800/70 uppercase tracking-wider">Taxa de Ocupação (Mês)</span>
+                    <h3 id="stat-ocupacao" class="text-xl font-extrabold text-navy-900 mt-0.5">0%</h3>
+                </div>
+            </div>
+
+            <div class="bg-sand-50 p-5 rounded-2xl border border-sea-200/60 flex items-center gap-4">
+                <div class="w-12 h-12 bg-sea-100 text-sea-600 rounded-xl flex items-center justify-center shrink-0">
+                    <i data-lucide="calendar-check" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="text-[11px] font-bold text-navy-800/70 uppercase tracking-wider">Noites Ocupadas (Mês)</span>
+                    <h3 id="stat-noites" class="text-xl font-extrabold text-navy-900 mt-0.5">0 noites</h3>
+                </div>
+            </div>
+        </div>
+
         <form id="admin-form" onsubmit="guardarPainel(event)" class="space-y-8">
             <!-- Secção de Taxas Globais por Estadia -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-sand-50 p-6 rounded-2xl border border-sea-200/60">
@@ -266,6 +299,44 @@
             });
         }
 
+        function calcularMetricasMes(precosGeral) {
+            const hoje = new Date();
+            const anoAtual = hoje.getFullYear();
+            const mesAtual = hoje.getMonth(); // 0 a 11
+            
+            const totalDiasMes = new Date(anoAtual, mesAtual + 1, 0).getDate();
+            
+            let noitesOcupadasTotal = 0;
+            let faturamentoTotal = 0;
+            
+            const precoBaseApt = { cristal_mar: 65, tonay_sol: 60 };
+
+            ['cristal_mar', 'tonay_sol'].forEach(apt => {
+                const precosApt = precosGeral[apt] || {};
+                const precoPadrao = precoBaseApt[apt];
+
+                for (let d = 1; d <= totalDiasMes; d++) {
+                    const mesStr = String(mesAtual + 1).padStart(2, '0');
+                    const diaStr = String(d).padStart(2, '0');
+                    const dataStr = `${anoAtual}-${mesStr}-${diaStr}`;
+
+                    const infoDia = precosApt[dataStr];
+                    if (infoDia && infoDia.bloqueado) {
+                        noitesOcupadasTotal++;
+                        const precoNoite = (infoDia.preco !== undefined && !isNaN(infoDia.preco)) ? infoDia.preco : precoPadrao;
+                        faturamentoTotal += precoNoite;
+                    }
+                }
+            });
+
+            const capacidadeTotalNoites = totalDiasMes * 2;
+            const taxaOcupacao = Math.round((noitesOcupadasTotal / capacidadeTotalNoites) * 100);
+
+            document.getElementById('stat-faturacao').innerText = faturamentoTotal.toLocaleString('pt-PT', { style: 'currency', currency: 'EUR' });
+            document.getElementById('stat-ocupacao').innerText = `${taxaOcupacao}%`;
+            document.getElementById('stat-noites').innerText = `${noitesOcupadasTotal} de ${capacidadeTotalNoites} noites`;
+        }
+
         function renderizarListaBloqueios() {
             const apt = document.getElementById('admin-apt-select').value;
             const nomeAptEl = document.getElementById('nome-apt-lista');
@@ -278,6 +349,9 @@
             const datasOrdenadas = Object.keys(precosApt).sort();
 
             const bloqueios = datasOrdenadas.filter(d => precosApt[d] && precosApt[d].bloqueado);
+
+            // Calcula e atualiza as métricas do mês em tempo real
+            calcularMetricasMes(dadosGlobaisServidor.precos);
 
             if (bloqueios.length === 0) {
                 container.innerHTML = `<p class="text-navy-800/60 bg-white p-3 rounded-xl border border-sea-200/60">Sem estadias ou bloqueios ativos para este alojamento.</p>`;
