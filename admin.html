@@ -115,12 +115,12 @@
                 <h3 class="font-bold text-navy-900 text-sm flex items-center gap-2">
                     <i data-lucide="calendar-range" class="w-4 h-4 text-sea-600"></i> Gestão de Preços Diários e Bloqueio de Datas
                 </h3>
-                <p class="text-xs text-navy-800/70">Selecione o alojamento, defina o preço específico para determinadas noites ou bloqueie datas em que o apartamento esteja indisponível.</p>
+                <p class="text-xs text-navy-800/70">Os dias assinalados a <strong>vermelho</strong> no calendário encontram-se bloqueados/indisponíveis no site. Pode selecioná-los aqui para os reabrir ou alterar tarifas.</p>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-navy-800 mb-1">Alojamento</label>
-                        <select id="admin-apt-select" class="w-full bg-white border border-sea-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sea-500 cursor-pointer">
+                        <select id="admin-apt-select" onchange="atualizarDiasBloqueadosNoAdminCalendario()" class="w-full bg-white border border-sea-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sea-500 cursor-pointer">
                             <option value="cristal_mar">Cristal Mar</option>
                             <option value="tonay_sol">Tonay Sol</option>
                         </select>
@@ -131,13 +131,13 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-navy-800 mb-1">Novo Preço por Noite (€)</label>
-                        <input type="number" id="admin-novo-preco" placeholder="Ex: 85" step="1" class="w-full bg-white border border-sea-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sea-500">
+                        <input type="number" id="admin-novo-preco" placeholder="Em branco = preço base" step="1" class="w-full bg-white border border-sea-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sea-500">
                     </div>
                 </div>
 
                 <div class="flex flex-wrap items-center justify-between pt-2 gap-3">
                     <label class="flex items-center gap-2 text-xs font-semibold text-navy-900 cursor-pointer bg-white px-3 py-2 rounded-xl border border-sea-200">
-                        <input type="checkbox" id="admin-bloquear-check" class="w-4 h-4 text-sea-600 rounded"> Bloquear datas selecionadas (Indisponível)
+                        <input type="checkbox" id="admin-bloquear-check" class="w-4 h-4 text-sea-600 rounded"> Bloquear datas selecionadas (Desmarque para abrir datas)
                     </label>
                     <button type="button" onclick="aplicarRegrasDatas()" class="bg-sea-600 hover:bg-sea-500 text-white font-bold px-5 py-2.5 rounded-xl transition-all text-xs flex items-center gap-2 cursor-pointer shadow-sm">
                         <i data-lucide="check" class="w-4 h-4"></i> Aplicar Regra às Datas
@@ -161,12 +161,13 @@
     <script>
         lucide.createIcons();
 
-        // PIN de segurança atualizado
         const PIN_ADMIN = "buarcos2026";
+        let adminCalendarioPicker = null;
+        let dadosGlobaisServidor = { precos: {}, limpezaGlobal: {}, petGlobal: 15 };
 
         function verificarPin(e) {
             e.preventDefault();
-            const pinInserido = document.getElementById('admin-pin-input').value;
+            const pinInserido = document.getElementById('admin-pin-input').value.trim();
             if (pinInserido === PIN_ADMIN) {
                 sessionStorage.setItem('buarcos_admin_auth', 'true');
                 mostrarPainel();
@@ -188,10 +189,7 @@
             location.reload();
         }
 
-        let adminCalendarioPicker = null;
-        let dadosGlobaisServidor = { precos: {}, limpezaGlobal: {}, petGlobal: 15 };
-
-                function inicializarAdminCalendario() {
+        function inicializarAdminCalendario() {
             if (adminCalendarioPicker) {
                 adminCalendarioPicker.destroy();
             }
@@ -202,7 +200,6 @@
                 minDate: "today",
                 dateFormat: "Y-m-d",
                 conjunction: " a ",
-                // Destaca visualmente os dias bloqueados a vermelho claro, mas deixa clicar neles!
                 onDayCreate: function(dObj, dStr, fp, dayElem) {
                     const apt = document.getElementById('admin-apt-select').value;
                     const precosApt = dadosGlobaisServidor.precos[apt] || {};
@@ -221,26 +218,9 @@
             });
         }
 
-        // Atualiza visualmente o calendário do admin ao mudar de apartamento
-        document.getElementById('admin-apt-select').addEventListener('change', () => {
-            atualizarDiasBloqueadosNoAdminCalendario();
-        });
-
         function atualizarDiasBloqueadosNoAdminCalendario() {
             if (adminCalendarioPicker) {
                 adminCalendarioPicker.redraw();
-            }
-        }
-
-            const diasBloqueados = [];
-            Object.keys(precosApt).forEach(dataStr => {
-                if (precosApt[dataStr] && precosApt[dataStr].bloqueado) {
-                    diasBloqueados.push(dataStr);
-                }
-            });
-
-            if (adminCalendarioPicker) {
-                adminCalendarioPicker.set('disable', diasBloqueados);
             }
         }
 
@@ -249,7 +229,6 @@
                 const res = await fetch(`/api/precos?t=${Date.now()}`);
                 const json = await res.json();
                 if (json.success) {
-                    // Extração correta a partir de json.data (compatibilidade com a estrutura do site)
                     if (json.data) {
                         dadosGlobaisServidor.precos = json.data;
                     } else {
@@ -270,7 +249,6 @@
                         document.getElementById('pet-estadia').value = json.petGlobal;
                     }
 
-                    // Atualiza imediatamente o calendário do admin com os dias bloqueados atuais
                     atualizarDiasBloqueadosNoAdminCalendario();
                 }
             } catch(err) {
@@ -312,12 +290,19 @@
                 if (!isNaN(novoPreco)) {
                     dadosGlobaisServidor.precos[apt][dataStr].preco = novoPreco;
                 }
+                
                 dadosGlobaisServidor.precos[apt][dataStr].bloqueado = bloquear;
+                if (!bloquear) {
+                    delete dadosGlobaisServidor.precos[apt][dataStr].estadoPagamento;
+                    delete dadosGlobaisServidor.precos[apt][dataStr].expiraEm;
+                    delete dadosGlobaisServidor.precos[apt][dataStr].motivo;
+                }
 
                 dt.setDate(dt.getDate() + 1);
             }
 
-            alert('Regras aplicadas com sucesso no painel local! Clique em "Guardar Alterações no Servidor" para gravar.');
+            atualizarDiasBloqueadosNoAdminCalendario();
+            alert('Regras aplicadas no painel! Não se esqueça de clicar em "Guardar Alterações no Servidor" para gravar definitivamente.');
         }
 
         async function guardarPainel(e) {
