@@ -201,16 +201,36 @@
             });
         }
 
-                        async function carregarDadosServidor() {
+        // Sincroniza visualmente os bloqueios do servidor no calendário do admin ao mudar de apartamento
+        document.getElementById('admin-apt-select').addEventListener('change', () => {
+            atualizarDiasBloqueadosNoAdminCalendario();
+        });
+
+        function atualizarDiasBloqueadosNoAdminCalendario() {
+            const apt = document.getElementById('admin-apt-select').value;
+            const precosApt = dadosGlobaisServidor.precos[apt] || {};
+            
+            const diasBloqueados = [];
+            Object.keys(precosApt).forEach(dataStr => {
+                if (precosApt[dataStr] && precosApt[dataStr].bloqueado) {
+                    diasBloqueados.push(dataStr);
+                }
+            });
+
+            if (adminCalendarioPicker) {
+                adminCalendarioPicker.set('disable', diasBloqueados);
+            }
+        }
+
+        async function carregarDadosServidor() {
             try {
                 const res = await fetch(`/api/precos?t=${Date.now()}`);
                 const json = await res.json();
                 if (json.success) {
-                    // Extrai corretamente a árvore de preços e bloqueios a partir de .data
+                    // Extração correta a partir de json.data (compatibilidade com a estrutura do site)
                     if (json.data) {
                         dadosGlobaisServidor.precos = json.data;
                     } else {
-                        // Fallback caso venha na raiz
                         let mapaDados = { ...json };
                         delete mapaDados.success;
                         delete mapaDados.limpezaGlobal;
@@ -227,6 +247,9 @@
                         dadosGlobaisServidor.petGlobal = json.petGlobal;
                         document.getElementById('pet-estadia').value = json.petGlobal;
                     }
+
+                    // Atualiza imediatamente o calendário do admin com os dias bloqueados atuais
+                    atualizarDiasBloqueadosNoAdminCalendario();
                 }
             } catch(err) {
                 console.error("Erro ao carregar dados no admin:", err);
@@ -235,7 +258,6 @@
                 document.getElementById('pet-estadia').value = 15;
             }
         }
-
 
         function aplicarRegrasDatas() {
             const datasSelecionadas = adminCalendarioPicker.selectedDates;
@@ -298,6 +320,7 @@
                 const json = await res.json();
                 if (json.success) {
                     alert('Todas as alterações, preços, bloqueios e taxas foram guardados com sucesso!');
+                    atualizarDiasBloqueadosNoAdminCalendario();
                 } else {
                     alert('Erro ao gravar no servidor.');
                 }
