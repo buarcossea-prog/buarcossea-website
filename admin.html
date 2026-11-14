@@ -232,9 +232,17 @@
             }
         }
 
-        function mostrarPainel() {
+        async function mostrarPainel() {
             document.getElementById('pin-screen').classList.add('hidden');
             document.getElementById('admin-content').classList.remove('hidden');
+
+            // Sincroniza automaticamente os iCals da Airbnb e Booking em background ao entrar no admin
+            try {
+                await fetch('/api/sincronizar');
+            } catch (err) {
+                console.error("Erro na sincronização automática iCal:", err);
+            }
+
             inicializarAdminCalendario();
             carregarDadosServidor();
         }
