@@ -1,77 +1,94 @@
-import { Redis } from '@upstash/redis';
-
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL || '',
-  token: process.env.UPSTASH_REDIS_REST_TOKEN || '',
-});
-
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    const redisUrl = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+    const redisToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  // GET: Retornar preços, bloqueios e taxas globais
-  if (req.method === 'GET') {
-    try {
-      const data = await redis.get('buarcos_precos_map') || {};
-      const limpezaGlobal = await redis.get('buarcos_limpeza_global') || { cristal_mar: 35, tonay_sol: 35 };
-      return res.status(200).json({ success: true, data, limpezaGlobal });
-    } catch (err) {
-      return res.status(200).json({ success: true, data: {}, limpezaGlobal: { cristal_mar: 35, tonay_sol: 35 } });
-    }
-  }
-
-  // POST: Protegido pelo PIN 'buarcos2026'
-  if (req.method === 'POST') {
-    const authHeader = req.headers.authorization || '';
-    const tokenInformado = authHeader.replace('Bearer ', '').trim();
-
-    if (tokenInformado !== 'buarcos2026') {
-      return res.status(401).json({ success: false, error: 'Palavra-passe incorreta.' });
+    if (!redisUrl || !redisToken) {
+        return res.status(500).json({ success: false, error: 'Redis não configurado' });
     }
 
-    try {
-      const body = req.body || {};
+    // Impede cache do navegador para que o calendário esteja sempre atualizado
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
 
-      if (body.acao === 'salvar_limpeza') {
-        const limpezaGlobal = {
-          cristal_mar: Number(body.limpezaCristal) || 35,
-          tonay_sol: Number(body.limpezaTonay) || 35
-        };
-        await redis.set('buarcos_limpeza_global', limpezaGlobal);
-        return res.status(200).json({ success: true });
-      }
+    if (req.method === 'GET') {
+        try {
+            const getRes = await fetch(`${redisUrl}/get/precos_buarcos`, {
+                headers: { Authorization: `Bearer ${redisToken}` }
+            });
+            const getData = await getRes.json();
 
-      const { alojamento, datas, preco, pet, descontoExtra, bloqueado, nota } = body;
-      let mapaAtual = await redis.get('buarcos_precos_map') || {};
+            let storedData = { data: {}, limpezaGlobal: { cristal_mar: 35, tonay_sol: 35 }, petGlobal: 15 };
+            if (getData && getData.result) {
+                const parsed = typeof getData.result === 'string' ? JSON.parse(getData.result) : getData.result;
+                if (parsed.data) {
+                    storedData = parsed;
+                } else {
+                    storedData.data = parsed;
+                }
+            }
 
-      if (!mapaAtual[alojamento]) {
-        mapaAtual[alojamento] = {};
-      }
+            // VERIFICAÇÃO AUTOMÁTICA DE EXPIRAÇÃO (24H)
+            const agora = Date.now();
+            let houveAlteracao = false;
 
-      if (Array.isArray(datas)) {
-        datas.forEach(dataStr => {
-          mapaAtual[alojamento][dataStr] = {
-            preco: Number(preco) || 65,
-            pet: Number(pet) || 0,
-            descontoExtra: Number(descontoExtra) || 0,
-            bloqueado: Boolean(bloqueado),
-            nota: nota || ''
-          };
-        });
-      }
+            Object.keys(storedData.data || {}).forEach(apt => {
+                Object.keys(storedData.data[apt] || {}).forEach(dataStr => {
+                    const diaInfo = storedData.data[apt][dataStr];
+                    if (
+                        diaInfo &&
+                        diaInfo.bloqueado &&
+                        diaInfo.estadoPagamento === 'pendente' &&
+                        diaInfo.expiraEm &&
+                        agora > diaInfo.expiraEm
+                    ) {
+                        // O prazo de 24h expirou sem pagamento: liberta a data!
+                        delete diaInfo.bloqueado;
+                        delete diaInfo.estadoPagamento;
+                        delete diaInfo.expiraEm;
+                        delete diaInfo.motivo;
+                        houveAlteracao = true;
+                    }
+                });
+            });
 
-      await redis.set('buarcos_precos_map', mapaAtual);
-      return res.status(200).json({ success: true });
+            // Se alguma data expirou e foi libertada, grava a atualização no Redis
+            if (houveAlteracao) {
+                await fetch(`${redisUrl}/set/precos_buarcos`, {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${redisToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(storedData)
+                });
+            }
 
-    } catch (err) {
-      return res.status(500).json({ success: false, error: err.message });
+            return res.status(200).json({
+                success: true,
+                data: storedData.data || {},
+                limpezaGlobal: storedData.limpezaGlobal || { cristal_mar: 35, tonay_sol: 35 },
+                petGlobal: storedData.petGlobal !== undefined ? storedData.petGlobal : 15
+            });
+        } catch (error) {
+            return res.status(500).json({ success: false, error: error.message });
+        }
     }
-  }
 
-  return res.status(405).json({ success: false, error: 'Método não permitido' });
+    if (req.method === 'POST') {
+        try {
+            const body = req.body;
+            await fetch(`${redisUrl}/set/precos_buarcos`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${redisToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
+            return res.status(200).json({ success: true });
+        } catch (error) {
+            return res.status(500).json({ success: false, error: error.message });
+        }
+    }
+
+    return res.status(405).json({ success: false, error: 'Método não permitido' });
 }
