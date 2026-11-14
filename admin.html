@@ -201,23 +201,22 @@
             });
         }
 
-                async function carregarDadosServidor() {
+                        async function carregarDadosServidor() {
             try {
                 const res = await fetch(`/api/precos?t=${Date.now()}`);
                 const json = await res.json();
                 if (json.success) {
-                    // Compatibilidade total com qualquer formato guardado no Redis
-                    let mapaDados = {};
+                    // Extrai corretamente a árvore de preços e bloqueios a partir de .data
                     if (json.data) {
-                        mapaDados = json.data;
+                        dadosGlobaisServidor.precos = json.data;
                     } else {
-                        mapaDados = json;
+                        // Fallback caso venha na raiz
+                        let mapaDados = { ...json };
                         delete mapaDados.success;
                         delete mapaDados.limpezaGlobal;
                         delete mapaDados.petGlobal;
+                        dadosGlobaisServidor.precos = mapaDados;
                     }
-
-                    dadosGlobaisServidor.precos = mapaDados || {};
 
                     if (json.limpezaGlobal) {
                         dadosGlobaisServidor.limpezaGlobal = json.limpezaGlobal;
