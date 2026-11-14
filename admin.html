@@ -60,9 +60,9 @@
         </div>
     </div>
 
-    <!-- Conteúdo Principal do Admin (Oculto até inserir o PIN correto) -->
-    <div id="admin-content" class="hidden max-w-5xl mx-auto bg-white rounded-3xl shadow-sm border border-sea-200/70 p-6 sm:p-8">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-4 border-b border-sea-100 gap-4">
+    <!-- Conteúdo Principal do Admin -->
+    <div id="admin-content" class="hidden max-w-5xl mx-auto bg-white rounded-3xl shadow-sm border border-sea-200/70 p-6 sm:p-8 space-y-8">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-sea-100 gap-4">
             <div>
                 <span class="text-sea-600 font-semibold text-xs uppercase tracking-widest">Painel de Controlo</span>
                 <h1 class="text-2xl font-bold text-navy-900 mt-1">Gestão de Preços, Bloqueios e Taxas</h1>
@@ -78,7 +78,7 @@
         </div>
 
         <form id="admin-form" onsubmit="guardarPainel(event)" class="space-y-8">
-            <!-- Secção de Taxas Globais por Estadia (Limpeza e Pet) -->
+            <!-- Secção de Taxas Globais por Estadia -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-sand-50 p-6 rounded-2xl border border-sea-200/60">
                 <div>
                     <h3 class="font-bold text-navy-900 mb-4 text-sm flex items-center gap-2">
@@ -110,28 +110,40 @@
                 </div>
             </div>
 
-            <!-- Secção de Preços Específicos e Bloqueio por Dias -->
+            <!-- Secção de Preços Específicos, Bloqueio e Notas -->
             <div class="bg-sand-50 p-6 rounded-2xl border border-sea-200/60 space-y-4">
                 <h3 class="font-bold text-navy-900 text-sm flex items-center gap-2">
-                    <i data-lucide="calendar-range" class="w-4 h-4 text-sea-600"></i> Gestão de Preços Diários e Bloqueio de Datas
+                    <i data-lucide="calendar-range" class="w-4 h-4 text-sea-600"></i> Gestão de Preços Diários, Bloqueio e Notas
                 </h3>
-                <p class="text-xs text-navy-800/70">Os dias assinalados a <strong>vermelho</strong> no calendário encontram-se bloqueados/indisponíveis no site. Pode selecioná-los aqui para os reabrir ou alterar tarifas.</p>
+                <p class="text-xs text-navy-800/70">Selecione o intervalo de datas, marque a caixa de bloqueio e preencha o nome/contacto para registar reservas diretas.</p>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-navy-800 mb-1">Alojamento</label>
-                        <select id="admin-apt-select" onchange="atualizarDiasBloqueadosNoAdminCalendario()" class="w-full bg-white border border-sea-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sea-500 cursor-pointer">
+                        <select id="admin-apt-select" onchange="atualizarVisualizacaoAdmin()" class="w-full bg-white border border-sea-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sea-500 cursor-pointer">
                             <option value="cristal_mar">Cristal Mar</option>
                             <option value="tonay_sol">Tonay Sol</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-navy-800 mb-1">Selecionar Intervalo de Datas</label>
+                        <label class="block text-xs font-semibold text-navy-800 mb-1">Intervalo de Datas</label>
                         <input type="text" id="admin-campo-datas" placeholder="Clique para selecionar..." class="w-full bg-white border border-sea-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sea-500 cursor-pointer font-semibold text-sea-600">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-navy-800 mb-1">Novo Preço por Noite (€)</label>
+                        <label class="block text-xs font-semibold text-navy-800 mb-1">Preço por Noite (€)</label>
                         <input type="number" id="admin-novo-preco" placeholder="Em branco = preço base" step="1" class="w-full bg-white border border-sea-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sea-500">
+                    </div>
+                </div>
+
+                <!-- Campos para Nome, Contacto e Notas -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                    <div>
+                        <label class="block text-xs font-semibold text-navy-800 mb-1">Nome do Hóspede / Origem</label>
+                        <input type="text" id="admin-nota-nome" placeholder="Ex: Carlos Silva (Reserva Direta)" class="w-full bg-white border border-sea-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sea-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-navy-800 mb-1">Contacto / Telemóvel / Notas</label>
+                        <input type="text" id="admin-nota-contacto" placeholder="Ex: 912345678 - Sinal pago" class="w-full bg-white border border-sea-200 rounded-xl p-2.5 text-sm focus:outline-none focus:border-sea-500">
                     </div>
                 </div>
 
@@ -142,6 +154,16 @@
                     <button type="button" onclick="aplicarRegrasDatas()" class="bg-sea-600 hover:bg-sea-500 text-white font-bold px-5 py-2.5 rounded-xl transition-all text-xs flex items-center gap-2 cursor-pointer shadow-sm">
                         <i data-lucide="check" class="w-4 h-4"></i> Aplicar Regra às Datas
                     </button>
+                </div>
+
+                <!-- Consulta Rápida de Datas Bloqueadas e Notas -->
+                <div class="pt-4 border-t border-sea-200/70">
+                    <h4 class="text-xs font-bold text-navy-900 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                        <i data-lucide="clipboard-list" class="w-4 h-4 text-sea-600"></i> Consulta de Datas Bloqueadas e Notas (<span id="nome-apt-lista">Cristal Mar</span>)
+                    </h4>
+                    <div id="lista-bloqueios-notas" class="space-y-2 max-h-60 overflow-y-auto pr-1 text-xs">
+                        <p class="text-navy-800/60 italic">A carregar registos...</p>
+                    </div>
                 </div>
             </div>
 
@@ -189,6 +211,13 @@
             location.reload();
         }
 
+        function formatarDataStr(dateObj) {
+            const ano = dateObj.getFullYear();
+            const mes = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const dia = String(dateObj.getDate()).padStart(2, '0');
+            return `${ano}-${mes}-${dia}`;
+        }
+
         function inicializarAdminCalendario() {
             if (adminCalendarioPicker) {
                 adminCalendarioPicker.destroy();
@@ -200,28 +229,102 @@
                 minDate: "today",
                 dateFormat: "Y-m-d",
                 conjunction: " a ",
+                onChange: function(selectedDates) {
+                    if (selectedDates.length > 0) {
+                        const apt = document.getElementById('admin-apt-select').value;
+                        const dataStr = formatarDataStr(selectedDates[0]);
+                        const infoDia = dadosGlobaisServidor.precos[apt] && dadosGlobaisServidor.precos[apt][dataStr];
+                        
+                        if (infoDia) {
+                            document.getElementById('admin-bloquear-check').checked = !!infoDia.bloqueado;
+                            document.getElementById('admin-nota-nome').value = infoDia.motivo || '';
+                            document.getElementById('admin-nota-contacto').value = infoDia.contacto || '';
+                            document.getElementById('admin-novo-preco').value = infoDia.preco || '';
+                        } else {
+                            document.getElementById('admin-bloquear-check').checked = false;
+                            document.getElementById('admin-nota-nome').value = '';
+                            document.getElementById('admin-nota-contacto').value = '';
+                            document.getElementById('admin-novo-preco').value = '';
+                        }
+                    }
+                },
                 onDayCreate: function(dObj, dStr, fp, dayElem) {
                     const apt = document.getElementById('admin-apt-select').value;
                     const precosApt = dadosGlobaisServidor.precos[apt] || {};
-                    const ano = dayElem.dateObj.getFullYear();
-                    const mes = String(dayElem.dateObj.getMonth() + 1).padStart(2, '0');
-                    const dia = String(dayElem.dateObj.getDate()).padStart(2, '0');
-                    const dataStr = `${ano}-${mes}-${dia}`;
+                    const dataStr = formatarDataStr(dayElem.dateObj);
 
                     if (precosApt[dataStr] && precosApt[dataStr].bloqueado) {
                         dayElem.style.backgroundColor = "#fee2e2";
                         dayElem.style.color = "#991b1b";
                         dayElem.style.borderColor = "#fca5a5";
-                        dayElem.title = "Dia Bloqueado (Clique para selecionar e desbloquear)";
+                        
+                        let motivoInfo = precosApt[dataStr].motivo || "Bloqueado";
+                        let contactoInfo = precosApt[dataStr].contacto || "";
+                        dayElem.title = `${motivoInfo}${contactoInfo ? ' | ' + contactoInfo : ''}`;
                     }
                 }
             });
         }
 
-        function atualizarDiasBloqueadosNoAdminCalendario() {
+        function renderizarListaBloqueios() {
+            const apt = document.getElementById('admin-apt-select').value;
+            const nomeAptEl = document.getElementById('nome-apt-lista');
+            if (nomeAptEl) {
+                nomeAptEl.innerText = apt === 'cristal_mar' ? 'Cristal Mar' : 'Tonay Sol';
+            }
+
+            const container = document.getElementById('lista-bloqueios-notas');
+            const precosApt = dadosGlobaisServidor.precos[apt] || {};
+            const datasOrdenadas = Object.keys(precosApt).sort();
+
+            const bloqueios = datasOrdenadas.filter(d => precosApt[d] && precosApt[d].bloqueado);
+
+            if (bloqueios.length === 0) {
+                container.innerHTML = `<p class="text-navy-800/60 bg-white p-3 rounded-xl border border-sea-200/60">Sem datas bloqueadas para este alojamento.</p>`;
+                return;
+            }
+
+            container.innerHTML = bloqueios.map(dataStr => {
+                const info = precosApt[dataStr];
+                const nome = info.motivo || 'Bloqueio sem nome';
+                const contacto = info.contacto ? `<span class="text-navy-800/80">• ${info.contacto}</span>` : '';
+                const badgePendente = info.estadoPagamento === 'pendente' 
+                    ? `<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold text-[10px]">Pré-Reserva 24h</span>` 
+                    : `<span class="bg-red-100 text-red-800 px-2 py-0.5 rounded font-bold text-[10px]">Fechado</span>`;
+
+                return `
+                    <div class="flex flex-wrap items-center justify-between gap-2 bg-white p-2.5 rounded-xl border border-sea-200/80">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="font-mono font-bold text-navy-900 bg-sand-100 px-2 py-0.5 rounded">${dataStr}</span>
+                            ${badgePendente}
+                            <strong class="text-navy-900">${nome}</strong>
+                            ${contacto}
+                        </div>
+                        <button type="button" onclick="desbloquearDiaRapido('${apt}', '${dataStr}')" class="text-[11px] bg-sand-100 hover:bg-red-50 text-red-700 font-semibold px-2.5 py-1 rounded-lg border border-red-200 cursor-pointer">
+                            Abrir Dia
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function desbloquearDiaRapido(apt, dataStr) {
+            if (dadosGlobaisServidor.precos[apt] && dadosGlobaisServidor.precos[apt][dataStr]) {
+                dadosGlobaisServidor.precos[apt][dataStr].bloqueado = false;
+                delete dadosGlobaisServidor.precos[apt][dataStr].estadoPagamento;
+                delete dadosGlobaisServidor.precos[apt][dataStr].expiraEm;
+                delete dadosGlobaisServidor.precos[apt][dataStr].motivo;
+                delete dadosGlobaisServidor.precos[apt][dataStr].contacto;
+                atualizarVisualizacaoAdmin();
+                alert(`Dia ${dataStr} aberto localmente! Clique em "Guardar Alterações no Servidor" para confirmar.`);
+            }
+        }
+
+        function atualizarVisualizacaoAdmin() {
             if (adminCalendarioPicker) {
                 adminCalendarioPicker.redraw();
             }
+            renderizarListaBloqueios();
         }
 
         async function carregarDadosServidor() {
@@ -249,7 +352,7 @@
                         document.getElementById('pet-estadia').value = json.petGlobal;
                     }
 
-                    atualizarDiasBloqueadosNoAdminCalendario();
+                    atualizarVisualizacaoAdmin();
                 }
             } catch(err) {
                 console.error("Erro ao carregar dados no admin:", err);
@@ -261,14 +364,16 @@
 
         function aplicarRegrasDatas() {
             const datasSelecionadas = adminCalendarioPicker.selectedDates;
-            if (datasSelecionadas.length < 2) {
-                alert('Por favor selecione um intervalo de datas no calendário.');
+            if (datasSelecionadas.length === 0) {
+                alert('Por favor selecione pelo menos uma data ou intervalo no calendário.');
                 return;
             }
 
             const apt = document.getElementById('admin-apt-select').value;
             const novoPreco = parseFloat(document.getElementById('admin-novo-preco').value);
             const bloquear = document.getElementById('admin-bloquear-check').checked;
+            const notaNome = document.getElementById('admin-nota-nome').value.trim();
+            const notaContacto = document.getElementById('admin-nota-contacto').value.trim();
 
             let dt = new Date(datasSelecionadas[0]);
             const fim = new Date(datasSelecionadas[datasSelecionadas.length - 1]);
@@ -278,10 +383,7 @@
             }
 
             while (dt <= fim) {
-                const ano = dt.getFullYear();
-                const mes = String(dt.getMonth() + 1).padStart(2, '0');
-                const dia = String(dt.getDate()).padStart(2, '0');
-                const dataStr = `${ano}-${mes}-${dia}`;
+                const dataStr = formatarDataStr(dt);
 
                 if (!dadosGlobaisServidor.precos[apt][dataStr]) {
                     dadosGlobaisServidor.precos[apt][dataStr] = {};
@@ -292,17 +394,22 @@
                 }
                 
                 dadosGlobaisServidor.precos[apt][dataStr].bloqueado = bloquear;
-                if (!bloquear) {
+                
+                if (bloquear) {
+                    if (notaNome) dadosGlobaisServidor.precos[apt][dataStr].motivo = notaNome;
+                    if (notaContacto) dadosGlobaisServidor.precos[apt][dataStr].contacto = notaContacto;
+                } else {
                     delete dadosGlobaisServidor.precos[apt][dataStr].estadoPagamento;
                     delete dadosGlobaisServidor.precos[apt][dataStr].expiraEm;
                     delete dadosGlobaisServidor.precos[apt][dataStr].motivo;
+                    delete dadosGlobaisServidor.precos[apt][dataStr].contacto;
                 }
 
                 dt.setDate(dt.getDate() + 1);
             }
 
-            atualizarDiasBloqueadosNoAdminCalendario();
-            alert('Regras aplicadas no painel! Não se esqueça de clicar em "Guardar Alterações no Servidor" para gravar definitivamente.');
+            atualizarVisualizacaoAdmin();
+            alert('Regras e notas aplicadas! Clique agora no botão "Guardar Alterações no Servidor" para gravar definitivamente.');
         }
 
         async function guardarPainel(e) {
@@ -326,8 +433,8 @@
                 });
                 const json = await res.json();
                 if (json.success) {
-                    alert('Todas as alterações, preços, bloqueios e taxas foram guardados com sucesso!');
-                    atualizarDiasBloqueadosNoAdminCalendario();
+                    alert('Todas as alterações, notas, bloqueios e taxas foram guardados no servidor!');
+                    atualizarVisualizacaoAdmin();
                 } else {
                     alert('Erro ao gravar no servidor.');
                 }
