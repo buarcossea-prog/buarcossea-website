@@ -191,25 +191,47 @@
         let adminCalendarioPicker = null;
         let dadosGlobaisServidor = { precos: {}, limpezaGlobal: {}, petGlobal: 15 };
 
-        function inicializarAdminCalendario() {
+                function inicializarAdminCalendario() {
+            if (adminCalendarioPicker) {
+                adminCalendarioPicker.destroy();
+            }
+
             adminCalendarioPicker = flatpickr("#admin-campo-datas", {
                 mode: "range",
                 locale: "pt",
                 minDate: "today",
                 dateFormat: "Y-m-d",
-                conjunction: " a "
+                conjunction: " a ",
+                // Destaca visualmente os dias bloqueados a vermelho claro, mas deixa clicar neles!
+                onDayCreate: function(dObj, dStr, fp, dayElem) {
+                    const apt = document.getElementById('admin-apt-select').value;
+                    const precosApt = dadosGlobaisServidor.precos[apt] || {};
+                    const ano = dayElem.dateObj.getFullYear();
+                    const mes = String(dayElem.dateObj.getMonth() + 1).padStart(2, '0');
+                    const dia = String(dayElem.dateObj.getDate()).padStart(2, '0');
+                    const dataStr = `${ano}-${mes}-${dia}`;
+
+                    if (precosApt[dataStr] && precosApt[dataStr].bloqueado) {
+                        dayElem.style.backgroundColor = "#fee2e2";
+                        dayElem.style.color = "#991b1b";
+                        dayElem.style.borderColor = "#fca5a5";
+                        dayElem.title = "Dia Bloqueado (Clique para selecionar e desbloquear)";
+                    }
+                }
             });
         }
 
-        // Sincroniza visualmente os bloqueios do servidor no calendário do admin ao mudar de apartamento
+        // Atualiza visualmente o calendário do admin ao mudar de apartamento
         document.getElementById('admin-apt-select').addEventListener('change', () => {
             atualizarDiasBloqueadosNoAdminCalendario();
         });
 
         function atualizarDiasBloqueadosNoAdminCalendario() {
-            const apt = document.getElementById('admin-apt-select').value;
-            const precosApt = dadosGlobaisServidor.precos[apt] || {};
-            
+            if (adminCalendarioPicker) {
+                adminCalendarioPicker.redraw();
+            }
+        }
+
             const diasBloqueados = [];
             Object.keys(precosApt).forEach(dataStr => {
                 if (precosApt[dataStr] && precosApt[dataStr].bloqueado) {
