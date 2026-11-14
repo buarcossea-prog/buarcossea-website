@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     const redisToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
     const resendKey = process.env.RESEND_API_KEY;
 
-    // Define validade de 24 horas a partir de agora
+    // Define validade de 24 horas a partir de agora para pré-reserva
     const agora = Date.now();
     const expiraEm = agora + (24 * 60 * 60 * 1000);
     const dataLimiteFormatada = new Date(expiraEm).toLocaleString('pt-PT', { timeZone: 'Europe/Lisbon' });
@@ -48,12 +48,14 @@ export default async function handler(req, res) {
                 const dia = String(dtAtual.getDate()).padStart(2, '0');
                 const dataStr = `${ano}-${mes}-${dia}`;
 
+                // Guarda o bloqueio e preenche automaticamente as notas com os dados do cliente do site
                 storedData.data[apartamento][dataStr] = {
                     ...(storedData.data[apartamento][dataStr] || {}),
                     bloqueado: true,
                     estadoPagamento: 'pendente',
                     expiraEm: expiraEm,
-                    motivo: `Pré-Reserva (${hospede.nome}) - Expira: ${dataLimiteFormatada}`
+                    motivo: `Site: ${hospede.nome}`,
+                    contacto: `${hospede.telefone} (${hospede.email})`
                 };
 
                 dtAtual.setDate(dtAtual.getDate() + 1);
@@ -82,7 +84,7 @@ export default async function handler(req, res) {
                 body: JSON.stringify({
                     from: 'Buarcos & Sea <onboarding@resend.dev>',
                     to: ['buarcossea@gmail.com'],
-                    subject: `Nova Pré-Reserva (24h): ${nomeApt} (${checkin} a ${checkout})`,
+                    subject: `Nova Pré-Reserva (24h): ${nomeApt} (${checkin} a ${checkout}) - ${hospede.nome}`,
                     html: `
                         <h2>Nova Pré-Reserva Recebida no Site</h2>
                         <p><strong>Alojamento:</strong> ${nomeApt}</p>
@@ -91,9 +93,9 @@ export default async function handler(req, res) {
                         <p><strong>Hóspedes:</strong> ${adultos} Adultos, ${criancas} Crianças</p>
                         <p><strong>Valor Total:</strong> ${total}</p>
                         <p><strong>Método Escolhido:</strong> ${metodoPagamento.toUpperCase()}</p>
-                        <p style="color: #b45309;"><strong>⏳ Prazo de Pagamento (24h):</strong> As datas ficam bloqueadas automaticamente até <strong>${dataLimiteFormatada}</strong>. Se não for confirmado pagamento, serão libertadas.</p>
+                        <p style="color: #b45309;"><strong>⏳ Prazo de Pagamento (24h):</strong> As datas ficam bloqueadas automaticamente até <strong>${dataLimiteFormatada}</strong>.</p>
                         <hr>
-                        <h3>Dados do Hóspede</h3>
+                        <h3>Dados do Hóspede (Já registados no Admin)</h3>
                         <p><strong>Nome:</strong> ${hospede.nome}</p>
                         <p><strong>Email:</strong> ${hospede.email}</p>
                         <p><strong>Telemóvel:</strong> ${hospede.telefone}</p>
