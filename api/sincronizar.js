@@ -6,21 +6,18 @@ export default async function handler(req, res) {
         return res.status(500).json({ success: false, error: 'Configuração do Redis em falta' });
     }
 
-    // Podes colocar aqui os teus links iCal reais da Airbnb e Booking para cada apartamento
-    // Exemplo de estrutura:
     const linksCanais = {
         cristal_mar: [
-            // process.env.ICAL_AIRBNB_CRISTAL,
-            // process.env.ICAL_BOOKING_CRISTAL
+            "https://www.airbnb.com/calendar/ical/1357310302657236052.ics?t=dee07350f32b440c84ea7a435852ce1a&locale=pt-PT",
+            "https://ical.booking.com/v1/export?t=65bbe889-665e-4ba9-b27f-f7d565f9052d"
         ],
         tonay_sol: [
-            // process.env.ICAL_AIRBNB_TONAY,
-            // process.env.ICAL_BOOKING_TONAY
+            "https://www.airbnb.com/calendar/ical/913697094754040454.ics?t=4fcdaae84b2740699596375f71e0b5e2&locale=pt-PT",
+            "https://ical.booking.com/v1/export?t=4e97733e-08c0-49af-bb24-566c40dc55c0"
         ]
     };
 
     try {
-        // 1. Buscar dados atuais ao Redis
         const getRes = await fetch(`${redisUrl}/get/precos_buarcos`, {
             headers: { Authorization: `Bearer ${redisToken}` }
         });
@@ -33,7 +30,6 @@ export default async function handler(req, res) {
             else storedData.data = parsed;
         }
 
-        // 2. Processar cada canal e extrair as datas ocupadas (formato iCal .ics)
         for (const [apt, urls] of Object.entries(linksCanais)) {
             if (!urls || urls.length === 0) continue;
             if (!storedData.data[apt]) storedData.data[apt] = {};
@@ -43,7 +39,6 @@ export default async function handler(req, res) {
                     const icallRes = await fetch(url);
                     const icallText = await icallRes.text();
 
-                    // Expressão regular simples para extrair datas DTSTART e DTEND do formato iCal
                     const eventos = icallText.split('BEGIN:VEVENT');
                     for (const ev of eventos) {
                         const startMatch = ev.match(/DTSTART(?:;VALUE=DATE)?:([0-9]{8})/);
@@ -55,7 +50,6 @@ export default async function handler(req, res) {
                             let dEnd = parseIcalDate(endMatch[1]);
                             let origemNome = summaryMatch ? summaryMatch[1].trim() : 'Canal Externo (Airbnb/Booking)';
 
-                            // O iCal da Booking/Airbnb costuma excluir o dia de check-out, por isso o loop vai até dEnd - 1 dia
                             let dtAtual = new Date(dStart);
                             let dtFim = new Date(dEnd);
 
@@ -65,13 +59,12 @@ export default async function handler(req, res) {
                                 const dia = String(dtAtual.getDate()).padStart(2, '0');
                                 const dataStr = `${ano}-${mes}-${dia}`;
 
-                                // Bloqueia apenas se já não estiver confirmado por reserva direta do site
                                 if (!storedData.data[apt][dataStr] || !storedData.data[apt][dataStr].bloqueado) {
                                     storedData.data[apt][dataStr] = {
                                         ...(storedData.data[apt][dataStr] || {}),
                                         bloqueado: true,
                                         motivo: origemNome,
-                                        contacto: 'Sincronizado automaticamente'
+                                        contacto: 'Sincronizado via iCal'
                                     };
                                 }
 
@@ -85,7 +78,6 @@ export default async function handler(req, res) {
             }
         }
 
-        // 3. Guardar dados atualizados no Redis
         await fetch(`${redisUrl}/set/precos_buarcos`, {
             method: 'POST',
             headers: {
@@ -95,7 +87,7 @@ export default async function handler(req, res) {
             body: JSON.stringify(storedData)
         });
 
-        return res.status(255).json({ success: true, message: 'Sincronização de canais concluída com sucesso!' });
+        return res.status(200).json({ success: true, message: 'Sincronização de canais concluída com sucesso!' });
 
     } catch (error) {
         console.error('Erro na sincronização:', error);
@@ -109,4 +101,3 @@ function parseIcalDate(str8) {
     const dia = str8.substring(6, 8);
     return `${ano}-${mes}-${dia}T00:00:00`;
 }
-
