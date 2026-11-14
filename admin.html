@@ -183,4 +183,307 @@
     <script>
         lucide.createIcons();
 
-        const
+        const PIN_ADMIN = "buarcos2026";
+        let adminCalendarioPicker = null;
+        let dadosGlobaisServidor = { precos: {}, limpezaGlobal: {}, petGlobal: 15 };
+
+        function verificarPin(e) {
+            e.preventDefault();
+            const pinInserido = document.getElementById('admin-pin-input').value.trim();
+            if (pinInserido === PIN_ADMIN) {
+                sessionStorage.setItem('buarcos_admin_auth', 'true');
+                mostrarPainel();
+            } else {
+                alert('PIN incorreto. Tente novamente.');
+                document.getElementById('admin-pin-input').value = '';
+            }
+        }
+
+        function mostrarPainel() {
+            document.getElementById('pin-screen').classList.add('hidden');
+            document.getElementById('admin-content').classList.remove('hidden');
+            inicializarAdminCalendario();
+            carregarDadosServidor();
+        }
+
+        function bloquearSessao() {
+            sessionStorage.removeItem('buarcos_admin_auth');
+            location.reload();
+        }
+
+        function formatarDataStr(dateObj) {
+            const ano = dateObj.getFullYear();
+            const mes = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const dia = String(dateObj.getDate()).padStart(2, '0');
+            return `${ano}-${mes}-${dia}`;
+        }
+
+        function inicializarAdminCalendario() {
+            if (adminCalendarioPicker) {
+                adminCalendarioPicker.destroy();
+            }
+
+            adminCalendarioPicker = flatpickr("#admin-campo-datas", {
+                mode: "range",
+                locale: "pt",
+                minDate: "today",
+                dateFormat: "Y-m-d",
+                conjunction: " a ",
+                onChange: function(selectedDates) {
+                    if (selectedDates.length > 0) {
+                        const apt = document.getElementById('admin-apt-select').value;
+                        const dataStr = formatarDataStr(selectedDates[0]);
+                        const infoDia = dadosGlobaisServidor.precos[apt] && dadosGlobaisServidor.precos[apt][dataStr];
+                        
+                        if (infoDia) {
+                            document.getElementById('admin-bloquear-check').checked = !!infoDia.bloqueado;
+                            document.getElementById('admin-nota-nome').value = infoDia.motivo || '';
+                            document.getElementById('admin-nota-contacto').value = infoDia.contacto || '';
+                            document.getElementById('admin-novo-preco').value = infoDia.preco || '';
+                        } else {
+                            document.getElementById('admin-bloquear-check').checked = false;
+                            document.getElementById('admin-nota-nome').value = '';
+                            document.getElementById('admin-nota-contacto').value = '';
+                            document.getElementById('admin-novo-preco').value = '';
+                        }
+                    }
+                },
+                onDayCreate: function(dObj, dStr, fp, dayElem) {
+                    const apt = document.getElementById('admin-apt-select').value;
+                    const precosApt = dadosGlobaisServidor.precos[apt] || {};
+                    const dataStr = formatarDataStr(dayElem.dateObj);
+
+                    if (precosApt[dataStr] && precosApt[dataStr].bloqueado) {
+                        dayElem.style.backgroundColor = "#fee2e2";
+                        dayElem.style.color = "#991b1b";
+                        dayElem.style.borderColor = "#fca5a5";
+                        
+                        let motivoInfo = precosApt[dataStr].motivo || "Bloqueado";
+                        let contactoInfo = precosApt[dataStr].contacto || "";
+                        dayElem.title = `${motivoInfo}${contactoInfo ? ' | ' + contactoInfo : ''}`;
+                    }
+                }
+            });
+        }
+
+        function renderizarListaBloqueios() {
+            const apt = document.getElementById('admin-apt-select').value;
+            const nomeAptEl = document.getElementById('nome-apt-lista');
+            if (nomeAptEl) {
+                nomeAptEl.innerText = apt === 'cristal_mar' ? 'Cristal Mar' : 'Tonay Sol';
+            }
+
+            const container = document.getElementById('lista-bloqueios-notas');
+            const precosApt = dadosGlobaisServidor.precos[apt] || {};
+            const datasOrdenadas = Object.keys(precosApt).sort();
+
+            const bloqueios = datasOrdenadas.filter(d => precosApt[d] && precosApt[d].bloqueado);
+
+            if (bloqueios.length === 0) {
+                container.innerHTML = `<p class="text-navy-800/60 bg-white p-3 rounded-xl border border-sea-200/60">Sem estadias ou bloqueios ativos para este alojamento.</p>`;
+                return;
+            }
+
+            let intervalos = [];
+            if (bloqueios.length > 0) {
+                let inicio = bloqueios[0];
+                let fim = bloqueios[0];
+                let infoAtual = precosApt[bloqueios[0]];
+
+                for (let i = 1; i < bloqueios.length; i++) {
+                    const dataAtual = bloqueios[i];
+                    const infoData = precosApt[dataAtual];
+
+                    const dPrev = new Date(fim);
+                    dPrev.setDate(dPrev.getDate() + 1);
+                    const diaSeguinteStr = formatarDataStr(dPrev);
+
+                    if (dataAtual === diaSeguinteStr && infoData.motivo === infoAtual.motivo && infoData.estadoPagamento === infoAtual.estadoPagamento) {
+                        fim = dataAtual;
+                    } else {
+                        intervalos.push({ inicio, fim, info: infoAtual });
+                        inicio = dataAtual;
+                        fim = dataAtual;
+                        infoAtual = infoData;
+                    }
+                }
+                intervalos.push({ inicio, fim, info: infoAtual });
+            }
+
+            container.innerHTML = intervalos.map(intervalo => {
+                const nome = intervalo.info.motivo || 'Bloqueio sem nome';
+                const contacto = intervalo.info.contacto ? `<span class="text-navy-800/80">• ${intervalo.info.contacto}</span>` : '';
+                
+                let textoPeriodo = intervalo.inicio === intervalo.fim ? intervalo.inicio : `${intervalo.inicio} ➔ ${intervalo.fim}`;
+                
+                const badgePendente = intervalo.info.estadoPagamento === 'pendente' 
+                    ? `<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold text-[10px]">Pré-Reserva 24h</span>` 
+                    : `<span class="bg-red-100 text-red-800 px-2 py-0.5 rounded font-bold text-[10px]">Fechado / Direta</span>`;
+
+                return `
+                    <div class="flex flex-wrap items-center justify-between gap-2 bg-white p-2.5 rounded-xl border border-sea-200/80 shadow-xs">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="font-mono font-bold text-navy-900 bg-sand-100 px-2.5 py-1 rounded text-xs">${textoPeriodo}</span>
+                            ${badgePendente}
+                            <strong class="text-navy-900">${nome}</strong>
+                            ${contacto}
+                        </div>
+                        <button type="button" onclick="desbloquearIntervalo('${apt}', '${intervalo.inicio}', '${intervalo.fim}')" class="text-[11px] bg-sand-100 hover:bg-red-50 text-red-700 font-semibold px-2.5 py-1 rounded-lg border border-red-200 cursor-pointer">
+                            Abrir Período
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function desbloquearIntervalo(apt, dataInicioStr, dataFimStr) {
+            let dt = new Date(`${dataInicioStr}T00:00:00`);
+            const fim = new Date(`${dataFimStr}T00:00:00`);
+
+            while (dt <= fim) {
+                const dataStr = formatarDataStr(dt);
+                if (dadosGlobaisServidor.precos[apt] && dadosGlobaisServidor.precos[apt][dataStr]) {
+                    dadosGlobaisServidor.precos[apt][dataStr].bloqueado = false;
+                    delete dadosGlobaisServidor.precos[apt][dataStr].estadoPagamento;
+                    delete dadosGlobaisServidor.precos[apt][dataStr].expiraEm;
+                    delete dadosGlobaisServidor.precos[apt][dataStr].motivo;
+                    delete dadosGlobaisServidor.precos[apt][dataStr].contacto;
+                }
+                dt.setDate(dt.getDate() + 1);
+            }
+
+            atualizarVisualizacaoAdmin();
+            alert(`Período de ${dataInicioStr} a ${dataFimStr} aberto localmente! Clique em "Guardar Alterações no Servidor" para confirmar.`);
+        }
+
+        function atualizarVisualizacaoAdmin() {
+            if (adminCalendarioPicker) {
+                adminCalendarioPicker.redraw();
+            }
+            renderizarListaBloqueios();
+        }
+
+        async function carregarDadosServidor() {
+            try {
+                const res = await fetch(`/api/precos?t=${Date.now()}`);
+                const json = await res.json();
+                if (json.success) {
+                    if (json.data) {
+                        dadosGlobaisServidor.precos = json.data;
+                    } else {
+                        let mapaDados = { ...json };
+                        delete mapaDados.success;
+                        delete mapaDados.limpezaGlobal;
+                        delete mapaDados.petGlobal;
+                        dadosGlobaisServidor.precos = mapaDados;
+                    }
+
+                    if (json.limpezaGlobal) {
+                        dadosGlobaisServidor.limpezaGlobal = json.limpezaGlobal;
+                        document.getElementById('limpeza-cristal').value = json.limpezaGlobal.cristal_mar || 35;
+                        document.getElementById('limpeza-tonay').value = json.limpezaGlobal.tonay_sol || 35;
+                    }
+                    if (json.petGlobal !== undefined) {
+                        dadosGlobaisServidor.petGlobal = json.petGlobal;
+                        document.getElementById('pet-estadia').value = json.petGlobal;
+                    }
+
+                    atualizarVisualizacaoAdmin();
+                }
+            } catch(err) {
+                console.error("Erro ao carregar dados no admin:", err);
+                document.getElementById('limpeza-cristal').value = 35;
+                document.getElementById('limpeza-tonay').value = 35;
+                document.getElementById('pet-estadia').value = 15;
+            }
+        }
+
+        function aplicarRegrasDatas() {
+            const datasSelecionadas = adminCalendarioPicker.selectedDates;
+            if (datasSelecionadas.length === 0) {
+                alert('Por favor selecione pelo menos uma data ou intervalo no calendário.');
+                return;
+            }
+
+            const apt = document.getElementById('admin-apt-select').value;
+            const novoPreco = parseFloat(document.getElementById('admin-novo-preco').value);
+            const bloquear = document.getElementById('admin-bloquear-check').checked;
+            const notaNome = document.getElementById('admin-nota-nome').value.trim();
+            const notaContacto = document.getElementById('admin-nota-contacto').value.trim();
+
+            let dt = new Date(datasSelecionadas[0]);
+            const fim = new Date(datasSelecionadas[datasSelecionadas.length - 1]);
+
+            if (!dadosGlobaisServidor.precos[apt]) {
+                dadosGlobaisServidor.precos[apt] = {};
+            }
+
+            while (dt <= fim) {
+                const dataStr = formatarDataStr(dt);
+
+                if (!dadosGlobaisServidor.precos[apt][dataStr]) {
+                    dadosGlobaisServidor.precos[apt][dataStr] = {};
+                }
+
+                if (!isNaN(novoPreco)) {
+                    dadosGlobaisServidor.precos[apt][dataStr].preco = novoPreco;
+                }
+                
+                dadosGlobaisServidor.precos[apt][dataStr].bloqueado = bloquear;
+                
+                if (bloquear) {
+                    if (notaNome) dadosGlobaisServidor.precos[apt][dataStr].motivo = notaNome;
+                    if (notaContacto) dadosGlobaisServidor.precos[apt][dataStr].contacto = notaContacto;
+                } else {
+                    delete dadosGlobaisServidor.precos[apt][dataStr].estadoPagamento;
+                    delete dadosGlobaisServidor.precos[apt][dataStr].expiraEm;
+                    delete dadosGlobaisServidor.precos[apt][dataStr].motivo;
+                    delete dadosGlobaisServidor.precos[apt][dataStr].contacto;
+                }
+
+                dt.setDate(dt.getDate() + 1);
+            }
+
+            atualizarVisualizacaoAdmin();
+            alert('Regras e notas aplicadas! Clique agora no botão "Guardar Alterações no Servidor" para gravar definitivamente.');
+        }
+
+        async function guardarPainel(e) {
+            e.preventDefault();
+            const limpezaCristal = parseFloat(document.getElementById('limpeza-cristal').value);
+            const limpezaTonay = parseFloat(document.getElementById('limpeza-tonay').value);
+            const petEstadia = parseFloat(document.getElementById('pet-estadia').value);
+
+            dadosGlobaisServidor.limpezaGlobal = { cristal_mar: limpezaCristal, tonay_sol: limpezaTonay };
+            dadosGlobaisServidor.petGlobal = petEstadia;
+
+            try {
+                const res = await fetch('/api/precos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        data: dadosGlobaisServidor.precos,
+                        limpezaGlobal: dadosGlobaisServidor.limpezaGlobal,
+                        petGlobal: dadosGlobaisServidor.petGlobal
+                    })
+                });
+                const json = await res.json();
+                if (json.success) {
+                    alert('Todas as alterações, notas, bloqueios e taxas foram guardados no servidor!');
+                    atualizarVisualizacaoAdmin();
+                } else {
+                    alert('Erro ao gravar no servidor.');
+                }
+            } catch(err) {
+                alert('Erro de ligação ao servidor ao tentar guardar.');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('buarcos_admin_auth') === 'true') {
+                mostrarPainel();
+            }
+        });
+    </script>
+</body>
+</html>
