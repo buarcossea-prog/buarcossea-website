@@ -16,7 +16,13 @@ export default async function handler(req, res) {
             });
             const getData = await getRes.json();
 
-            let storedData = { data: {}, limpezaGlobal: { cristal_mar: 35, tonay_sol: 35 }, petGlobal: 15 };
+            let storedData = { 
+                data: {}, 
+                limpezaGlobal: { cristal_mar: 35, tonay_sol: 35 }, 
+                petGlobal: 15,
+                regrasEstadia: { base: 2, junho: 4, alta: 7 }
+            };
+
             if (getData && getData.result) {
                 const parsed = typeof getData.result === 'string' ? JSON.parse(getData.result) : getData.result;
                 if (parsed.data) {
@@ -40,17 +46,16 @@ export default async function handler(req, res) {
                         diaInfo.expiraEm &&
                         agora > diaInfo.expiraEm
                     ) {
-                        // O prazo de 24h expirou sem pagamento: liberta a data!
                         delete diaInfo.bloqueado;
                         delete diaInfo.estadoPagamento;
                         delete diaInfo.expiraEm;
                         delete diaInfo.motivo;
+                        delete diaInfo.contacto;
                         houveAlteracao = true;
                     }
                 });
             });
 
-            // Se alguma data expirou e foi libertada, grava a atualização no Redis
             if (houveAlteracao) {
                 await fetch(`${redisUrl}/set/precos_buarcos`, {
                     method: 'POST',
@@ -66,7 +71,8 @@ export default async function handler(req, res) {
                 success: true,
                 data: storedData.data || {},
                 limpezaGlobal: storedData.limpezaGlobal || { cristal_mar: 35, tonay_sol: 35 },
-                petGlobal: storedData.petGlobal !== undefined ? storedData.petGlobal : 15
+                petGlobal: storedData.petGlobal !== undefined ? storedData.petGlobal : 15,
+                regrasEstadia: storedData.regrasEstadia || { base: 2, junho: 4, alta: 7 }
             });
         } catch (error) {
             return res.status(500).json({ success: false, error: error.message });
