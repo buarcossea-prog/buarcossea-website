@@ -1277,7 +1277,7 @@
             }
         }
 
-            async function selecionarMetodoPagamento(metodo) {
+              async function selecionarMetodoPagamento(metodo) {
         if (!validarDadosHospede()) return;
 
         const total = document.getElementById('valor-total').innerText;
@@ -1285,23 +1285,13 @@
         container.classList.remove('hidden');
         
         const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
-        const msgProcessando = {
-            pt: 'A processar pedido de reserva e a gerar dados de pagamento...',
-            en: 'Processing booking request and generating payment details...',
-            fr: 'Traitement de la demande et génération des paiements...',
-            es: 'Procesando solicitud de reserva y generando datos de pago...'
-        };
-        container.innerHTML = `<p class="text-xs text-navy-800 font-semibold">${msgProcessando[langAtual] || msgProcessando['pt']}</p>`;
-
-        const resposta = await submeterReservaBackend(metodo);
-        const expiraStr = resposta.expiraEm ? `<strong>${resposta.expiraEm}</strong>` : '';
-        const tempoValidadeTexto = metodo === 'mbway' ? '5 minutos' : '24 horas';
         
+        const tempoValidadeTexto = metodo === 'mbway' ? '5 minutos' : '24 horas';
         const avisosTexto = {
-            pt: `<strong>⏳ Validade do Pagamento:</strong> Este pedido expira em <strong>${tempoValidadeTexto}</strong> (até ${expiraStr}). Caso o pagamento não seja confirmado dentro deste prazo, as datas serão libertadas automaticamente.`,
-            en: `<strong>⏳ Payment Validity:</strong> This request expires in <strong>${tempoValidadeTexto}</strong> (until ${expiraStr}). If payment is not confirmed within this period, dates will be automatically released.`,
-            fr: `<strong>⏳ Validité du Paiement:</strong> Cette demande expire dans <strong>${tempoValidadeTexto}</strong> (jusqu'au ${expiraStr}). Si le paiement n'est pas confirmé dans ce délai, les dates seront libérées.`,
-            es: `<strong>⏳ Validez del Pago:</strong> Este pedido expira en <strong>${tempoValidadeTexto}</strong> (hasta ${expiraStr}). Si el pago no se confirma en este plazo, las fechas se liberarán.`
+            pt: `<strong>⏳ Validade do Pagamento:</strong> Este pedido expira em <strong>${tempoValidadeTexto}</strong> após a confirmação. Caso o pagamento não seja efetuado, as datas serão libertadas.`,
+            en: `<strong>⏳ Payment Validity:</strong> This request expires in <strong>${tempoValidadeTexto}</strong> after confirmation.`,
+            fr: `<strong>⏳ Validité du Paiement:</strong> Cette demande expire dans <strong>${tempoValidadeTexto}</strong> après confirmation.`,
+            es: `<strong>⏳ Validez del Pago:</strong> Este pedido expira en <strong>${tempoValidadeTexto}</strong> después de la confirmación.`
         };
         const avisoPrazo = `<p class="text-[11px] text-amber-700 bg-amber-50 p-2.5 rounded border border-amber-200 mt-2">${avisosTexto[langAtual] || avisosTexto['pt']}</p>`;
 
@@ -1313,22 +1303,20 @@
                 <p class="text-xs text-navy-800/80">Confirme o número de telemóvel para receber o pedido no valor de <strong>${total}</strong>:</p>
                 <div class="mt-3 flex gap-2">
                     <input type="tel" id="mbway-tel" value="${telDefault}" class="border border-sea-200 p-2 rounded text-sm flex-1 bg-white">
-                    <button type="button" onclick="alert('Pedido MB WAY enviado! Verifique a sua aplicação.')" class="bg-red-600 hover:bg-red-700 text-white text-xs px-4 py-2 rounded font-bold cursor-pointer">Enviar Pedido</button>
+                    <button type="button" onclick="confirmarEfetivarReserva('mbway')" class="bg-red-600 hover:bg-red-700 text-white text-xs px-4 py-2 rounded font-bold cursor-pointer">Enviar Pedido e Confirmar</button>
                 </div>
                 ${avisoPrazo}
             `;
         } else if (metodo === 'multibanco') {
-            const ref = resposta.referencia || '987 654 321';
-            const ent = resposta.entidade || '11683';
             container.innerHTML = `
-                <div class="font-bold text-navy-900 mb-1">Referência Multibanco Gerada</div>
+                <div class="font-bold text-navy-900 mb-1">Referência Multibanco</div>
                 <div class="space-y-1 font-mono text-xs bg-white p-3 rounded border border-sea-200 text-navy-900">
-                    <div class="flex justify-between"><span>Entidade:</span> <strong>${ent}</strong></div>
-                    <div class="flex justify-between"><span>Referência:</span> <strong>${ref}</strong></div>
+                    <div class="flex justify-between"><span>Entidade:</span> <strong>11683</strong></div>
+                    <div class="flex justify-between"><span>Referência:</span> <strong>987 654 321</strong></div>
                     <div class="flex justify-between"><span>Valor:</span> <strong>${total}</strong></div>
                 </div>
                 <div class="mt-3">
-                    <button type="button" onclick="alert('Reserva registada com sucesso! As referências foram enviadas para o seu email.')" class="w-full bg-navy-900 hover:bg-navy-800 text-white text-xs py-2.5 rounded font-bold cursor-pointer shadow">Confirmar e Registar Reserva</button>
+                    <button type="button" onclick="confirmarEfetivarReserva('multibanco')" class="w-full bg-navy-900 hover:bg-navy-800 text-white text-xs py-2.5 rounded font-bold cursor-pointer shadow">Confirmar e Registar Reserva</button>
                 </div>
                 ${avisoPrazo}
             `;
@@ -1337,7 +1325,7 @@
                 <div class="font-bold text-navy-900">Pagamento por Cartão de Crédito</div>
                 <p class="text-xs text-navy-800/80">Valor a liquidar com segurança: <strong>${total}</strong>.</p>
                 <div class="mt-3">
-                    <button type="button" onclick="alert('Redirecionando para o gateway de pagamento seguro por cartão...')" class="w-full bg-navy-900 hover:bg-navy-800 text-white text-xs py-2.5 rounded font-bold cursor-pointer shadow">Confirmar e Pagar com Cartão</button>
+                    <button type="button" onclick="confirmarEfetivarReserva('cartao')" class="w-full bg-navy-900 hover:bg-navy-800 text-white text-xs py-2.5 rounded font-bold cursor-pointer shadow">Confirmar e Pagar com Cartão</button>
                 </div>
                 ${avisoPrazo}
             `;
@@ -1346,12 +1334,42 @@
                 <div class="font-bold text-navy-900">Apple Pay / Google Pay</div>
                 <p class="text-xs text-navy-800/80">Valor a liquidar: <strong>${total}</strong>.</p>
                 <div class="mt-3">
-                    <button type="button" onclick="alert('A abrir a carteira digital...')" class="w-full bg-navy-900 hover:bg-navy-800 text-white text-xs py-2.5 rounded font-bold cursor-pointer shadow">Confirmar com Carteira Digital</button>
+                    <button type="button" onclick="confirmarEfetivarReserva('carteiras')" class="w-full bg-navy-900 hover:bg-navy-800 text-white text-xs py-2.5 rounded font-bold cursor-pointer shadow">Confirmar com Carteira Digital</button>
                 </div>
                 ${avisoPrazo}
             `;
         }
     }
+
+    async function confirmarEfetivarReserva(metodo) {
+        const container = document.getElementById('detalhes-pagamento');
+        container.innerHTML = `<p class="text-xs text-navy-800 font-semibold">A registar reserva e a bloquear datas no sistema...</p>`;
+
+        const resposta = await submeterReservaBackend(metodo);
+
+        if (resposta && resposta.success) {
+            if (metodo === 'mbway') {
+                alert('Pedido MB WAY enviado com sucesso! Verifique a sua aplicação.');
+            } else if (metodo === 'multibanco') {
+                const ent = resposta.entidade || '11683';
+                const ref = resposta.referencia || '987 654 321';
+                container.innerHTML = `
+                    <div class="font-bold text-emerald-700 mb-1">✓ Reserva Registada com Sucesso!</div>
+                    <p class="text-xs text-navy-800 mb-2">As referências foram geradas e enviadas para o seu email.</p>
+                    <div class="space-y-1 font-mono text-xs bg-white p-3 rounded border border-sea-200 text-navy-900">
+                        <div class="flex justify-between"><span>Entidade:</span> <strong>${ent}</strong></div>
+                        <div class="flex justify-between"><span>Referência:</span> <strong>${ref}</strong></div>
+                        <div class="flex justify-between"><span>Valor:</span> <strong>${document.getElementById('valor-total').innerText}</strong></div>
+                    </div>
+                `;
+            } else {
+                alert('Reserva confirmada com sucesso! Redirecionando...');
+            }
+        } else {
+            alert('Ocorreu um erro ao registar a reserva ou as datas já foram ocupadas. Por favor tente novamente.');
+        }
+    }
+  
 
 
         window.addEventListener('DOMContentLoaded', () => {
