@@ -1089,6 +1089,7 @@
             if (simulador) simulador.scrollIntoView({ behavior: 'smooth' });
         }
 
+        // SIMULAÇÃO APENAS LOCAL (NÃO GUARDA NA BD NEM ENVIA EMAIL)
         async function calcularReserva(e) {
             e.preventDefault();
             const apt = document.getElementById('apt-select').value;
@@ -1277,6 +1278,7 @@
             }
         }
 
+        // BLOQUEIO E EMAIL SÓ OCORREM AQUI (APÓS ESCOLHA DO PAGAMENTO)
         async function selecionarMetodoPagamento(metodo) {
             if (!validarDadosHospede()) return;
 
@@ -1286,21 +1288,25 @@
             
             const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
             const msgProcessando = {
-                pt: 'A processar pedido de reserva e a bloquear datas...',
-                en: 'Processing booking request and blocking dates...',
-                fr: 'Traitement de la demande et blocage des dates...',
-                es: 'Procesando solicitud de reserva y bloqueando fechas...'
+                pt: 'A processar pedido de reserva e a gerar dados de pagamento...',
+                en: 'Processing booking request and generating payment details...',
+                fr: 'Traitement de la demande et génération des paiements...',
+                es: 'Procesando solicitud de reserva y generando datos de pago...'
             };
             container.innerHTML = `<p class="text-xs text-navy-800 font-semibold">${msgProcessando[langAtual] || msgProcessando['pt']}</p>`;
 
             const resposta = await submeterReservaBackend(metodo);
             
             const expiraStr = resposta.expiraEm ? `<strong>${resposta.expiraEm}</strong>` : '';
+            
+            // PRAZO DINÂMICO: MB WAY = 5 minutos | Multibanco / Outros = 24 horas
+            const tempoValidadeTexto = metodo === 'mbway' ? '5 minutos' : '24 horas';
+            
             const avisosTexto = {
-                pt: `<strong>⏳ Pré-Reserva válida por 24h:</strong> As datas foram bloqueadas temporariamente até ${expiraStr}. Caso o pagamento não seja confirmado dentro deste prazo, a disponibilidade será libertada automaticamente.`,
-                en: `<strong>⏳ Pre-booking valid for 24h:</strong> Dates have been temporarily blocked until ${expiraStr}. If payment is not confirmed within this period, availability will be automatically released.`,
-                fr: `<strong>⏳ Pré-réservation valable 24h:</strong> Les dates ont été bloquées temporairement jusqu'au ${expiraStr}. Si le paiement n'est pas confirmé dans ce délai, la disponibilité sera libérée automatiquement.`,
-                es: `<strong>⏳ Pre-reserva válida por 24h:</strong> Las fechas han sido bloqueadas temporalmente hasta ${expiraStr}. Si el pago no se confirma dentro de este plazo, la disponibilidad se liberará automáticamente.`
+                pt: `<strong>⏳ Validade do Pagamento:</strong> Este pedido expira em <strong>${tempoValidadeTexto}</strong> (até ${expiraStr}). Caso o pagamento não seja confirmado dentro deste prazo, as datas serão libertadas automaticamente.`,
+                en: `<strong>⏳ Payment Validity:</strong> This request expires in <strong>${tempoValidadeTexto}</strong> (until ${expiraStr}). If payment is not confirmed within this period, dates will be automatically released.`,
+                fr: `<strong>⏳ Validité du Paiement:</strong> Cette demande expire dans <strong>${tempoValidadeTexto}</strong> (jusqu'au ${expiraStr}). Si le paiement n'est pas confirmé dans ce délai, les dates seront libérées.`,
+                es: `<strong>⏳ Validez del Pago:</strong> Este pedido expira en <strong>${tempoValidadeTexto}</strong> (hasta ${expiraStr}). Si el pago no se confirma en este plazo, las fechas se liberarán.`
             };
             const avisoPrazo = `<p class="text-[11px] text-amber-700 bg-amber-50 p-2.5 rounded border border-amber-200 mt-2">${avisosTexto[langAtual] || avisosTexto['pt']}</p>`;
 
@@ -1316,7 +1322,7 @@
                     <p class="text-xs text-navy-800/80">${sub[langAtual] || sub['pt']}</p>
                     <div class="mt-3 flex gap-2">
                         <input type="tel" id="mbway-tel" value="${telDefault}" class="border border-sea-200 p-2 rounded text-sm flex-1 bg-white">
-                        <button type="button" onclick="alert('${langAtual === 'fr' ? 'Demande MB WAY envoyée !' : langAtual === 'en' ? 'MB WAY request sent!' : 'Pedido MB WAY enviado! A sua pré-reserva foi registada.'}')" class="bg-red-600 hover:bg-red-700 text-white text-xs px-4 py-2 rounded font-bold cursor-pointer">${btn[langAtual] || btn['pt']}</button>
+                        <button type="button" onclick="alert('${langAtual === 'fr' ? 'Demande MB WAY envoyée !' : langAtual === 'en' ? 'MB WAY request sent!' : 'Pedido MB WAY enviado! Verifique a sua aplicação.')}')" class="bg-red-600 hover:bg-red-700 text-white text-xs px-4 py-2 rounded font-bold cursor-pointer">${btn[langAtual] || btn['pt']}</button>
                     </div>
                     ${avisoPrazo}
                 `;
@@ -1339,7 +1345,7 @@
                 container.innerHTML = `
                     <div class="font-bold text-navy-900">${tit[langAtual] || tit['pt']}</div>
                     <p class="text-xs text-navy-800/80">Valor a liquidar: <strong>${total}</strong>.</p>
-                    <button type="button" onclick="alert('Pré-reserva registada com sucesso!')" class="mt-3 w-full bg-navy-900 hover:bg-navy-800 text-white text-xs py-2.5 rounded font-bold cursor-pointer">${btn[langAtual] || btn['pt']}</button>
+                    <button type="button" onclick="alert('Redirecionando para gateway de pagamento seguro...')" class="mt-3 w-full bg-navy-900 hover:bg-navy-800 text-white text-xs py-2.5 rounded font-bold cursor-pointer">${btn[langAtual] || btn['pt']}</button>
                     ${avisoPrazo}
                 `;
             } else {
@@ -1348,7 +1354,7 @@
                 container.innerHTML = `
                     <div class="font-bold text-navy-900">${tit[langAtual] || tit['pt']}</div>
                     <p class="text-xs text-navy-800/80">Valor a liquidar: <strong>${total}</strong>.</p>
-                    <button type="button" onclick="alert('Pré-reserva registada com sucesso!')" class="mt-3 bg-navy-900 text-white text-xs px-4 py-2 rounded font-bold cursor-pointer">${btn[langAtual] || btn['pt']}</button>
+                    <button type="button" onclick="alert('Redirecionando para pagamento...')" class="mt-3 bg-navy-900 text-white text-xs px-4 py-2 rounded font-bold cursor-pointer">${btn[langAtual] || btn['pt']}</button>
                     ${avisoPrazo}
                 `;
             }
