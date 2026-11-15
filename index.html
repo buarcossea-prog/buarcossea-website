@@ -943,432 +943,425 @@
             }, 100);
         });
     </script>
+    lucide.createIcons();
 
-    <!-- Scripts de Interação -->
-    <script>
+    function formatarDataLocal(dateObj) {
+        const ano = dateObj.getFullYear();
+        const mes = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const dia = String(dateObj.getDate()).padStart(2, '0');
+        return `${ano}-${mes}-${dia}`;
+    }
+
+    const alojamentosDados = {
+        cristal_mar: {
+            nome: "Cristal Mar",
+            al: "161145/AL",
+            preco: "Desde 65€ / noite",
+            descricao_key: "cristal_desc",
+            fotos: [
+                "imagens/cristal/IMG_20261005_152808.jpg",
+                "imagens/cristal/IMG_20261005_152824.jpg"
+            ],
+            comodidades_keys: ["cm_1", "cm_2", "cm_3", "cm_4", "cm_5", "cm_6", "cm_7", "cm_8"]
+        },
+        tonay_sol: {
+            nome: "Tonay Sol",
+            al: "146454/AL",
+            preco: "Desde 60€ / noite",
+            descricao_key: "tonay_desc",
+            fotos: [
+                "imagens/tonay/IMG_20261005_112644.jpg",
+                "imagens/tonay/IMG_20261005_113430.jpg",
+                "imagens/tonay/IMG_20261005_113439.jpg",
+                "imagens/tonay/IMG_20261005_113453.jpg",
+                "imagens/tonay/IMG_20261005_113549.jpg",
+                "imagens/tonay/IMG_20261005_113817.jpg",
+                "imagens/tonay/IMG_20261005_113822.jpg",
+                "imagens/tonay/IMG_20261005_113825.jpg",
+                "imagens/tonay/IMG_20261005_113856.jpg"
+            ],
+            comodidades_keys: ["ts_1", "ts_2", "ts_3", "ts_4", "ts_5", "ts_6", "ts_7", "ts_8"]
+        }
+    };
+
+    // CORREÇÃO: Função para abrir comodidades e fotos corretamente
+    function abrirDetalhes(id) {
+        const apt = alojamentosDados[id];
+        if (!apt) return;
+        
+        const modal = document.getElementById('modal-detalhes');
+        const conteudo = document.getElementById('modal-conteudo');
+        const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
+        const t = traducoes[langAtual] || traducoes['pt'];
+
+        const descTexto = t[apt.descricao_key] || apt.descricao_key;
+        let fotosHtml = apt.fotos.map(f => `<img src="${f}" class="w-full h-48 object-cover rounded-xl shadow-sm">`).join('');
+
+        let comodidadesHtml = apt.comodidades_keys.map(key => {
+            const textoComodidade = t[key] || key;
+            return `<li class="flex items-center gap-2 text-sm text-navy-900"><span class="w-2 h-2 rounded-full bg-sea-600"></span> ${textoComodidade}</li>`;
+        }).join('');
+
+        conteudo.innerHTML = `
+            <div class="flex justify-between items-start border-b border-sea-100 pb-4">
+                <div>
+                    <span class="text-xs font-mono bg-sea-100 px-2.5 py-0.5 rounded text-navy-800">Registo AL: ${apt.al}</span>
+                    <h3 class="text-2xl font-bold text-navy-900 mt-1">${apt.nome}</h3>
+                </div>
+                <span class="text-sea-600 font-bold text-lg">${apt.preco}</span>
+            </div>
+            <p class="text-navy-800/80 text-sm leading-relaxed">${descTexto}</p>
+            <div>
+                <h4 class="font-bold text-navy-900 mb-3 text-xs uppercase tracking-wider">${t.galeria_fotos || 'Galeria de Fotos'}</h4>
+                <div class="grid grid-cols-2 gap-3">${fotosHtml}</div>
+            </div>
+            <div>
+                <h4 class="font-bold text-navy-900 mb-3 text-xs uppercase tracking-wider">${t.comodidades_apt || 'Comodidades'}</h4>
+                <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2">${comodidadesHtml}</ul>
+            </div>
+            <div class="pt-4 border-t border-sea-100">
+                <button type="button" onclick="fecharDetalhes(); selecionarApartamento('${id}');" class="w-full bg-navy-900 hover:bg-navy-800 text-white font-bold py-3 rounded-xl transition-all text-sm flex items-center justify-center gap-2 shadow cursor-pointer">
+                    <i data-lucide="calendar" class="w-4 h-4 text-sea-500"></i> ${t.btn_simular_modal || 'Simular Reserva'}
+                </button>
+            </div>
+        `;
+
+        modal.classList.remove('hidden');
         lucide.createIcons();
+    }
 
-        function formatarDataLocal(dateObj) {
-            const ano = dateObj.getFullYear();
-            const mes = String(dateObj.getMonth() + 1).padStart(2, '0');
-            const dia = String(dateObj.getDate()).padStart(2, '0');
-            return `${ano}-${mes}-${dia}`;
+    function fecharDetalhes() {
+        document.getElementById('modal-detalhes').classList.add('hidden');
+    }
+
+    let calendarioPicker = null;
+    let datasBloqueadasPorApto = {};
+    let regrasEstadiaConfig = { base: 2, junho: 4, alta: 7 };
+
+    // CORREÇÃO: Inicialização robusta do Calendário Flatpickr
+    async function inicializarCalendario() {
+        const inputDatas = document.getElementById('campo-datas');
+        if (!inputDatas) return;
+
+        try {
+            const res = await fetch(`/api/precos?t=${Date.now()}`);
+            const json = await res.json();
+            if (json.success && json.data) {
+                const mapa = json.data;
+                datasBloqueadasPorApto = {};
+                Object.keys(mapa).forEach(apt => {
+                    datasBloqueadasPorApto[apt] = [];
+                    Object.keys(mapa[apt]).forEach(dataStr => {
+                        if (mapa[apt][dataStr] && mapa[apt][dataStr].bloqueado) {
+                            datasBloqueadasPorApto[apt].push(dataStr);
+                        }
+                    });
+                });
+                if (json.regrasEstadia) {
+                    regrasEstadiaConfig = json.regrasEstadia;
+                }
+            }
+        } catch(err) {
+            console.error("Erro ao carregar calendário:", err);
         }
 
-        const alojamentosDados = {
-            cristal_mar: {
-                nome: "Cristal Mar",
-                al: "161145/AL",
-                preco: "Desde 65€ / noite",
-                descricao_key: "cristal_desc",
-                fotos: [
-                    "imagens/cristal/IMG_20261005_152808.jpg",
-                    "imagens/cristal/IMG_20261005_152824.jpg"
-                ],
-                comodidades_keys: ["cm_1", "cm_2", "cm_3", "cm_4", "cm_5", "cm_6", "cm_7", "cm_8"]
-            },
-            tonay_sol: {
-                nome: "Tonay Sol",
-                al: "146454/AL",
-                preco: "Desde 60€ / noite",
-                descricao_key: "tonay_desc",
-                fotos: [
-                    "imagens/tonay/IMG_20261005_112644.jpg",
-                    "imagens/tonay/IMG_20261005_113430.jpg",
-                    "imagens/tonay/IMG_20261005_113439.jpg",
-                    "imagens/tonay/IMG_20261005_113453.jpg",
-                    "imagens/tonay/IMG_20261005_113549.jpg",
-                    "imagens/tonay/IMG_20261005_113817.jpg",
-                    "imagens/tonay/IMG_20261005_113822.jpg",
-                    "imagens/tonay/IMG_20261005_113825.jpg",
-                    "imagens/tonay/IMG_20261005_113856.jpg"
-                ],
-                comodidades_keys: ["ts_1", "ts_2", "ts_3", "ts_4", "ts_5", "ts_6", "ts_7", "ts_8"]
+        const selectApt = document.getElementById('apt-select');
+        const aptAtual = selectApt ? selectApt.value : 'cristal_mar';
+        const diasIndisponiveis = datasBloqueadasPorApto[aptAtual] || [];
+        const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
+
+        if (calendarioPicker) {
+            calendarioPicker.destroy();
+        }
+
+        calendarioPicker = flatpickr("#campo-datas", {
+            mode: "range",
+            locale: langAtual,
+            minDate: "today",
+            dateFormat: "Y-m-d",
+            disable: diasIndisponiveis,
+            conjunction: " a "
+        });
+    }
+
+    function atualizarCalendarioDisponibilidade() {
+        inicializarCalendario();
+    }
+
+    // CORREÇÃO: Direcionamento imediato e scroll suave para o simulador
+    function selecionarApartamento(id) {
+        const select = document.getElementById('apt-select');
+        if (select) {
+            select.value = id;
+            atualizarCalendarioDisponibilidade();
+        }
+        const simulador = document.getElementById('simulador');
+        if (simulador) {
+            simulador.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    // SIMULAÇÃO APENAS LOCAL
+    async function calcularReserva(e) {
+        e.preventDefault();
+        const apt = document.getElementById('apt-select').value;
+        if (!calendarioPicker || calendarioPicker.selectedDates.length < 2) {
+            const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
+            const msgErro = (traducoes[langAtual] && traducoes[langAtual].erro_datas) || traducoes['pt'].erro_datas;
+            alert(msgErro);
+            return;
+        }
+
+        const datasSelecionadas = calendarioPicker.selectedDates;
+        const checkin = datasSelecionadas[0];
+        const checkout = datasSelecionadas[datasSelecionadas.length - 1];
+
+        const diffTime = checkout - checkin;
+        const noites = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+        if (noites <= 0) {
+            alert('A data de check-out tem de ser posterior ao check-in.');
+            return;
+        }
+
+        const mesCheckin = checkin.getMonth(); 
+        let minimoExigido = regrasEstadiaConfig.base || 2;
+
+        if (mesCheckin === 5) { 
+            minimoExigido = regrasEstadiaConfig.junho || 4;
+        } else if ((mesCheckin === 6 || mesCheckin === 7) || (mesCheckin === 8 && checkin.getDate() <= 15)) { 
+            minimoExigido = regrasEstadiaConfig.alta || 7;
+        }
+
+        if (noites < minimoExigido) {
+            alert(`Para o período selecionado, a estadia mínima exigida é de ${minimoExigido} noites.`);
+            return;
+        }
+
+        const adultos = parseInt(document.getElementById('hospedes').value) || 1;
+        const criancas = parseInt(document.getElementById('criancas').value) || 0;
+        const temPet = document.getElementById('tem-pet').value === 'sim';
+        const numPets = parseInt(document.getElementById('num-pets').value) || 1;
+
+        let mapaPrecos = {};
+        let limpezaGlobalData = { cristal_mar: 35, tonay_sol: 35 };
+        let petGlobalValor = 15;
+        try {
+            const res = await fetch(`/api/precos?t=${Date.now()}`);
+            const json = await res.json();
+            if (json.success) {
+                mapaPrecos = json.data;
+                if (json.limpezaGlobal) limpezaGlobalData = json.limpezaGlobal;
+                if (json.petGlobal !== undefined) petGlobalValor = json.petGlobal;
+                if (json.regrasEstadia) regrasEstadiaConfig = json.regrasEstadia;
+            }
+        } catch(err) {}
+
+        const precoBaseDefault = apt === 'cristal_mar' ? 65 : 60;
+        let subtotalNoites = 0;
+        let percentagemDescontoExtra = 10; 
+        let temBloqueio = false;
+
+        let taxaTuristicaTotal = 0;
+        const noitesTaxaLimite = Math.min(noites, 7);
+
+        let dt = new Date(checkin.getFullYear(), checkin.getMonth(), checkin.getDate());
+        for (let i = 0; i < noites; i++) {
+            const dataStr = formatarDataLocal(dt);
+            const dadosDia = mapaPrecos[apt] && mapaPrecos[apt][dataStr];
+
+            if (dadosDia && dadosDia.bloqueado) {
+                temBloqueio = true;
+                break;
+            }
+
+            const precoDia = (dadosDia && dadosDia.preco) ? dadosDia.preco : precoBaseDefault;
+            subtotalNoites += precoDia;
+
+            if (dadosDia && dadosDia.descontoExtra) percentagemDescontoExtra = dadosDia.descontoExtra;
+
+            if (i < noitesTaxaLimite) {
+                const mes = dt.getMonth(); 
+                const eEpocaAlta = (mes >= 5 && mes <= 8);
+                const valorNoiteTaxa = eEpocaAlta ? 2.00 : 1.50;
+                taxaTuristicaTotal += valorNoiteTaxa * adultos;
+            }
+
+            dt.setDate(dt.getDate() + 1);
+        }
+
+        if (temBloqueio) {
+            alert('Infelizmente algumas das datas selecionadas estão bloqueadas. Por favor escolha outro período.');
+            return;
+        }
+
+        const taxaLimpezaFinal = limpezaGlobalData[apt] !== undefined ? limpezaGlobalData[apt] : 35;
+        const desconto = subtotalNoites * (percentagemDescontoExtra / 100);
+        const noitesComDesconto = subtotalNoites - desconto;
+
+        const totalTaxaPet = temPet ? (petGlobalValor * numPets) : 0;
+        const totalFinal = noitesComDesconto + taxaLimpezaFinal + totalTaxaPet + taxaTuristicaTotal;
+
+        document.getElementById('label-noites').innerText = `Estadia (${noites} noites):`;
+        document.getElementById('valor-noites').innerText = `${subtotalNoites.toFixed(2)} €`;
+
+        document.getElementById('label-desc-texto').innerText = `Desconto Reserva Direta (${percentagemDescontoExtra}%):`;
+        document.getElementById('valor-desconto').innerText = `-${desconto.toFixed(2)} €`;
+
+        document.getElementById('valor-limpeza').innerText = `${taxaLimpezaFinal.toFixed(2)} €`;
+
+        const linhaPet = document.getElementById('linha-pet');
+        if (temPet) {
+            linhaPet.classList.remove('hidden');
+            document.getElementById('valor-pet-total').innerText = `${totalTaxaPet.toFixed(2)} € (${numPets} pet)`;
+        } else {
+            linhaPet.classList.add('hidden');
+        }
+
+        document.getElementById('label-taxa-turistica').innerText = `Taxa Turística F. Foz (${noitesTaxaLimite} noites x ${adultos} adultos):`;
+        document.getElementById('valor-taxa-turistica').innerText = `${taxaTuristicaTotal.toFixed(2)} €`;
+
+        document.getElementById('valor-total').innerText = `${totalFinal.toFixed(2)} €`;
+
+        document.getElementById('resultado-simulacao').classList.remove('hidden');
+        document.getElementById('modal-ifthenpay').classList.add('hidden');
+        document.getElementById('resultado-simulacao').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function validarDadosHospede() {
+        const nome = document.getElementById('hospede-nome').value.trim();
+        const email = document.getElementById('hospede-email').value.trim();
+        const telefone = document.getElementById('hospede-telefone').value.trim();
+        const termos = document.getElementById('aceitar-termos').checked;
+
+        if (!nome || !email || !telefone || !termos) {
+            const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
+            const msg = (traducoes[langAtual] && traducoes[langAtual].erro_dados_hospede) || traducoes['pt'].erro_dados_hospede;
+            alert(msg);
+            return false;
+        }
+        return true;
+    }
+
+    async function submeterReservaBackend(metodo) {
+        if (!calendarioPicker || calendarioPicker.selectedDates.length < 2) return { success: false };
+        const datasSelecionadas = calendarioPicker.selectedDates;
+        const payload = {
+            apartamento: document.getElementById('apt-select').value,
+            checkin: formatarDataLocal(datasSelecionadas[0]),
+            checkout: formatarDataLocal(datasSelecionadas[datasSelecionadas.length - 1]),
+            adultos: document.getElementById('hospedes').value,
+            criancas: document.getElementById('criancas').value,
+            total: document.getElementById('valor-total').innerText,
+            metodoPagamento: metodo,
+            idioma: localStorage.getItem('buarcos_lang') || 'pt',
+            hospede: {
+                nome: document.getElementById('hospede-nome').value.trim(),
+                email: document.getElementById('hospede-email').value.trim(),
+                telefone: document.getElementById('hospede-telefone').value.trim(),
+                pais: document.getElementById('hospede-pais').value.trim(),
+                nif: document.getElementById('hospede-nif').value.trim()
             }
         };
 
-        function abrirDetalhes(id) {
-            const apt = alojamentosDados[id];
-            const modal = document.getElementById('modal-detalhes');
-            const conteudo = document.getElementById('modal-conteudo');
-            const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
-            const t = traducoes[langAtual];
-
-            const descTexto = t[apt.descricao_key] || apt.descricao_key;
-            let fotosHtml = apt.fotos.map(f => `<img src="${f}" class="w-full h-48 object-cover rounded-xl shadow-sm">`).join('');
-
-            let comodidadesHtml = apt.comodidades_keys.map(key => {
-                const textoComodidade = t[key] || key;
-                return `<li class="flex items-center gap-2 text-sm text-navy-900"><span class="w-2 h-2 rounded-full bg-sea-600"></span> ${textoComodidade}</li>`;
-            }).join('');
-
-            conteudo.innerHTML = `
-                <div class="flex justify-between items-start border-b border-sea-100 pb-4">
-                    <div>
-                        <span class="text-xs font-mono bg-sea-100 px-2.5 py-0.5 rounded text-navy-800">Registo AL: ${apt.al}</span>
-                        <h3 class="text-2xl font-bold text-navy-900 mt-1">${apt.nome}</h3>
-                    </div>
-                    <span class="text-sea-600 font-bold text-lg">${apt.preco}</span>
-                </div>
-                <p class="text-navy-800/80 text-sm leading-relaxed">${descTexto}</p>
-                <div>
-                    <h4 class="font-bold text-navy-900 mb-3 text-xs uppercase tracking-wider">${t.galeria_fotos}</h4>
-                    <div class="grid grid-cols-2 gap-3">${fotosHtml}</div>
-                </div>
-                <div>
-                    <h4 class="font-bold text-navy-900 mb-3 text-xs uppercase tracking-wider">${t.comodidades_apt}</h4>
-                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2">${comodidadesHtml}</ul>
-                </div>
-                <div class="pt-4 border-t border-sea-100">
-                    <button type="button" onclick="fecharDetalhes(); selecionarApartamento('${id}');" class="w-full bg-navy-900 hover:bg-navy-800 text-white font-bold py-3 rounded-xl transition-all text-sm flex items-center justify-center gap-2 shadow cursor-pointer">
-                        <i data-lucide="calendar" class="w-4 h-4 text-sea-500"></i> ${t.btn_simular_modal}
-                    </button>
-                </div>
-            `;
-
-            modal.classList.remove('hidden');
-            lucide.createIcons();
-        }
-
-        function fecharDetalhes() {
-            document.getElementById('modal-detalhes').classList.add('hidden');
-        }
-
-        let calendarioPicker = null;
-        let datasBloqueadasPorApto = {};
-        let regrasEstadiaConfig = { base: 2, junho: 4, alta: 7 };
-
-        async function inicializarCalendario() {
-            const inputDatas = document.getElementById('campo-datas');
-            if (!inputDatas) return;
-
-            try {
-                const res = await fetch(`/api/precos?t=${Date.now()}`);
-                const json = await res.json();
-                if (json.success && json.data) {
-                    const mapa = json.data;
-                    datasBloqueadasPorApto = {};
-                    Object.keys(mapa).forEach(apt => {
-                        datasBloqueadasPorApto[apt] = [];
-                        Object.keys(mapa[apt]).forEach(dataStr => {
-                            if (mapa[apt][dataStr] && mapa[apt][dataStr].bloqueado) {
-                                datasBloqueadasPorApto[apt].push(dataStr);
-                            }
-                        });
-                    });
-                    if (json.regrasEstadia) {
-                        regrasEstadiaConfig = json.regrasEstadia;
-                    }
-                }
-            } catch(err) {
-                console.error("Erro ao carregar calendário:", err);
-            }
-
-            const selectApt = document.getElementById('apt-select');
-            const aptAtual = selectApt ? selectApt.value : 'cristal_mar';
-            const diasIndisponiveis = datasBloqueadasPorApto[aptAtual] || [];
-            const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
-
-            if (calendarioPicker) {
-                calendarioPicker.destroy();
-            }
-
-            calendarioPicker = flatpickr("#campo-datas", {
-                mode: "range",
-                locale: langAtual,
-                minDate: "today",
-                dateFormat: "Y-m-d",
-                disable: diasIndisponiveis,
-                conjunction: " a "
+        try {
+            const res = await fetch('/api/reservar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
             });
+            const json = await res.json();
+            if (json.success) {
+                await inicializarCalendario();
+            }
+            return json;
+        } catch (err) {
+            console.error("Erro ao comunicar com API:", err);
+            return { success: false };
         }
+    }
 
-        function atualizarCalendarioDisponibilidade() {
+    async function abrirPagamento() {
+        const modalPay = document.getElementById('modal-ifthenpay');
+        if (modalPay) {
+            modalPay.classList.remove('hidden');
+            modalPay.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    async function selecionarMetodoPagamento(metodo) {
+        if (!validarDadosHospede()) return;
+
+        const total = document.getElementById('valor-total').innerText;
+        const container = document.getElementById('detalhes-pagamento');
+        container.classList.remove('hidden');
+        
+        const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
+        const msgProcessando = {
+            pt: 'A processar pedido de reserva e a gerar dados de pagamento...',
+            en: 'Processing booking request and generating payment details...',
+            fr: 'Traitement de la demande et génération des paiements...',
+            es: 'Procesando solicitud de reserva y generando datos de pago...'
+        };
+        container.innerHTML = `<p class="text-xs text-navy-800 font-semibold">${msgProcessando[langAtual] || msgProcessando['pt']}</p>`;
+
+        const resposta = await submeterReservaBackend(metodo);
+        const expiraStr = resposta.expiraEm ? `<strong>${resposta.expiraEm}</strong>` : '';
+        const tempoValidadeTexto = metodo === 'mbway' ? '5 minutos' : '24 horas';
+        
+        const avisosTexto = {
+            pt: `<strong>⏳ Validade do Pagamento:</strong> Este pedido expira em <strong>${tempoValidadeTexto}</strong> (até ${expiraStr}). Caso o pagamento não seja confirmado dentro deste prazo, as datas serão libertadas automaticamente.`,
+            en: `<strong>⏳ Payment Validity:</strong> This request expires in <strong>${tempoValidadeTexto}</strong> (until ${expiraStr}). If payment is not confirmed within this period, dates will be automatically released.`,
+            fr: `<strong>⏳ Validité du Paiement:</strong> Cette demande expire dans <strong>${tempoValidadeTexto}</strong> (jusqu'au ${expiraStr}). Si le paiement n'est pas confirmé dans ce délai, les dates seront libérées.`,
+            es: `<strong>⏳ Validez del Pago:</strong> Este pedido expira en <strong>${tempoValidadeTexto}</strong> (hasta ${expiraStr}). Si el pago no se confirma en este plazo, las fechas se liberarán.`
+        };
+        const avisoPrazo = `<p class="text-[11px] text-amber-700 bg-amber-50 p-2.5 rounded border border-amber-200 mt-2">${avisosTexto[langAtual] || avisosTexto['pt']}</p>`;
+
+        const telDefault = document.getElementById('hospede-telefone').value.trim();
+
+        if (metodo === 'mbway') {
+            container.innerHTML = `
+                <div class="font-bold text-navy-900">Pagamento por MB WAY</div>
+                <p class="text-xs text-navy-800/80">Confirme o número de telemóvel para receber o pedido no valor de <strong>${total}</strong>:</p>
+                <div class="mt-3 flex gap-2">
+                    <input type="tel" id="mbway-tel" value="${telDefault}" class="border border-sea-200 p-2 rounded text-sm flex-1 bg-white">
+                    <button type="button" onclick="alert('Pedido MB WAY enviado! Verifique a sua aplicação.')" class="bg-red-600 hover:bg-red-700 text-white text-xs px-4 py-2 rounded font-bold cursor-pointer">Enviar Pedido</button>
+                </div>
+                ${avisoPrazo}
+            `;
+        } else if (metodo === 'multibanco') {
+            const ref = resposta.referencia || '987 654 321';
+            const ent = resposta.entidade || '11683';
+            container.innerHTML = `
+                <div class="font-bold text-navy-900 mb-1">Referência Multibanco Gerada</div>
+                <div class="space-y-1 font-mono text-xs bg-white p-3 rounded border border-sea-200 text-navy-900">
+                    <div class="flex justify-between"><span>Entidade:</span> <strong>${ent}</strong></div>
+                    <div class="flex justify-between"><span>Referência:</span> <strong>${ref}</strong></div>
+                    <div class="flex justify-between"><span>Valor:</span> <strong>${total}</strong></div>
+                </div>
+                ${avisoPrazo}
+            `;
+        } else {
+            container.innerHTML = `
+                <div class="font-bold text-navy-900">Pagamento por Cartão / Outros</div>
+                <p class="text-xs text-navy-800/80">Valor a liquidar: <strong>${total}</strong>.</p>
+                <button type="button" onclick="alert('Redirecionando para pagamento...')" class="mt-3 bg-navy-900 text-white text-xs px-4 py-2 rounded font-bold cursor-pointer">Continuar Pagamento</button>
+                ${avisoPrazo}
+            `;
+        }
+    }
+
+    // Garante o arranque do Flatpickr assim que a página é carregada
+    window.addEventListener('DOMContentLoaded', () => {
+        const idiomaSalvo = localStorage.getItem('buarcos_lang') || 'pt';
+        const seletor = document.getElementById('seletor-idioma');
+        if (seletor) seletor.value = idiomaSalvo;
+        mudarIdioma(idiomaSalvo);
+
+        setTimeout(() => {
             inicializarCalendario();
-        }
+        }, 150);
+    });
+</script>
 
-        function selecionarApartamento(id) {
-            const select = document.getElementById('apt-select');
-            if (select) {
-                select.value = id;
-                atualizarCalendarioDisponibilidade();
-            }
-            const simulador = document.getElementById('simulador');
-            if (simulador) {
-                simulador.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // SIMULAÇÃO APENAS LOCAL (NÃO GUARDA NA BD NEM ENVIA EMAIL)
-        async function calcularReserva(e) {
-            e.preventDefault();
-            const apt = document.getElementById('apt-select').value;
-            const datasSelecionadas = calendarioPicker.selectedDates;
-
-            if (datasSelecionadas.length < 2) {
-                const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
-                const msgErro = (traducoes[langAtual] && traducoes[langAtual].erro_datas) || traducoes['pt'].erro_datas;
-                alert(msgErro);
-                return;
-            }
-
-            const checkin = datasSelecionadas[0];
-            const checkout = datasSelecionadas[datasSelecionadas.length - 1];
-
-            const diffTime = checkout - checkin;
-            const noites = Math.round(diffTime / (1000 * 60 * 60 * 24));
-
-            if (noites <= 0) {
-                alert('A data de check-out tem de ser posterior ao check-in.');
-                return;
-            }
-
-            const mesCheckin = checkin.getMonth(); 
-            let minimoExigido = regrasEstadiaConfig.base || 2;
-
-            if (mesCheckin === 5) { 
-                minimoExigido = regrasEstadiaConfig.junho || 4;
-            } else if ((mesCheckin === 6 || mesCheckin === 7) || (mesCheckin === 8 && checkin.getDate() <= 15)) { 
-                minimoExigido = regrasEstadiaConfig.alta || 7;
-            }
-
-            if (noites < minimoExigido) {
-                alert(`Para o período selecionado, a estadia mínima exigida é de ${minimoExigido} noites.`);
-                return;
-            }
-
-            const adultos = parseInt(document.getElementById('hospedes').value) || 1;
-            const criancas = parseInt(document.getElementById('criancas').value) || 0;
-            const temPet = document.getElementById('tem-pet').value === 'sim';
-            const numPets = parseInt(document.getElementById('num-pets').value) || 1;
-
-            let mapaPrecos = {};
-            let limpezaGlobalData = { cristal_mar: 35, tonay_sol: 35 };
-            let petGlobalValor = 15;
-            try {
-                const res = await fetch(`/api/precos?t=${Date.now()}`);
-                const json = await res.json();
-                if (json.success) {
-                    mapaPrecos = json.data;
-                    if (json.limpezaGlobal) limpezaGlobalData = json.limpezaGlobal;
-                    if (json.petGlobal !== undefined) petGlobalValor = json.petGlobal;
-                    if (json.regrasEstadia) regrasEstadiaConfig = json.regrasEstadia;
-                }
-            } catch(err) {}
-
-            const precoBaseDefault = apt === 'cristal_mar' ? 65 : 60;
-            let subtotalNoites = 0;
-            let percentagemDescontoExtra = 10; 
-            let temBloqueio = false;
-
-            let taxaTuristicaTotal = 0;
-            const noitesTaxaLimite = Math.min(noites, 7);
-
-            let dt = new Date(checkin.getFullYear(), checkin.getMonth(), checkin.getDate());
-            for (let i = 0; i < noites; i++) {
-                const dataStr = formatarDataLocal(dt);
-                const dadosDia = mapaPrecos[apt] && mapaPrecos[apt][dataStr];
-
-                if (dadosDia && dadosDia.bloqueado) {
-                    temBloqueio = true;
-                    break;
-                }
-
-                const precoDia = (dadosDia && dadosDia.preco) ? dadosDia.preco : precoBaseDefault;
-                subtotalNoites += precoDia;
-
-                if (dadosDia && dadosDia.descontoExtra) percentagemDescontoExtra = dadosDia.descontoExtra;
-
-                if (i < noitesTaxaLimite) {
-                    const mes = dt.getMonth(); 
-                    const eEpocaAlta = (mes >= 5 && mes <= 8);
-                    const valorNoiteTaxa = eEpocaAlta ? 2.00 : 1.50;
-                    taxaTuristicaTotal += valorNoiteTaxa * adultos;
-                }
-
-                dt.setDate(dt.getDate() + 1);
-            }
-
-            if (temBloqueio) {
-                alert('Infelizmente algumas das datas selecionadas estão bloqueadas. Por favor escolha outro período.');
-                return;
-            }
-
-            const taxaLimpezaFinal = limpezaGlobalData[apt] !== undefined ? limpezaGlobalData[apt] : 35;
-            const desconto = subtotalNoites * (percentagemDescontoExtra / 100);
-            const noitesComDesconto = subtotalNoites - desconto;
-
-            const totalTaxaPet = temPet ? (petGlobalValor * numPets) : 0;
-
-            const totalFinal = noitesComDesconto + taxaLimpezaFinal + totalTaxaPet + taxaTuristicaTotal;
-
-            document.getElementById('label-noites').innerText = `Estadia (${noites} noites):`;
-            document.getElementById('valor-noites').innerText = `${subtotalNoites.toFixed(2)} €`;
-
-            document.getElementById('label-desc-texto').innerText = `Desconto Reserva Direta (${percentagemDescontoExtra}%):`;
-            document.getElementById('valor-desconto').innerText = `-${desconto.toFixed(2)} €`;
-
-            document.getElementById('valor-limpeza').innerText = `${taxaLimpezaFinal.toFixed(2)} €`;
-
-            const linhaPet = document.getElementById('linha-pet');
-            if (temPet) {
-                linhaPet.classList.remove('hidden');
-                document.getElementById('valor-pet-total').innerText = `${totalTaxaPet.toFixed(2)} € (${numPets} pet)`;
-            } else {
-                linhaPet.classList.add('hidden');
-            }
-
-            document.getElementById('label-taxa-turistica').innerText = `Taxa Turística F. Foz (${noitesTaxaLimite} noites x ${adultos} adultos):`;
-            document.getElementById('valor-taxa-turistica').innerText = `${taxaTuristicaTotal.toFixed(2)} €`;
-
-            document.getElementById('valor-total').innerText = `${totalFinal.toFixed(2)} €`;
-
-            document.getElementById('resultado-simulacao').classList.remove('hidden');
-            document.getElementById('modal-ifthenpay').classList.add('hidden');
-            document.getElementById('resultado-simulacao').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function validarDadosHospede() {
-            const nome = document.getElementById('hospede-nome').value.trim();
-            const email = document.getElementById('hospede-email').value.trim();
-            const telefone = document.getElementById('hospede-telefone').value.trim();
-            const termos = document.getElementById('aceitar-termos').checked;
-
-            if (!nome || !email || !telefone || !termos) {
-                const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
-                const msg = (traducoes[langAtual] && traducoes[langAtual].erro_dados_hospede) || traducoes['pt'].erro_dados_hospede;
-                alert(msg);
-                return false;
-            }
-            return true;
-        }
-
-        async function submeterReservaBackend(metodo) {
-            const datasSelecionadas = calendarioPicker.selectedDates;
-            const payload = {
-                apartamento: document.getElementById('apt-select').value,
-                checkin: formatarDataLocal(datasSelecionadas[0]),
-                checkout: formatarDataLocal(datasSelecionadas[datasSelecionadas.length - 1]),
-                adultos: document.getElementById('hospedes').value,
-                criancas: document.getElementById('criancas').value,
-                total: document.getElementById('valor-total').innerText,
-                metodoPagamento: metodo,
-                idioma: localStorage.getItem('buarcos_lang') || 'pt',
-                hospede: {
-                    nome: document.getElementById('hospede-nome').value.trim(),
-                    email: document.getElementById('hospede-email').value.trim(),
-                    telefone: document.getElementById('hospede-telefone').value.trim(),
-                    pais: document.getElementById('hospede-pais').value.trim(),
-                    nif: document.getElementById('hospede-nif').value.trim()
-                }
-            };
-
-            try {
-                const res = await fetch('/api/reservar', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const json = await res.json();
-                if (json.success) {
-                    await inicializarCalendario();
-                }
-                return json;
-            } catch (err) {
-                console.error("Erro ao comunicar com API:", err);
-                return { success: false };
-            }
-        }
-
-        async function abrirPagamento() {
-            const modalPay = document.getElementById('modal-ifthenpay');
-            if (modalPay) {
-                modalPay.classList.remove('hidden');
-                modalPay.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // BLOQUEIO E EMAIL SÓ OCORREM AQUI (APÓS ESCOLHA DO PAGAMENTO)
-        async function selecionarMetodoPagamento(metodo) {
-            if (!validarDadosHospede()) return;
-
-            const total = document.getElementById('valor-total').innerText;
-            const container = document.getElementById('detalhes-pagamento');
-            container.classList.remove('hidden');
-            
-            const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
-            const msgProcessando = {
-                pt: 'A processar pedido de reserva e a gerar dados de pagamento...',
-                en: 'Processing booking request and generating payment details...',
-                fr: 'Traitement de la demande et génération des paiements...',
-                es: 'Procesando solicitud de reserva y generando datos de pago...'
-            };
-            container.innerHTML = `<p class="text-xs text-navy-800 font-semibold">${msgProcessando[langAtual] || msgProcessando['pt']}</p>`;
-
-            const resposta = await submeterReservaBackend(metodo);
-            
-            const expiraStr = resposta.expiraEm ? `<strong>${resposta.expiraEm}</strong>` : '';
-            
-            // PRAZO DINÂMICO: MB WAY = 5 minutos | Multibanco / Outros = 24 horas
-            const tempoValidadeTexto = metodo === 'mbway' ? '5 minutos' : '24 horas';
-            
-            const avisosTexto = {
-                pt: `<strong>⏳ Validade do Pagamento:</strong> Este pedido expira em <strong>${tempoValidadeTexto}</strong> (até ${expiraStr}). Caso o pagamento não seja confirmado dentro deste prazo, as datas serão libertadas automaticamente.`,
-                en: `<strong>⏳ Payment Validity:</strong> This request expires in <strong>${tempoValidadeTexto}</strong> (until ${expiraStr}). If payment is not confirmed within this period, dates will be automatically released.`,
-                fr: `<strong>⏳ Validité du Paiement:</strong> Cette demande expire dans <strong>${tempoValidadeTexto}</strong> (jusqu'au ${expiraStr}). Si le paiement n'est pas confirmé dans ce délai, les dates seront libérées.`,
-                es: `<strong>⏳ Validez del Pago:</strong> Este pedido expira en <strong>${tempoValidadeTexto}</strong> (hasta ${expiraStr}). Si el pago no se confirma en este plazo, las fechas se liberarán.`
-            };
-            const avisoPrazo = `<p class="text-[11px] text-amber-700 bg-amber-50 p-2.5 rounded border border-amber-200 mt-2">${avisosTexto[langAtual] || avisosTexto['pt']}</p>`;
-
-            const telDefault = document.getElementById('hospede-telefone').value.trim();
-
-            if (metodo === 'mbway') {
-                const tit = { pt: 'Pagamento por MB WAY', en: 'MB WAY Payment', fr: 'Paiement par MB WAY', es: 'Pago por MB WAY' };
-                const sub = { pt: `Confirme o número de telemóvel para receber o pedido no valor de <strong>${total}</strong>:`, en: `Confirm your mobile number to receive the payment request of <strong>${total}</strong>:`, fr: `Confirmez votre numéro de mobile pour recevoir la demande de <strong>${total}</strong>:`, es: `Confirme su número de móvil para recibir la solicitud de <strong>${total}</strong>:` };
-                const btn = { pt: 'Enviar Pedido', en: 'Send Request', fr: 'Envoyer la Demande', es: 'Enviar Solicitud' };
-
-                container.innerHTML = `
-                    <div class="font-bold text-navy-900">${tit[langAtual] || tit['pt']}</div>
-                    <p class="text-xs text-navy-800/80">${sub[langAtual] || sub['pt']}</p>
-                    <div class="mt-3 flex gap-2">
-                        <input type="tel" id="mbway-tel" value="${telDefault}" class="border border-sea-200 p-2 rounded text-sm flex-1 bg-white">
-                        <button type="button" onclick="alert('${langAtual === 'fr' ? 'Demande MB WAY envoyée !' : langAtual === 'en' ? 'MB WAY request sent!' : 'Pedido MB WAY enviado! Verifique a sua aplicação.')}')" class="bg-red-600 hover:bg-red-700 text-white text-xs px-4 py-2 rounded font-bold cursor-pointer">${btn[langAtual] || btn['pt']}</button>
-                    </div>
-                    ${avisoPrazo}
-                `;
-            } else if (metodo === 'multibanco') {
-                const ref = resposta.referencia || '987 654 321';
-                const ent = resposta.entidade || '11683';
-                const tit = { pt: 'Referência Multibanco Gerada', en: 'Multibanco Reference Generated', fr: 'Référence Multibanco Générée', es: 'Referencia Multibanco Generada' };
-                container.innerHTML = `
-                    <div class="font-bold text-navy-900 mb-1">${tit[langAtual] || tit['pt']}</div>
-                    <div class="space-y-1 font-mono text-xs bg-white p-3 rounded border border-sea-200 text-navy-900">
-                        <div class="flex justify-between"><span>Entidade:</span> <strong>${ent}</strong></div>
-                        <div class="flex justify-between"><span>Referência:</span> <strong>${ref}</strong></div>
-                        <div class="flex justify-between"><span>Valor:</span> <strong>${total}</strong></div>
-                    </div>
-                    ${avisoPrazo}
-                `;
-            } else if (metodo === 'cartao') {
-                const tit = { pt: 'Pagamento por Cartão (VISA / Mastercard)', en: 'Card Payment (VISA / Mastercard)', fr: 'Paiement par Carte (VISA / Mastercard)', es: 'Pago con Tarjeta (VISA / Mastercard)' };
-                const btn = { pt: 'Pagar com Cartão', en: 'Pay with Card', fr: 'Payer par Carte', es: 'Pagar con Tarjeta' };
-                container.innerHTML = `
-                    <div class="font-bold text-navy-900">${tit[langAtual] || tit['pt']}</div>
-                    <p class="text-xs text-navy-800/80">Valor a liquidar: <strong>${total}</strong>.</p>
-                    <button type="button" onclick="alert('Redirecionando para gateway de pagamento seguro...')" class="mt-3 w-full bg-navy-900 hover:bg-navy-800 text-white text-xs py-2.5 rounded font-bold cursor-pointer">${btn[langAtual] || btn['pt']}</button>
-                    ${avisoPrazo}
-                `;
-            } else {
-                const tit = { pt: 'Apple Pay / Google Pay / PayShop', en: 'Apple Pay / Google Pay / PayShop', fr: 'Apple Pay / Google Pay / PayShop', es: 'Apple Pay / Google Pay / PayShop' };
-                const btn = { pt: 'Continuar Pagamento', en: 'Continue Payment', fr: 'Continuer le Paiement', es: 'Continuar Pago' };
-                container.innerHTML = `
-                    <div class="font-bold text-navy-900">${tit[langAtual] || tit['pt']}</div>
-                    <p class="text-xs text-navy-800/80">Valor a liquidar: <strong>${total}</strong>.</p>
-                    <button type="button" onclick="alert('Redirecionando para pagamento...')" class="mt-3 bg-navy-900 text-white text-xs px-4 py-2 rounded font-bold cursor-pointer">${btn[langAtual] || btn['pt']}</button>
-                    ${avisoPrazo}
-                `;
-            }
-        }
-    </script>
-</body>
-</html>
+    
