@@ -444,7 +444,7 @@
         </div>
     </section>
 
-    <!-- Rodapé Atualizado -->
+    <!-- Rodapé Atualizado (Sem Link Público para o Admin) -->
     <footer class="bg-navy-950 text-slate-300 py-12 mt-auto border-t border-navy-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-navy-800 text-sm">
@@ -1112,14 +1112,12 @@
                 return;
             }
 
-            // Validação da Estadia Mínima baseada nas regras configuradas
-            const mesCheckin = checkin.getMonth(); // 0 a 11 (0=Jan, 5=Jun, 6=Jul, 7=Ago, 8=Set)
+            const mesCheckin = checkin.getMonth(); 
             let minimoExigido = regrasEstadiaConfig.base || 2;
 
-            if (mesCheckin === 5) { // Junho
+            if (mesCheckin === 5) { 
                 minimoExigido = regrasEstadiaConfig.junho || 4;
             } else if ((mesCheckin === 6 || mesCheckin === 7) || (mesCheckin === 8 && checkin.getDate() <= 15)) { 
-                // 1 de Julho a 15 de Setembro
                 minimoExigido = regrasEstadiaConfig.alta || 7;
             }
 
@@ -1285,27 +1283,49 @@
             const total = document.getElementById('valor-total').innerText;
             const container = document.getElementById('detalhes-pagamento');
             container.classList.remove('hidden');
-            container.innerHTML = `<p class="text-xs text-navy-800 font-semibold">A processar pedido de reserva e a bloquear datas...</p>`;
+            
+            const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
+            const msgProcessando = {
+                pt: 'A processar pedido de reserva e a bloquear datas...',
+                en: 'Processing booking request and blocking dates...',
+                fr: 'Traitement de la demande et blocage des dates...',
+                es: 'Procesando solicitud de reserva y bloqueando fechas...'
+            };
+            container.innerHTML = `<p class="text-xs text-navy-800 font-semibold">${msgProcessando[langAtual] || msgProcessando['pt']}</p>`;
 
             const resposta = await submeterReservaBackend(metodo);
-            const avisoPrazo = `<p class="text-[11px] text-amber-700 bg-amber-50 p-2.5 rounded border border-amber-200 mt-2"><strong>⏳ Pré-Reserva válida por 24h:</strong> As datas foram bloqueadas temporariamente${resposta.expiraEm ? ` até <strong>${resposta.expiraEm}</strong>` : ''}. Caso o pagamento não seja confirmado dentro deste prazo, a disponibilidade será libertada automaticamente.</p>`;
+            
+            const expiraStr = resposta.expiraEm ? `<strong>${resposta.expiraEm}</strong>` : '';
+            const avisosTexto = {
+                pt: `<strong>⏳ Pré-Reserva válida por 24h:</strong> As datas foram bloqueadas temporariamente até ${expiraStr}. Caso o pagamento não seja confirmado dentro deste prazo, a disponibilidade será libertada automaticamente.`,
+                en: `<strong>⏳ Pre-booking valid for 24h:</strong> Dates have been temporarily blocked until ${expiraStr}. If payment is not confirmed within this period, availability will be automatically released.`,
+                fr: `<strong>⏳ Pré-réservation valable 24h:</strong> Les dates ont été bloquées temporairement jusqu'au ${expiraStr}. Si le paiement n'est pas confirmé dans ce délai, la disponibilité sera libérée automatiquement.`,
+                es: `<strong>⏳ Pre-reserva válida por 24h:</strong> Las fechas han sido bloqueadas temporalmente hasta ${expiraStr}. Si el pago no se confirma dentro de este plazo, la disponibilidad se liberará automáticamente.`
+            };
+            const avisoPrazo = `<p class="text-[11px] text-amber-700 bg-amber-50 p-2.5 rounded border border-amber-200 mt-2">${avisosTexto[langAtual] || avisosTexto['pt']}</p>`;
+
+            const telDefault = document.getElementById('hospede-telefone').value.trim();
 
             if (metodo === 'mbway') {
-                const telDefault = document.getElementById('hospede-telefone').value.trim();
+                const tit = { pt: 'Pagamento por MB WAY', en: 'MB WAY Payment', fr: 'Paiement par MB WAY', es: 'Pago por MB WAY' };
+                const sub = { pt: `Confirme o número de telemóvel para receber o pedido no valor de <strong>${total}</strong>:`, en: `Confirm your mobile number to receive the payment request of <strong>${total}</strong>:`, fr: `Confirmez votre numéro de mobile pour recevoir la demande de <strong>${total}</strong>:`, es: `Confirme su número de móvil para recibir la solicitud de <strong>${total}</strong>:` };
+                const btn = { pt: 'Enviar Pedido', en: 'Send Request', fr: 'Envoyer la Demande', es: 'Enviar Solicitud' };
+
                 container.innerHTML = `
-                    <div class="font-bold text-navy-900">Pagamento por MB WAY</div>
-                    <p class="text-xs text-navy-800/80">Confirme o número de telemóvel para receber o pedido no valor de <strong>${total}</strong>:</p>
+                    <div class="font-bold text-navy-900">${tit[langAtual] || tit['pt']}</div>
+                    <p class="text-xs text-navy-800/80">${sub[langAtual] || sub['pt']}</p>
                     <div class="mt-3 flex gap-2">
                         <input type="tel" id="mbway-tel" value="${telDefault}" class="border border-sea-200 p-2 rounded text-sm flex-1 bg-white">
-                        <button type="button" onclick="alert('Pedido MB WAY enviado! A sua pré-reserva foi registada e as datas bloqueadas por 24h.')" class="bg-red-600 hover:bg-red-700 text-white text-xs px-4 py-2 rounded font-bold cursor-pointer">Enviar Pedido</button>
+                        <button type="button" onclick="alert('${langAtual === 'fr' ? 'Demande MB WAY envoyée !' : langAtual === 'en' ? 'MB WAY request sent!' : 'Pedido MB WAY enviado! A sua pré-reserva foi registada.'}')" class="bg-red-600 hover:bg-red-700 text-white text-xs px-4 py-2 rounded font-bold cursor-pointer">${btn[langAtual] || btn['pt']}</button>
                     </div>
                     ${avisoPrazo}
                 `;
             } else if (metodo === 'multibanco') {
                 const ref = resposta.referencia || '987 654 321';
                 const ent = resposta.entidade || '11683';
+                const tit = { pt: 'Referência Multibanco Gerada', en: 'Multibanco Reference Generated', fr: 'Référence Multibanco Générée', es: 'Referencia Multibanco Generada' };
                 container.innerHTML = `
-                    <div class="font-bold text-navy-900 mb-1">Referência Multibanco Gerada</div>
+                    <div class="font-bold text-navy-900 mb-1">${tit[langAtual] || tit['pt']}</div>
                     <div class="space-y-1 font-mono text-xs bg-white p-3 rounded border border-sea-200 text-navy-900">
                         <div class="flex justify-between"><span>Entidade:</span> <strong>${ent}</strong></div>
                         <div class="flex justify-between"><span>Referência:</span> <strong>${ref}</strong></div>
@@ -1314,17 +1334,21 @@
                     ${avisoPrazo}
                 `;
             } else if (metodo === 'cartao') {
+                const tit = { pt: 'Pagamento por Cartão (VISA / Mastercard)', en: 'Card Payment (VISA / Mastercard)', fr: 'Paiement par Carte (VISA / Mastercard)', es: 'Pago con Tarjeta (VISA / Mastercard)' };
+                const btn = { pt: 'Pagar com Cartão', en: 'Pay with Card', fr: 'Payer par Carte', es: 'Pagar con Tarjeta' };
                 container.innerHTML = `
-                    <div class="font-bold text-navy-900">Pagamento por Cartão (VISA / Mastercard)</div>
+                    <div class="font-bold text-navy-900">${tit[langAtual] || tit['pt']}</div>
                     <p class="text-xs text-navy-800/80">Valor a liquidar: <strong>${total}</strong>.</p>
-                    <button type="button" onclick="alert('A redirecionar para o terminal seguro ifThenPay... Pré-reserva registada!')" class="mt-3 w-full bg-navy-900 hover:bg-navy-800 text-white text-xs py-2.5 rounded font-bold cursor-pointer">Pagar com Cartão</button>
+                    <button type="button" onclick="alert('Pré-reserva registada com sucesso!')" class="mt-3 w-full bg-navy-900 hover:bg-navy-800 text-white text-xs py-2.5 rounded font-bold cursor-pointer">${btn[langAtual] || btn['pt']}</button>
                     ${avisoPrazo}
                 `;
             } else {
+                const tit = { pt: 'Apple Pay / Google Pay / PayShop', en: 'Apple Pay / Google Pay / PayShop', fr: 'Apple Pay / Google Pay / PayShop', es: 'Apple Pay / Google Pay / PayShop' };
+                const btn = { pt: 'Continuar Pagamento', en: 'Continue Payment', fr: 'Continuer le Paiement', es: 'Continuar Pago' };
                 container.innerHTML = `
-                    <div class="font-bold text-navy-900">Apple Pay / Google Pay / PayShop</div>
+                    <div class="font-bold text-navy-900">${tit[langAtual] || tit['pt']}</div>
                     <p class="text-xs text-navy-800/80">Valor a liquidar: <strong>${total}</strong>.</p>
-                    <button type="button" onclick="alert('A iniciar pagamento digital... Pré-reserva registada!')" class="mt-3 bg-navy-900 text-white text-xs px-4 py-2 rounded font-bold cursor-pointer">Continuar Pagamento</button>
+                    <button type="button" onclick="alert('Pré-reserva registada com sucesso!')" class="mt-3 bg-navy-900 text-white text-xs px-4 py-2 rounded font-bold cursor-pointer">${btn[langAtual] || btn['pt']}</button>
                     ${avisoPrazo}
                 `;
             }
