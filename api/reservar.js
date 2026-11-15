@@ -13,8 +13,10 @@ export default async function handler(req, res) {
     const redisToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
     const resendKey = process.env.RESEND_API_KEY;
 
+    // MB WAY expira em 5 min; Multibanco / outros em 24h
+    const minutosValidade = metodoPagamento === 'mbway' ? 5 : 24 * 60;
     const agora = Date.now();
-    const expiraEm = agora + (24 * 60 * 60 * 1000);
+    const expiraEm = agora + (minutosValidade * 60 * 1000);
     const dataLimiteFormatada = new Date(expiraEm).toLocaleString('pt-PT', { timeZone: 'Europe/Lisbon' });
 
     try {
@@ -52,7 +54,7 @@ export default async function handler(req, res) {
                     bloqueado: true,
                     estadoPagamento: 'pendente',
                     expiraEm: expiraEm,
-                    motivo: `Site: ${hospede.nome}`,
+                    motivo: `Pré-Reserva (${metodoPagamento.toUpperCase()}): ${hospede.nome}`,
                     contacto: `${hospede.telefone} (${hospede.email})`
                 };
 
@@ -72,8 +74,6 @@ export default async function handler(req, res) {
         let emailEnviado = false;
         if (resendKey) {
             const nomeApt = apartamento === 'cristal_mar' ? 'Cristal Mar (161145/AL)' : 'Tonay Sol (146454/AL)';
-            
-            // Links específicos do Google Forms para AIMA/SEF por alojamento
             const formCristalMar = "https://docs.google.com/forms/d/e/1FAIpQLSe3mo6kPf1zrk3d_Sd-LgCeWgnJaetPvMBIUB2lMVLh3MIQyw/viewform?usp=header";
             const formTonaySol = "https://docs.google.com/forms/d/e/1FAIpQLSdIQY4ulOCMwe2u5INgvA8ViHeEy6nXmFHpyadOaGR8C3k62A/viewform?usp=header";
             const linkAimaSef = (apartamento === 'cristal_mar') ? formCristalMar : formTonaySol;
@@ -87,15 +87,12 @@ export default async function handler(req, res) {
                 body: JSON.stringify({
                     from: 'Buarcos & Sea <onboarding@resend.dev>',
                     to: ['buarcossea@gmail.com', hospede.email],
-                    subject: `Nova Pré-Reserva: ${nomeApt} (${checkin} a ${checkout}) - ${hospede.nome}`,
+                    subject: `Nova Pré-Reserva (${metodoPagamento.toUpperCase()}): ${nomeApt} (${checkin} a ${checkout}) - ${hospede.nome}`,
                     html: `
                         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #193247;">
-                            <div style="text-align: center; padding: 20px 0;">
-                                <img src="https://buarcossea.pt/logo.png" alt="Buarcos & Sea Accommodation" style="height: 70px; object-fit: contain;">
-                            </div>
                             <h2 style="color: #23425c;">Pré-Reserva Registada com Sucesso!</h2>
                             <p>Olá <strong>${hospede.nome}</strong>,</p>
-                            <p>Obrigado por escolher o <strong>Buarcos & Sea Accommodation</strong>. A sua pré-reserva para o <strong>${nomeApt}</strong> encontra-se registada.</p>
+                            <p>Obrigado por escolher o <strong>Buarcos & Sea Accommodation</strong>. A sua pré-reserva para o <strong>${nomeApt}</strong> foi registada.</p>
                             
                             <div style="background-color: #f3f1eb; padding: 15px; border-radius: 8px; margin: 20px 0;">
                                 <p style="margin: 5px 0;"><strong>Check-in:</strong> ${checkin}</p>
@@ -103,17 +100,13 @@ export default async function handler(req, res) {
                                 <p style="margin: 5px 0;"><strong>Hóspedes:</strong> ${adultos} Adultos, ${criancas} Crianças</p>
                                 <p style="margin: 5px 0;"><strong>Valor Total:</strong> ${total}</p>
                                 <p style="margin: 5px 0;"><strong>Método de Pagamento:</strong> ${metodoPagamento.toUpperCase()}</p>
-                                <p style="color: #b45309; margin-top: 10px;"><strong>⏳ Prazo de Pagamento (24h):</strong> As datas ficam bloqueadas até <strong>${dataLimiteFormatada}</strong>.</p>
+                                <p style="color: #b45309; margin-top: 10px;"><strong>⏳ Prazo de Pagamento:</strong> O pagamento expira em <strong>${dataLimiteFormatada}</strong>.</p>
                             </div>
 
                             <div style="background-color: #e6f0ef; padding: 15px; border-radius: 8px; margin: 20px 0;">
                                 <h3 style="margin-top: 0; color: #193247; font-size: 16px;">Registo Obrigatório (AIMA / SEF)</h3>
-                                <p style="font-size: 13px;">Para cumprir com a legislação em vigor, por favor preencha antecipadamente o formulário de registo:</p>
                                 <a href="${linkAimaSef}" target="_blank" style="display: inline-block; background-color: #648c88; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 5px; font-size: 13px;">Preencher Formulário de Registo</a>
                             </div>
-
-                            <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
-                            <p style="font-size: 12px; color: #666;">Buarcos & Sea Accommodation<br>📞 925 846 193 | ✉️ buarcossea@gmail.com</p>
                         </div>
                     `
                 })
