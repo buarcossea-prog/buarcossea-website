@@ -23,7 +23,7 @@ export default async function handler(req, res) {
         });
         const getData = await getRes.json();
 
-        let storedData = { data: {}, limpezaGlobal: { cristal_mar: 35, tonay_sol: 35 }, petGlobal: 15 };
+        let storedData = { data: {}, limpezaGlobal: { cristal_mar: 35, tonay_sol: 35 }, petGlobal: 15, regrasEstadia: { base: 2, junho: 4, alta: 7 } };
         if (getData && getData.result) {
             const parsed = typeof getData.result === 'string' ? JSON.parse(getData.result) : getData.result;
             if (parsed.data) storedData = parsed;
