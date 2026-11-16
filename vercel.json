@@ -4,5 +4,15 @@
       "path": "/api/limpar-expirados",
       "schedule": "0 0 * * *"
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/cristal_mar.ics",
+      "destination": "/api/ical?apt=cristal_mar"
+    },
+    {
+      "source": "/api/tonay_sol.ics",
+      "destination": "/api/ical?apt=tonay_sol"
+    }
   ]
 }
