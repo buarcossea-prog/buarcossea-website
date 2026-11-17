@@ -127,7 +127,7 @@
 
                         <div class="grid grid-cols-2 gap-3 text-xs font-medium text-navy-800 mb-6">
                             <div class="flex items-center gap-2"><i data-lucide="users" class="w-4 h-4 text-sea-600"></i> <span data-i18n="com_hospedes">Até 4 Hóspedes</span></div>
-                            <div class="flex items-center gap-2"><i data-lucide="wifi" class="w-4 h-4 text-sea-600"></i> Wi-Fi Fibra</div>
+                            <div class="flex items-center gap-2"><i data-lucide="wifi" class="w-4 h-4 text-sea-600"></i> Wi-Fi Fibra 1 Gbps</div>
                             <div class="flex items-center gap-2"><i data-lucide="tv" class="w-4 h-4 text-sea-600"></i> Smart TV 4K</div>
                             <div class="flex items-center gap-2"><i data-lucide="coffee" class="w-4 h-4 text-sea-600"></i> <span data-i18n="com_cozinha">Cozinha Equipada</span></div>
                         </div>
@@ -162,8 +162,8 @@
 
                         <div class="grid grid-cols-2 gap-3 text-xs font-medium text-navy-800 mb-6">
                             <div class="flex items-center gap-2"><i data-lucide="users" class="w-4 h-4 text-sea-600"></i> <span data-i18n="com_hospedes">Até 4 Hóspedes</span></div>
-                            <div class="flex items-center gap-2"><i data-lucide="wifi" class="w-4 h-4 text-sea-600"></i> Wi-Fi Grátis</div>
-                            <div class="flex items-center gap-2"><i data-lucide="tv" class="w-4 h-4 text-sea-600"></i> Smart TV</div>
+                            <div class="flex items-center gap-2"><i data-lucide="wifi" class="w-4 h-4 text-sea-600"></i> Wi-Fi Fibra 1 Gbps</div>
+                            <div class="flex items-center gap-2"><i data-lucide="tv" class="w-4 h-4 text-sea-600"></i> Smart TV 4K</div>
                             <div class="flex items-center gap-2"><i data-lucide="utensils" class="w-4 h-4 text-sea-600"></i> <span data-i18n="com_cozinha_comp">Cozinha Completa</span></div>
                         </div>
                     </div>
@@ -191,32 +191,27 @@
         </div>
     </div>
 
-    <!-- Modal de Visualização de Foto Individual em Tamanho Grande (Com botões de navegação e fecho ao clicar fora) -->
+    <!-- Modal de Visualização de Foto Individual em Tamanho Grande -->
     <div id="modal-foto-grande" onclick="fecharFotoGrande()" class="hidden fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer">
-        <!-- Botão de Fecho -->
         <button type="button" onclick="fecharFotoGrande()" class="absolute top-6 right-6 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full transition-colors cursor-pointer z-20" title="Fechar">
             <i data-lucide="x" class="w-6 h-6"></i>
         </button>
 
-        <!-- Botão Anterior (Esquerda) -->
         <button type="button" onclick="event.stopPropagation(); mudarFotoGrande(-1)" class="absolute left-4 sm:left-8 bg-white/20 hover:bg-white/40 text-white p-3 sm:p-4 rounded-full transition-colors cursor-pointer z-20 shadow-lg" title="Foto Anterior">
             <i data-lucide="chevron-left" class="w-7 h-7"></i>
         </button>
 
-        <!-- Imagem em Grande -->
         <img id="foto-grande-src" src="" alt="Foto em tamanho grande" onclick="event.stopPropagation()" class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl cursor-default">
 
-        <!-- Botão Seguinte (Direita) -->
         <button type="button" onclick="event.stopPropagation(); mudarFotoGrande(1)" class="absolute right-4 sm:right-8 bg-white/20 hover:bg-white/40 text-white p-3 sm:p-4 rounded-full transition-colors cursor-pointer z-20 shadow-lg" title="Foto Seguinte">
             <i data-lucide="chevron-right" class="w-7 h-7"></i>
         </button>
 
-        <!-- Contador de Fotos (Ex: 3 / 11) -->
         <div id="contador-fotos" class="absolute bottom-6 bg-black/60 text-white text-xs px-4 py-1.5 rounded-full font-mono tracking-wider backdrop-blur-sm z-20">
             1 / 1
         </div>
     </div>
-    
+
     <!-- Simulador de Reserva Interativo -->
     <section id="simulador" class="py-16 bg-navy-900 text-white">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -523,7 +518,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 
-    <!-- Dicionário de Traduções (PT / EN / FR / ES) com foot_privacidade incluído -->
+    <!-- Dicionário de Traduções atualizado com as comodidades reais de Cristal Mar e Tonay Sol -->
     <script>
         const traducoes = {
             pt: {
@@ -543,9 +538,9 @@
                 sec_aloj_titulo: "Alojamentos em Buarcos",
                 sec_aloj_sub: "Explore as comodidades e fotos de cada apartamento antes de simular a sua estadia",
                 cristal_preco: "Desde 65€ / noite",
-                cristal_desc: "Apartamento moderno com excelente exposição solar, vista privilegiada e a poucos passos da praia de Buarcos.",
+                cristal_desc: "Apartamento moderno com excelente exposição solar, vista panorâmica sobre o mar e o pôr do sol, situado no 14º andar.",
                 tonay_preco: "Desde 60€ / noite",
-                tonay_desc: "Espaço acolhedor e totalmente renovado, perfeito para famílias que procuram tranquilidade e proximidade ao mar.",
+                tonay_desc: "Espaço acolhedor e totalmente renovado (90m²), perfeito para famílias na marginal em frente à Praia de Buarcos.",
                 com_hospedes: "Até 4 Hóspedes",
                 com_cozinha: "Cozinha Equipada",
                 com_cozinha_comp: "Cozinha Completa",
@@ -593,8 +588,6 @@
                 tur_etiqueta: "Turismo & Cultura",
                 tur_titulo: "Descubra a Figueira da Foz e Buarcos",
                 tur_desc: "Aproveite a sua estadia para explorar as praias douradas, a gastronomia rica em peixe fresco e os eventos culturais da região. Consulte os portais locais para planear cada dia:",
-                tur_agenda_tit: "Agenda & Eventos",
-                tur_agenda_desc: "Acompanhe os concertos, exposições e novidades locais durante a sua estadia.",
                 loc_etiqueta: "Localização Privilegiada",
                 loc_titulo: "Buarcos, Figueira da Foz",
                 loc_desc: "Situados numa das zonas mais tradicionais e encantadoras da Figueira da Foz. A curta distância a pé da praia de Buarcos, de excelentes restaurantes de peixe fresco, pastelarias e comércio local.",
@@ -611,22 +604,41 @@
                 galeria_fotos: "Galeria de Fotos",
                 comodidades_apt: "Comodidades do Alojamento",
                 btn_simular_modal: "Simular Reserva para este Apartamento",
-                cm_1: "Wi-Fi Fibra Alta Velocidade",
-                cm_2: "Smart TV 4K com Streaming",
-                cm_3: "Vista Panorâmica de Mar",
-                cm_4: "Cozinha Totalmente Equipada",
-                cm_5: "Máquina de Café Expresso",
-                cm_6: "Roupa de Cama e Banho Incluída",
-                cm_7: "Secador de Cabelo",
-                cm_8: "Ferro de Engomar",
-                ts_1: "Wi-Fi Grátis",
-                ts_2: "Smart TV",
-                ts_3: "Proximidade à Praia (50m)",
-                ts_4: "Cozinha Completa",
-                ts_5: "Máquina de Lavar Roupa",
-                ts_6: "Varanda Solarenga",
-                ts_7: "Artigos de Higiene Pessoal",
-                ts_8: "Estacionamento Gratuito Próximo",
+
+                // Comodidades Cristal Mar (PT)
+                cm_1: "2 Quartos Confortáveis e Roupeiro",
+                cm_2: "2 Casas de Banho Modernas",
+                cm_3: "Varanda Ampla com Vista Mar e Pôr do Sol",
+                cm_4: "Localização no 14º Andar com Elevador",
+                cm_5: "Wi-Fi Fibra 1 Gbps Ultra Rápido",
+                cm_6: "Smart TV 4K com Serviço de Streaming",
+                cm_7: "Cozinha Totalmente Equipada",
+                cm_8: "Máquinas de Lavar Roupa e Loiça",
+                cm_9: "Roupa de Cama e Banho Incluída",
+                cm_10: "Secador de Cabelo e Produtos de Higiene",
+                cm_11: "Ferro e Tábua de Engomar / Estendal",
+                cm_12: "Acessibilidade para Cadeira de Rodas",
+                cm_13: "Estacionamento Gratuito Próximo",
+                cm_14: "Frente à Praia (A poucos passos)",
+                cm_15: "Jogos de Tabuleiro / Puzzles",
+
+                // Comodidades Tonay Sol (PT)
+                ts_1: "2 Quartos Confortáveis (90m² de Área)",
+                ts_2: "1 Casa de Banho Moderna com Duche",
+                ts_3: "Varanda com Vista Deslumbrante sobre o Oceano",
+                ts_4: "Localização na Marginal (Frente à Praia)",
+                ts_5: "Wi-Fi Fibra 1 Gbps Ultra Rápido",
+                ts_6: "Smart TV 4K com Canais por Cabo e Streaming",
+                ts_7: "Cozinha Equipada (Forno, Micro-ondas, Frigorífico)",
+                ts_8: "Máquina de Lavar Roupa",
+                ts_9: "Roupa de Cama e Toalhas Incluídas",
+                ts_10: "Secador de Cabelo e Produtos de Higiene",
+                ts_11: "Ferro, Tábua de Engomar e Estendal",
+                ts_12: "Acessibilidade por Elevador",
+                ts_13: "Estacionamento Gratuito Público Próximo",
+                ts_14: "Máquina de Café, Torradeira e Utensílios",
+                ts_15: "Jogos de Tabuleiro / Puzzles",
+
                 erro_datas: "Por favor selecione o período de check-in e check-out no calendário.",
                 whatsapp_msg: "Olá, gostaria de obter mais informações sobre a disponibilidade no Buarcos & Sea Accommodation."
             },
@@ -647,9 +659,9 @@
                 sec_aloj_titulo: "Accommodations in Buarcos",
                 sec_aloj_sub: "Explore amenities and photos of each apartment before simulating your stay",
                 cristal_preco: "From 65€ / night",
-                cristal_desc: "Modern apartment with excellent sun exposure, privileged views, and just steps from Buarcos beach.",
+                cristal_desc: "Modern apartment with excellent sun exposure, panoramic sea and sunset views, located on the 14th floor.",
                 tonay_preco: "From 60€ / night",
-                tonay_desc: "Cozy and fully renovated space, perfect for families seeking tranquility and proximity to the sea.",
+                tonay_desc: "Cozy and fully renovated space (90m²), perfect for families right on the beachfront esplanade in Buarcos.",
                 com_hospedes: "Up to 4 Guests",
                 com_cozinha: "Equipped Kitchen",
                 com_cozinha_comp: "Full Kitchen",
@@ -697,8 +709,6 @@
                 tur_etiqueta: "Tourism & Culture",
                 tur_titulo: "Discover Figueira da Foz and Buarcos",
                 tur_desc: "Make the most of your stay exploring golden beaches, fresh seafood gastronomy, and local cultural events. Check local portals to plan each day:",
-                tur_agenda_tit: "Agenda & Events",
-                tur_agenda_desc: "Keep up with concerts, exhibitions, and local news during your stay.",
                 loc_etiqueta: "Privileged Location",
                 loc_titulo: "Buarcos, Figueira da Foz",
                 loc_desc: "Located in one of the most traditional and charming areas of Figueira da Foz. Within walking distance of Buarcos beach, excellent fresh fish restaurants, bakeries, and local shops.",
@@ -715,22 +725,41 @@
                 galeria_fotos: "Photo Gallery",
                 comodidades_apt: "Apartment Amenities",
                 btn_simular_modal: "Simulate Booking for this Apartment",
-                cm_1: "High-Speed Fiber Wi-Fi",
-                cm_2: "4K Smart TV with Streaming",
-                cm_3: "Panoramic Sea View",
-                cm_4: "Fully Equipped Kitchen",
-                cm_5: "Espresso Coffee Machine",
-                cm_6: "Bed Linen and Towels Included",
-                cm_7: "Hairdryer",
-                cm_8: "Iron",
-                ts_1: "Free Wi-Fi",
-                ts_2: "Smart TV",
-                ts_3: "Proximity to Beach (50m)",
-                ts_4: "Full Kitchen",
-                ts_5: "Washing Machine",
-                ts_6: "Sunny Balcony",
-                ts_7: "Personal Hygiene Products",
-                ts_8: "Free Parking Nearby",
+
+                // Comodidades Cristal Mar (EN)
+                cm_1: "2 Comfortable Bedrooms with Wardrobe",
+                cm_2: "2 Modern Bathrooms",
+                cm_3: "Spacious Balcony with Sea & Sunset Views",
+                cm_4: "14th Floor Location with Elevator",
+                cm_5: "Ultra-fast 1 Gbps Fiber Wi-Fi",
+                cm_6: "4K Smart TV with Streaming Services",
+                cm_7: "Fully Equipped Kitchen",
+                cm_8: "Washing Machine and Dishwasher",
+                cm_9: "Bed Linen and Towels Included",
+                cm_10: "Hairdryer and Hygiene Products",
+                cm_11: "Iron, Ironing Board & Drying Rack",
+                cm_12: "Wheelchair Accessible",
+                cm_13: "Free Nearby Parking",
+                cm_14: "Beachfront (Just a few steps away)",
+                cm_15: "Board Games / Puzzles",
+
+                // Comodidades Tonay Sol (EN)
+                ts_1: "2 Comfortable Bedrooms (90m² Area)",
+                ts_2: "1 Modern Bathroom with Shower",
+                ts_3: "Balcony with Stunning Ocean Views",
+                ts_4: "Prime Location on the Beachfront Esplanade",
+                ts_5: "Ultra-fast 1 Gbps Fiber Wi-Fi",
+                ts_6: "4K Smart TV with Cable & Streaming",
+                ts_7: "Equipped Kitchen (Oven, Microwave, Fridge)",
+                ts_8: "Washing Machine",
+                ts_9: "Bed Linen and Towels Included",
+                ts_10: "Hairdryer and Hygiene Products",
+                ts_11: "Iron, Ironing Board & Drying Rack",
+                ts_12: "Elevator Access",
+                ts_13: "Free Public Parking Nearby",
+                ts_14: "Coffee Machine, Toaster & Utensils",
+                ts_15: "Board Games / Puzzles",
+
                 erro_datas: "Please select the check-in and check-out dates in the calendar.",
                 whatsapp_msg: "Hello, I would like to get more information about availability at Buarcos & Sea Accommodation."
             },
@@ -751,9 +780,9 @@
                 sec_aloj_titulo: "Logements à Buarcos",
                 sec_aloj_sub: "Découvrez les équipements et photos de chaque appartement avant de simuler votre séjour",
                 cristal_preco: "À partir de 65€ / nuit",
-                cristal_desc: "Appartement moderne avec excellente exposition au soleil, vue privilégiée et à quelques pas de la plage de Buarcos.",
+                cristal_desc: "Appartement moderne avec excellente exposition, vue panoramique sur la mer et le coucher de soleil au 14ème étage.",
                 tonay_preco: "À partir de 60€ / nuit",
-                tonay_desc: "Espace chaleureux et entièrement rénové, idéal pour les familles cherchant tranquillité et proximité de la mer.",
+                tonay_desc: "Espace chaleureux et entièrement rénové (90m²), idéal pour les familles sur le front de mer à Buarcos.",
                 com_hospedes: "Jusqu'à 4 Voyageurs",
                 com_cozinha: "Cuisine Équipée",
                 com_cozinha_comp: "Cuisine Complète",
@@ -801,8 +830,6 @@
                 tur_etiqueta: "Tourisme & Culture",
                 tur_titulo: "Découvrez Figueira da Foz et Buarcos",
                 tur_desc: "Profitez de votre séjour pour explorer les plages de sable fin, la gastronomie de poisson frais et les événements culturels locaux :",
-                tur_agenda_tit: "Agenda & Événements",
-                tur_agenda_desc: "Suivez les concerts, expositions et actualités locales pendant votre séjour.",
                 loc_etiqueta: "Emplacement Privilégié",
                 loc_titulo: "Buarcos, Figueira da Foz",
                 loc_desc: "Situés dans l'un des quartiers les plus traditionnels de Figueira da Foz. À distance de marche de la plage de Buarcos, d'excellents restaurants et commerces.",
@@ -819,22 +846,41 @@
                 galeria_fotos: "Galerie Photos",
                 comodidades_apt: "Équipements de l'Appartement",
                 btn_simular_modal: "Simuler la réservation pour cet appartement",
-                cm_1: "Wi-Fi Fibre Haute Vitesse",
-                cm_2: "Smart TV 4K avec Streaming",
-                cm_3: "Vue Panoramique sur la Mer",
-                cm_4: "Cuisine Entièrement Équipée",
-                cm_5: "Machine à Café Expresso",
-                cm_6: "Linge de Lit et Serviettes Inclus",
-                cm_7: "Sèche-cheveux",
-                cm_8: "Fer à Repasser",
-                ts_1: "Wi-Fi Gratuit",
-                ts_2: "Smart TV",
-                ts_3: "Proximité de la Plage (50m)",
-                ts_4: "Cuisine Complète",
-                ts_5: "Lave-linge",
-                ts_6: "Balcon Ensoleillé",
-                ts_7: "Produits d'Hygiène Personnelle",
-                ts_8: "Parking Gratuit à Proximité",
+
+                // Comodidades Cristal Mar (FR)
+                cm_1: "2 Chambres Confortables avec Penderie",
+                cm_2: "2 Salles de Bain Modernes",
+                cm_3: "Grand Balcon Vue Mer et Couché de Soleil",
+                cm_4: "Situé au 14ème Étage avec Ascenseur",
+                cm_5: "Wi-Fi Fibre Ultra Rapide 1 Gbps",
+                cm_6: "Smart TV 4K avec Streaming",
+                cm_7: "Cuisine Entièrement Équipée",
+                cm_8: "Lave-linge et Lave-vaisselle",
+                cm_9: "Linge de Lit et Serviettes Inclus",
+                cm_10: "Sèche-cheveux et Produits d'Hygiène",
+                cm_11: "Fer et Table à Repasser / Séchoir",
+                cm_12: "Accessible en Fauteuil Roulant",
+                cm_13: "Parking Gratuit à Proximité",
+                cm_14: "En Front de Mer (À quelques pas)",
+                cm_15: "Jeux de Société / Puzzles",
+
+                // Comodidades Tonay Sol (FR)
+                ts_1: "2 Chambres Confortables (90m²)",
+                ts_2: "1 Salle de Bain Moderne avec Douche",
+                ts_3: "Balcon avec Vue Imprenable sur l'Océan",
+                ts_4: "Emplacement Privilégié sur le Front de Mer",
+                ts_5: "Wi-Fi Fibre Ultra Rapide 1 Gbps",
+                ts_6: "Smart TV 4K avec Câble et Streaming",
+                ts_7: "Cuisine Équipée (Four, Micro-ondes, Frigo)",
+                ts_8: "Lave-linge",
+                ts_9: "Linge de Lit et Serviettes Inclus",
+                ts_10: "Sèche-cheveux et Produits d'Hygiène",
+                ts_11: "Fer, Table à Repasser et Séchoir",
+                ts_12: "Accès par Ascenseur",
+                ts_13: "Parking Public Gratuit à Proximité",
+                ts_14: "Machine à Café, Grille-pain et Ustensiles",
+                ts_15: "Jeux de Société / Puzzles",
+
                 erro_datas: "Veuillez sélectionner les dates d'arrivée et de départ dans le calendrier.",
                 whatsapp_msg: "Bonjour, j'aimerais obtenir plus d'informations sur la disponibilité au Buarcos & Sea Accommodation."
             },
@@ -855,9 +901,9 @@
                 sec_aloj_titulo: "Alojamientos en Buarcos",
                 sec_aloj_sub: "Explore las comodidades y fotos de cada apartamento antes de simular su estancia",
                 cristal_preco: "Desde 65€ / noche",
-                cristal_desc: "Apartamento moderno con excelente exposición solar, vistas privilegiadas y a pocos pasos de la playa de Buarcos.",
+                cristal_desc: "Apartamento moderno con excelente exposición solar, vistas panorámicas al mar y atardecer en la 14ª planta.",
                 tonay_preco: "Desde 60€ / noche",
-                tonay_desc: "Espacio acogedor y totalmente renovado, perfecto para familias que buscan tranquilidad y proximidad al mar.",
+                tonay_desc: "Espacio acogedor y totalmente renovado (90m²), perfecto para familias en primera línea de playa en Buarcos.",
                 com_hospedes: "Hasta 4 Huéspedes",
                 com_cozinha: "Cocina Equipada",
                 com_cozinha_comp: "Cocina Completa",
@@ -905,8 +951,6 @@
                 tur_etiqueta: "Turismo y Cultura",
                 tur_titulo: "Descubra Figueira da Foz y Buarcos",
                 tur_desc: "Aproveche su estancia para explorar las playas doradas, la gastronomía de pescado fresco y los eventos culturales locales:",
-                tur_agenda_tit: "Agenda y Eventos",
-                tur_agenda_desc: "Siga los conciertos, exposiciones y noticias locales durante su estancia.",
                 loc_etiqueta: "Ubicación Privilegiada",
                 loc_titulo: "Buarcos, Figueira da Foz",
                 loc_desc: "Situados en una de las zonas más tradicionales y encantadoras de Figueira da Foz. A poca distancia a pie de la playa de Buarcos, excelentes restaurantes de pescado fresco y comercios.",
@@ -923,22 +967,41 @@
                 galeria_fotos: "Galería de Fotos",
                 comodidades_apt: "Comodidades del Alojamiento",
                 btn_simular_modal: "Simular Reserva para este Apartamento",
-                cm_1: "Wi-Fi Fibra Alta Velocidad",
-                cm_2: "Smart TV 4K con Streaming",
-                cm_3: "Vista Panorámica al Mar",
-                cm_4: "Cocina Totalmente Equipada",
-                cm_5: "Cafetera Expresso",
-                cm_6: "Ropa de Cama y Toallas Incluidas",
-                cm_7: "Secador de Pelo",
-                cm_8: "Plancha",
-                ts_1: "Wi-Fi Gratis",
-                ts_2: "Smart TV",
-                ts_3: "Proximidad a la Playa (50m)",
-                ts_4: "Cocina Completa",
-                ts_5: "Lavadora",
-                ts_6: "Balcón Soleado",
-                ts_7: "Productos de Higiene Personal",
-                ts_8: "Aparcamiento Gratuito Cercano",
+
+                // Comodidades Cristal Mar (ES)
+                cm_1: "2 Dormitorios Cómodos con Armario",
+                cm_2: "2 Baños Modernos",
+                cm_3: "Amplio Balcón con Vistas al Mar y Atardecer",
+                cm_4: "Ubicación en la 14ª Planta con Ascensor",
+                cm_5: "Wi-Fi de Fibra 1 Gbps Ultra Rápido",
+                cm_6: "Smart TV 4K con Streaming",
+                cm_7: "Cocina Totalmente Equipada",
+                cm_8: "Lavadora y Lavavajillas",
+                cm_9: "Ropa de Cama y Toallas Incluidas",
+                cm_10: "Secador de Pelo y Artículos de Aseo",
+                cm_11: "Plancha, Tabla de Planchar y Tendedero",
+                cm_12: "Adaptado para Silla de Ruedas",
+                cm_13: "Aparcamiento Gratuito Cercano",
+                cm_14: "Frente a la Playa (A pocos pasos)",
+                cm_15: "Juegos de Mesa / Puzzles",
+
+                // Comodidades Tonay Sol (ES)
+                ts_1: "2 Dormitorios Cómodos (90m²)",
+                ts_2: "1 Baño Moderno con Ducha",
+                ts_3: "Balcón con Vistas Impresionantes al Océano",
+                ts_4: "Ubicación Privilegiada en Primera Línea de Playa",
+                ts_5: "Wi-Fi de Fibra 1 Gbps Ultra Rápido",
+                ts_6: "Smart TV 4K com Cable y Streaming",
+                ts_7: "Cocina Equipada (Horno, Microondas, Frigorífico)",
+                ts_8: "Lavadora",
+                ts_9: "Ropa de Cama y Toallas Incluidas",
+                ts_10: "Secador de Pelo y Artículos de Aseo",
+                ts_11: "Plancha, Tabla de Planchar y Tendedero",
+                ts_12: "Acceso por Ascensor",
+                ts_13: "Aparcamiento Público Gratuito Cercano",
+                ts_14: "Cafetera, Tostadora y Utensilios",
+                ts_15: "Juegos de Mesa / Puzzles",
+
                 erro_datas: "Por favor seleccione el período de entrada y salida en el calendario.",
                 whatsapp_msg: "Hola, me gustaría obtener más información sobre la disponibilidad en Buarcos & Sea Accommodation."
             }
@@ -996,7 +1059,10 @@
                     'imagens/cristal/cristal10.jpg',
                     'imagens/cristal/cristal11.jpg'
                 ],
-                comodidades_keys: ["cm_1", "cm_2", "cm_3", "cm_4", "cm_5", "cm_6", "cm_7", "cm_8"]
+                comodidades_keys: [
+                    "cm_1", "cm_2", "cm_3", "cm_4", "cm_5", "cm_6", "cm_7", "cm_8",
+                    "cm_9", "cm_10", "cm_11", "cm_12", "cm_13", "cm_14", "cm_15"
+                ]
             },
             tonay_sol: {
                 nome: "Tonay Sol",
@@ -1009,11 +1075,13 @@
                     'imagens/tonay/tonay3.jpg',
                     'imagens/tonay/tonay4.jpg'
                 ],
-                comodidades_keys: ["ts_1", "ts_2", "ts_3", "ts_4", "ts_5", "ts_6", "ts_7", "ts_8"]
+                comodidades_keys: [
+                    "ts_1", "ts_2", "ts_3", "ts_4", "ts_5", "ts_6", "ts_7", "ts_8",
+                    "ts_9", "ts_10", "ts_11", "ts_12", "ts_13", "ts_14", "ts_15"
+                ]
             }
         };
 
-        // Variáveis globais para controlar a galeria aberta no modal de foto grande
         let fotosGaleriaAtual = [];
         let indiceFotoAtual = 0;
 
@@ -1027,8 +1095,7 @@
             const t = traducoes[langAtual] || traducoes['pt'];
 
             const descTexto = t[apt.descricao_key] || apt.descricao_key;
-            
-            // Passamos o índice exato da foto (i) para abrir na posição correta
+
             let fotosHtml = apt.fotos.map((f, index) => `<img src="${f}" onclick="abrirFotoGrandePorApto('${id}', ${index})" class="w-full h-48 object-cover rounded-xl shadow-sm cursor-pointer hover:opacity-90 transition-opacity" title="Clique para ver em tamanho grande">`).join('');
 
             let comodidadesHtml = apt.comodidades_keys.map(key => {
@@ -1064,14 +1131,13 @@
             lucide.createIcons();
         }
 
-        // Funções para gerir a visualização da foto grande com setas de navegação
         function abrirFotoGrandePorApto(idApt, index) {
             const apt = alojamentosDados[idApt];
             if (!apt) return;
             fotosGaleriaAtual = apt.fotos;
             indiceFotoAtual = index;
             atualizarVisualizacaoFotoGrande();
-            
+
             const modalGrande = document.getElementById('modal-foto-grande');
             if (modalGrande) {
                 modalGrande.classList.remove('hidden');
@@ -1083,9 +1149,9 @@
             if (fotosGaleriaAtual.length === 0) return;
             indiceFotoAtual += direcao;
             if (indiceFotoAtual < 0) {
-                indiceFotoAtual = fotosGaleriaAtual.length - 1; // Volta para a última
+                indiceFotoAtual = fotosGaleriaAtual.length - 1;
             } else if (indiceFotoAtual >= fotosGaleriaAtual.length) {
-                indiceFotoAtual = 0; // Volta para a primeira
+                indiceFotoAtual = 0;
             }
             atualizarVisualizacaoFotoGrande();
         }
@@ -1108,7 +1174,6 @@
             }
         }
 
-        // Atalho com as setas do teclado (Esquerda/Direita para navegar, ESC para fechar)
         document.addEventListener('keydown', (e) => {
             const modalGrande = document.getElementById('modal-foto-grande');
             if (modalGrande && !modalGrande.classList.contains('hidden')) {
