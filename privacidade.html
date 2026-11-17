@@ -202,14 +202,14 @@
                 s4_tit: "4. Período de Conservación de los Datos",
                 s4_p1: "Los datos recogidos se conservarán únicamente durante el período estrictamente necesario para cumplir con los fines que motivaron su recogida o para cumplir con obligaciones legales (por ejemplo, los registros contables y fiscales se guardan durante el período legal obligatorio de 10 años).",
                 s5_tit: "5. Derechos de los Titulares de los Datos",
-                s5_p1: "De conformidad con el Reglamento General de Protección de Datos (RGPD), el usuario tiene derecho a solicitar en cualquier momento el acceso, rectificación, limitación o supresión de sus datos personales, así como el derecho a presentar una reclamación ante la <strong>CNPD (Comisión Nacional de Protección de Datos)</strong>. Para ejercer sus derechos, simplemente contáctenos a través del correo electrónico <strong>buarcossea@gmail.com</strong>.",
+                s5_p1: "De conformidad con el Reglamento General de Protección de Datos (RGPD), el usuario tiene derecho a solicitar en cualquier momento el acceso, rectificación, supresión o limitación de sus datos personales, así como el derecho a presentar una reclamación ante la <strong>CNPD (Comisión Nacional de Protección de Datos)</strong>. Para ejercer sus derechos, simplemente contáctenos a través del correo electrónico <strong>buarcossea@gmail.com</strong>.",
                 foot_copy: "© 2026 Buarcos & Sea Accommodation. Todos los derechos reservados. AL: 161145/AL & 146454/AL."
             }
         };
 
         function mudarIdioma(lang) {
             const elementos = document.querySelectorAll('[data-i18n]');
-            elementos.exports = elementos.forEach(el => {
+            elementos.forEach(el => {
                 const chave = el.getAttribute('data-i18n');
                 if (traducoesPrivacidade[lang] && traducoesPrivacidade[lang][chave]) {
                     el.innerHTML = traducoesPrivacidade[lang][chave];
