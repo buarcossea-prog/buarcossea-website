@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="meta_title">Política de Privacidade - Buarcos & Sea</title>
+    <!-- Tailwind CSS Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            800: '#23425c',
+                            900: '#193247',
+                            950: '#102231',
+                        },
+                        sea: {
+                            100: '#e6f0ef',
+                            200: '#cce0de',
+                            500: '#7ca39f',
+                            600: '#648c88',
+                        },
+                        sand: {
+                            50: '#faf9f6',
+                            100: '#f3f1eb',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-sand-50 text-navy-900 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-sea-200/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 sm:h-28 flex items-center justify-between">
+            <a href="index.html" class="flex items-center">
+                <img src="logo.png" alt="Buarcos & Sea" class="h-16 sm:h-20 w-auto object-contain">
+            </a>
+            <div class="flex items-center gap-3">
+                <!-- Seletor de Idiomas -->
+                <select id="seletor-idioma" onchange="mudarIdioma(this.value)" class="bg-sand-100 border border-sea-200 text-navy-900 text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:border-sea-500 cursor-pointer">
+                    <option value="pt">🇵🇹 PT</option>
+                    <option value="en">🇬🇧 EN</option>
+                    <option value="fr">🇫🇷 FR</option>
+                    <option value="es">🇪🇸 ES</option>
+                </select>
+
+                <a href="index.html" class="text-sm font-semibold text-navy-900 hover:text-sea-600 flex items-center gap-2 bg-sand-100 px-4 py-2 rounded-xl border border-sea-200 transition-colors">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> <span data-i18n="btn_voltar">Voltar ao Início</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Legal -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1">
+        <div class="bg-white rounded-3xl p-8 sm:p-12 shadow-sm border border-sea-200/70 space-y-8 text-sm leading-relaxed text-navy-800">
+            <div class="border-b border-sea-100 pb-6">
+                <span class="text-sea-600 font-semibold text-xs uppercase tracking-widest" data-i18n="legal_etiqueta">Privacidad & RGPD</span>
+                <h1 class="text-3xl font-bold text-navy-900 mt-1" data-i18n="legal_titulo">Política de Privacidade</h1>
+                <p class="text-xs text-navy-800/60 mt-2" data-i18n="legal_atualizacao">Última atualização: Março de 2026</p>
+            </div>
+
+            <!-- 1. Responsável -->
+            <section class="space-y-2">
+                <h2 class="text-lg font-bold text-navy-900" data-i18n="s1_tit">1. Responsável pelo Tratamento de Dados</h2>
+                <p data-i18n="s1_p1">O tratamento dos dados recolhidos através deste website é da responsabilidade de:</p>
+                <div class="bg-sand-50 p-4 rounded-xl border border-sea-100 text-xs font-medium text-navy-900 space-y-1">
+                    <p><strong>Nome / Entidade:</strong> Hélder José Lobato Cortesão (Empresário em Nome Individual)</p>
+                    <p><strong>Marca Comercial:</strong> Buarcos & Sea Accommodation</p>
+                    <p><strong>NIF / NIPC:</strong> 239852400</p>
+                    <p><strong>Morada Fiscal:</strong> Urb. Quinta São Luis, Lote 3, 3140-348 Pereira MMV, Portugal</p>
+                    <p><strong>Email de Contacto:</strong> buarcossea@gmail.com | <strong>Telefone:</strong> +351 925 846 193</p>
+                </div>
+            </section>
+
+            <!-- 2. Recolha de Dados -->
+            <section class="space-y-2">
+                <h2 class="text-lg font-bold text-navy-900" data-i18n="s2_tit">2. Recolha e Finalidade dos Dados Pessoais</h2>
+                <p data-i18n="s2_p1">Os dados pessoais solicitados no âmbito das reservas (como nome, contacto telefónico, endereço de e-mail e dados de identificação) destinam-se estritamente aos seguintes fins:</p>
+                <ul class="list-disc pl-5 space-y-1.5">
+                    <li data-i18n="s2_li1">Gestão, confirmação e comunicação relativa às reservas efetuadas nos alojamentos <strong>Cristal Mar</strong> e <strong>Tonay Sol</strong>.</li>
+                    <li data-i18n="s2_li2">Emissão de faturas e cumprimento de obrigações fiscais perante a Autoridade Tributária.</li>
+                    <li data-i18n="s2_li3">Comunicação obrigatória de alojamento de cidadãos estrangeiros às autoridades competentes (AIMA / SIBA), nos termos da lei portuguesa.</li>
+                </ul>
+            </section>
+
+            <!-- 3. Pagamentos -->
+            <section class="space-y-2">
+                <h2 class="text-lg font-bold text-navy-900" data-i18n="s3_tit">3. Segurança e Pagamentos</h2>
+                <p data-i18n="s3_p1">Os pagamentos online efetuados no site são processados de forma totalmente segura através da plataforma certificada <strong>ifThenPay</strong>. O website da Buarcos & Sea Accommodation não armazena nem tem acesso a dados confidenciais de cartões bancários dos clientes.</p>
+            </section>
+
+            <!-- 4. Conservação -->
+            <section class="space-y-2">
+                <h2 class="text-lg font-bold text-navy-900" data-i18n="s4_tit">4. Período de Conservação dos Dados</h2>
+                <p data-i18n="s4_p1">Os dados recolhidos serão conservados apenas pelo período estritamente necessário para cumprir as finalidades que motivaram a sua recolha ou para dar cumprimento a obrigações legais (por exemplo, os registos contabilísticos e fiscais são guardados pelo período legal obrigatório de 10 anos).</p>
+            </section>
+
+            <!-- 5. Direitos dos Utilizadores -->
+            <section class="space-y-2">
+                <h2 class="text-lg font-bold text-navy-900" data-i18n="s5_tit">5. Direitos dos Titulares dos Dados</h2>
+                <p data-i18n="s5_p1">Nos termos do Regulamento Geral sobre a Proteção de Dados (RGPD), o utilizador tem o direito de solicitar a qualquer momento o acesso, retificação, limitação ou eliminação dos seus dados pessoais, bem como o direito de apresentar reclamação junto da <strong>CNPD (Comissão Nacional de Proteção de Dados)</strong>. Para exercer os seus direitos, basta contactar-nos através do e-mail <strong>buarcossea@gmail.com</strong>.</p>
+            </section>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-navy-950 text-slate-400 py-8 text-center text-xs border-t border-navy-800">
+        <span data-i18n="foot_copy">© 2026 Buarcos & Sea Accommodation. Todos os direitos reservados. AL: 161145/AL & 146454/AL.</span>
+    </footer>
+
+    <!-- Dicionário de Traduções -->
+    <script>
+        lucide.createIcons();
+
+        const traducoesPrivacidade = {
+            pt: {
+                meta_title: "Política de Privacidade - Buarcos & Sea",
+                btn_voltar: "Voltar ao Início",
+                legal_etiqueta: "Privacidade & RGPD",
+                legal_titulo: "Política de Privacidade",
+                legal_atualizacao: "Última atualização: Março de 2026",
+                s1_tit: "1. Responsável pelo Tratamento de Dados",
+                s1_p1: "O tratamento dos dados recolhidos através deste website é da responsabilidade de:",
+                s2_tit: "2. Recolha e Finalidade dos Dados Pessoais",
+                s2_p1: "Os dados pessoais solicitados no âmbito das reservas (como nome, contacto telefónico, endereço de e-mail e dados de identificação) destinam-se estritamente aos seguintes fins:",
+                s2_li1: "Gestão, confirmação e comunicação relativa às reservas efetuadas nos alojamentos <strong>Cristal Mar</strong> e <strong>Tonay Sol</strong>.",
+                s2_li2: "Emissão de faturas e cumprimento de obrigações fiscais perante a Autoridade Tributária.",
+                s2_li3: "Comunicação obrigatória de alojamento de cidadãos estrangeiros às autoridades competentes (AIMA / SIBA), nos termos da lei portuguesa.",
+                s3_tit: "3. Segurança e Pagamentos",
+                s3_p1: "Os pagamentos online efetuados no site são processados de forma totalmente segura através da plataforma certificada <strong>ifThenPay</strong>. O website da Buarcos & Sea Accommodation não armazena nem tem acesso a dados confidenciais de cartões bancários dos clientes.",
+                s4_tit: "4. Período de Conservação dos Dados",
+                s4_p1: "Os dados recolhidos serão conservados apenas pelo período estritamente necessário para cumprir as finalidades que motivaram a sua recolha ou para dar cumprimento a obrigações legais (por exemplo, os registos contabilísticos e fiscais são guardados pelo período legal obrigatório de 10 anos).",
+                s5_tit: "5. Direitos dos Titulares dos Dados",
+                s5_p1: "Nos termos do Regulamento Geral sobre a Proteção de Dados (RGPD), o utilizador tem o direito de solicitar a qualquer momento o acesso, retificação, limitação ou eliminação dos seus dados pessoais, bem como o direito de apresentar reclamação junto da <strong>CNPD (Comissão Nacional de Proteção de Dados)</strong>. Para exercer os seus direitos, basta contactar-nos através do e-mail <strong>buarcossea@gmail.com</strong>.",
+                foot_copy: "© 2026 Buarcos & Sea Accommodation. Todos os direitos reservados. AL: 161145/AL & 146454/AL."
+            },
+            en: {
+                meta_title: "Privacy Policy - Buarcos & Sea",
+                btn_voltar: "Back to Home",
+                legal_etiqueta: "Privacy & GDPR",
+                legal_titulo: "Privacy Policy",
+                legal_atualizacao: "Last updated: March 2026",
+                s1_tit: "1. Data Controller",
+                s1_p1: "The processing of data collected through this website is the responsibility of:",
+                s2_tit: "2. Collection and Purpose of Personal Data",
+                s2_p1: "Personal data requested during the booking process (such as name, telephone contact, email address, and identification data) is strictly intended for the following purposes:",
+                s2_li1: "Management, confirmation, and communication regarding bookings made at <strong>Cristal Mar</strong> and <strong>Tonay Sol</strong>.",
+                s2_li2: "Issuing invoices and complying with tax obligations before the Tax Authority.",
+                s2_li3: "Mandatory reporting of foreign citizens' accommodation to competent authorities (AIMA / SIBA), under Portuguese law.",
+                s3_tit: "3. Security and Payments",
+                s3_p1: "Online payments made on the website are processed completely securely via the certified <strong>ifThenPay</strong> platform. The Buarcos & Sea Accommodation website does not store or have access to customers' confidential credit card details.",
+                s4_tit: "4. Data Retention Period",
+                s4_p1: "Collected data will be kept only for the period strictly necessary to fulfill the purposes that motivated its collection or to comply with legal obligations (for example, accounting and tax records are kept for the mandatory legal period of 10 years).",
+                s5_tit: "5. Rights of Data Subjects",
+                s5_p1: "Under the General Data Protection Regulation (GDPR), users have the right to request access, rectification, restriction, or deletion of their personal data at any time, as well as the right to lodge a complaint with the <strong>CNPD (National Data Protection Commission)</strong>. To exercise your rights, simply contact us via email at <strong>buarcossea@gmail.com</strong>.",
+                foot_copy: "© 2026 Buarcos & Sea Accommodation. All rights reserved. AL: 161145/AL & 146454/AL."
+            },
+            fr: {
+                meta_title: "Politique de Confidentialité - Buarcos & Sea",
+                btn_voltar: "Retour à l'accueil",
+                legal_etiqueta: "Confidentialité & RGPD",
+                legal_titulo: "Politique de Confidentialité",
+                legal_atualizacao: "Dernière mise à jour : Mars 2026",
+                s1_tit: "1. Responsable du Traitement des Données",
+                s1_p1: "Le traitement des données collectées via ce site web relève de la responsabilité de :",
+                s2_tit: "2. Collecte et Finalité des Données Personnelles",
+                s2_p1: "Les données personnelles demandées lors des réservations (nom, numéro de téléphone, adresse e-mail et données d'identification) sont strictement destinées aux finalités suivantes :",
+                s2_li1: "Gestion, confirmation et communication relatives aux réservations effectuées dans les hébergements <strong>Cristal Mar</strong> et <strong>Tonay Sol</strong>.",
+                s2_li2: "Émission de factures et respect des obligations fiscales envers l'administration fiscale.",
+                s2_li3: "Déclaration obligatoire d'hébergement des citoyens étrangers auprès des autorités compétentes (AIMA / SIBA), conformément à la loi portugaise.",
+                s3_tit: "3. Sécurité et Paiements",
+                s3_p1: "Les paiements en ligne effectués sur le site sont traités en toute sécurité via la plateforme certifiée <strong>ifThenPay</strong>. Le site web de Buarcos & Sea Accommodation ne stocke ni n'a accès aux données bancaires confidentielles des clients.",
+                s4_tit: "4. Durée de Conservation des Données",
+                s4_p1: "Les données collectées seront conservées uniquement pendant la période strictement nécessaire pour atteindre les finalités pour lesquelles elles ont été collectées ou pour respecter les obligations légales (par exemple, les documents comptables et fiscaux sont conservés pendant la période légale obligatoire de 10 ans).",
+                s5_tit: "5. Droits des Personnes Concernées",
+                s5_p1: "Conformément au Règlement Général sur la Protection des Données (RGPD), l'utilisateur a le droit de demander à tout moment l'accès, la rectification, la limitation ou la suppression de ses données personnelles, ainsi que le droit de déposer une plainte auprès de la <strong>CNPD (Commission Nationale de la Protection des Données)</strong>. Pour exercer vos droits, contactez-nous par e-mail à <strong>buarcossea@gmail.com</strong>.",
+                foot_copy: "© 2026 Buarcos & Sea Accommodation. Tous droits réservés. AL: 161145/AL & 146454/AL."
+            },
+            es: {
+                meta_title: "Política de Privacidad - Buarcos & Sea",
+                btn_voltar: "Volver al Inicio",
+                legal_etiqueta: "Privacidad y RGPD",
+                legal_titulo: "Política de Privacidad",
+                legal_atualizacao: "Última actualización: Marzo de 2026",
+                s1_tit: "1. Responsable del Tratamiento de Datos",
+                s1_p1: "El tratamiento de los datos recogidos a través de este sitio web es responsabilidad de:",
+                s2_tit: "2. Recogida y Finalidad de los Datos Personales",
+                s2_p1: "Los datos personales solicitados en el ámbito de las reservas (como nombre, teléfono, correo electrónico y datos de identificación) se destinan estrictamente a los siguientes fines:",
+                s2_li1: "Gestión, confirmación y comunicación relativa a las reservas realizadas en los alojamientos <strong>Cristal Mar</strong> e <strong>Tonay Sol</strong>.",
+                s2_li2: "Emisión de facturas y cumplimiento de las obligaciones fiscales ante la Autoridad Tributaria.",
+                s2_li3: "Comunicación obligatoria de alojamiento de ciudadanos extranjeros a las autoridades competentes (AIMA / SIBA), en los términos de la ley portuguesa.",
+                s3_tit: "3. Seguridad y Pagos",
+                s3_p1: "Los pagos online realizados en la pasarela del sitio web se procesan de forma totalmente segura a través de la plataforma certificada <strong>ifThenPay</strong>. El sitio web de Buarcos & Sea Accommodation no almacena ni tiene acceso a los datos confidenciales de las tarjetas bancarias de los clientes.",
+                s4_tit: "4. Período de Conservación de los Datos",
+                s4_p1: "Los datos recogidos se conservarán únicamente durante el período estrictamente necesario para cumplir con los fines que motivaron su recogida o para cumplir con obligaciones legales (por ejemplo, los registros contables y fiscales se guardan durante el período legal obligatorio de 10 años).",
+                s5_tit: "5. Derechos de los Titulares de los Datos",
+                s5_p1: "De conformidad con el Reglamento General de Protección de Datos (RGPD), el usuario tiene derecho a solicitar en cualquier momento el acceso, rectificación, limitación o supresión de sus datos personales, así como el derecho a presentar una reclamación ante la <strong>CNPD (Comisión Nacional de Protección de Datos)</strong>. Para ejercer sus derechos, simplemente contáctenos a través del correo electrónico <strong>buarcossea@gmail.com</strong>.",
+                foot_copy: "© 2026 Buarcos & Sea Accommodation. Todos los derechos reservados. AL: 161145/AL & 146454/AL."
+            }
+        };
+
+        function mudarIdioma(lang) {
+            const elementos = document.querySelectorAll('[data-i18n]');
+            elementos.exports = elementos.forEach(el => {
+                const chave = el.getAttribute('data-i18n');
+                if (traducoesPrivacidade[lang] && traducoesPrivacidade[lang][chave]) {
+                    el.innerHTML = traducoesPrivacidade[lang][chave];
+                }
+            });
+            localStorage.setItem('buarcos_lang', lang);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const idiomaSalvo = localStorage.getItem('buarcos_lang') || 'pt';
+            const seletor = document.getElementById('seletor-idioma');
+            if (seletor) seletor.value = idiomaSalvo;
+            mudarIdioma(idiomaSalvo);
+        });
+    </script>
+</body>
+</html>
