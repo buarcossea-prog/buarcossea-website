@@ -70,7 +70,6 @@
     </header>
 
     <!-- Hero Section -->
-        <!-- Hero Section -->
     <section class="relative bg-navy-950 py-24 lg:py-32 overflow-hidden border-b border-sea-200/60">
         <div class="absolute inset-0 z-0">
             <img src="imagens/fundo.jpg" alt="Buarcos & Sea" class="w-full h-full object-cover opacity-85">
@@ -111,15 +110,13 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <!-- Cristal Mar -->
-            <!-- Cristal Mar -->
-<div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-sea-200/70 hover:shadow-md transition-shadow flex flex-col">
-    <div class="relative h-64 bg-sand-100">
-        <!-- Atualiza aqui o caminho para a tua nova foto principal do Cristal -->
-        <img src="imagens/cristal/cristal1.jpg" alt="Cristal Mar" class="w-full h-full object-cover">
-        <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold text-navy-900 shadow-sm border border-sea-100" data-i18n="cristal_preco">
-            Desde 65€ / noite
-        </div>
-    </div>
+            <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-sea-200/70 hover:shadow-md transition-shadow flex flex-col">
+                <div class="relative h-64 bg-sand-100">
+                    <img src="imagens/cristal/cristal1.jpg" alt="Cristal Mar" class="w-full h-full object-cover">
+                    <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold text-navy-900 shadow-sm border border-sea-100" data-i18n="cristal_preco">
+                        Desde 65€ / noite
+                    </div>
+                </div>
                 <div class="p-7 flex-1 flex flex-col justify-between">
                     <div>
                         <div class="flex justify-between items-start mb-2">
@@ -148,15 +145,13 @@
             </div>
 
             <!-- Tonay Sol -->
-            <!-- Tonay Sol -->
-<div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-sea-200/70 hover:shadow-md transition-shadow flex flex-col">
-    <div class="relative h-64 bg-sand-100">
-        <!-- Atualiza aqui o caminho para a tua nova foto principal do Tonay -->
-        <img src="imagens/tonay/tonay1.jpg" alt="Tonay Sol" class="w-full h-full object-cover">
-        <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold text-navy-900 shadow-sm border border-sea-100" data-i18n="tonay_preco">
-            Desde 60€ / noite
-        </div>
-    </div>
+            <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-sea-200/70 hover:shadow-md transition-shadow flex flex-col">
+                <div class="relative h-64 bg-sand-100">
+                    <img src="imagens/tonay/tonay1.jpg" alt="Tonay Sol" class="w-full h-full object-cover">
+                    <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold text-navy-900 shadow-sm border border-sea-100" data-i18n="tonay_preco">
+                        Desde 60€ / noite
+                    </div>
+                </div>
                 <div class="p-7 flex-1 flex flex-col justify-between">
                     <div>
                         <div class="flex justify-between items-start mb-2">
@@ -397,7 +392,7 @@
         </div>
     </section>
 
-    <!-- Secção: Explorar a Região (Atualizada com novos links e sem a caixa de agenda) -->
+    <!-- Secção: Explorar a Região -->
     <section id="explorar" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="bg-sea-100/60 rounded-3xl p-8 sm:p-10 border border-sea-200">
             <div class="max-w-4xl">
@@ -430,7 +425,7 @@
         </div>
     </section>
 
-    <!-- Localização Section com Google Maps Exato (Atualizado para Tonay Sol) -->
+    <!-- Localização Section -->
     <section id="localizacao" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="bg-white rounded-3xl p-8 shadow-sm border border-sea-200/70 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
@@ -451,7 +446,7 @@
         </div>
     </section>
 
-    <!-- Rodapé Atualizado -->
+    <!-- Rodapé Atualizado com Links Legais -->
     <footer class="bg-navy-950 text-slate-300 py-12 mt-auto border-t border-navy-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-navy-800 text-sm">
@@ -466,6 +461,7 @@
                     <ul class="space-y-2 text-xs">
                         <li><a href="https://www.livroreclamacoes.pt" target="_blank" class="hover:text-white transition-colors flex items-center gap-1.5 text-sea-500 font-semibold"><i data-lucide="book-open" class="w-3.5 h-3.5"></i> <span data-i18n="foot_livro">Livro de Reclamações Eletrónico</span></a></li>
                         <li><a href="termos.html" class="hover:text-white transition-colors" data-i18n="foot_termos">Termos e Condições de Reserva</a></li>
+                        <li><a href="privacidade.html" class="hover:text-white transition-colors" data-i18n="foot_privacidade">Política de Privacidade</a></li>
                     </ul>
                 </div>
                 <div>
@@ -494,14 +490,14 @@
         </svg>
     </a>
 
-    <!-- Flatpickr (Biblioteca de Calendário) JS -->
+    <!-- Flatpickr JS -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/en.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 
-    <!-- Dicionário de Traduções (PT / EN / FR / ES) -->
+    <!-- Dicionário de Traduções (PT / EN / FR / ES) com foot_privacidade incluído -->
     <script>
         const traducoes = {
             pt: {
@@ -583,6 +579,7 @@
                 foot_links: "Links Úteis & Legal",
                 foot_livro: "Livro de Reclamações Eletrónico",
                 foot_termos: "Termos e Condições de Reserva",
+                foot_privacidade: "Política de Privacidade",
                 foot_contactos: "Contactos",
                 foot_copy: "© 2026 Buarcos & Sea Accommodation. Todos os direitos reservados. AL: 161145/AL & 146454/AL.",
                 galeria_fotos: "Galeria de Fotos",
@@ -686,6 +683,7 @@
                 foot_links: "Useful Links & Legal",
                 foot_livro: "Electronic Complaints Book",
                 foot_termos: "Booking Terms & Conditions",
+                foot_privacidade: "Privacy Policy",
                 foot_contactos: "Contacts",
                 foot_copy: "© 2026 Buarcos & Sea Accommodation. All rights reserved. AL: 161145/AL & 146454/AL.",
                 galeria_fotos: "Photo Gallery",
@@ -789,6 +787,7 @@
                 foot_links: "Liens Utiles & Légal",
                 foot_livro: "Livre de Réclamations Électronique",
                 foot_termos: "Termes et Conditions de Réservation",
+                foot_privacidade: "Politique de Confidentialité",
                 foot_contactos: "Contacts",
                 foot_copy: "© 2026 Buarcos & Sea Accommodation. Tous droits réservés. AL: 161145/AL & 146454/AL.",
                 galeria_fotos: "Galerie Photos",
@@ -892,6 +891,7 @@
                 foot_links: "Enlaces Útiles y Legal",
                 foot_livro: "Libro de Reclamaciones Electrónico",
                 foot_termos: "Termos e Condições de Reserva",
+                foot_privacidade: "Política de Privacidad",
                 foot_contactos: "Contactos",
                 foot_copy: "© 2026 Buarcos & Sea Accommodation. Todos los derechos reservados. AL: 161145/AL & 146454/AL.",
                 galeria_fotos: "Galería de Fotos",
@@ -958,17 +958,17 @@
                 preco: "Desde 65€ / noite",
                 descricao_key: "cristal_desc",
                 fotos: [
-    'imagens/cristal/cristal1.jpg',
-    'imagens/cristal/cristal2.jpg',
-    'imagens/cristal/cristal3.jpg',
-    'imagens/cristal/cristal4.jpg',
-    'imagens/cristal/cristal5.jpg',
-    'imagens/cristal/cristal6.jpg',
-    'imagens/cristal/cristal7.jpg',
-    'imagens/cristal/cristal8.jpg',
-    'imagens/cristal/cristal9.jpg',
-    'imagens/cristal/cristal10.jpg',
-    'imagens/cristal/cristal11.jpg'
+                    'imagens/cristal/cristal1.jpg',
+                    'imagens/cristal/cristal2.jpg',
+                    'imagens/cristal/cristal3.jpg',
+                    'imagens/cristal/cristal4.jpg',
+                    'imagens/cristal/cristal5.jpg',
+                    'imagens/cristal/cristal6.jpg',
+                    'imagens/cristal/cristal7.jpg',
+                    'imagens/cristal/cristal8.jpg',
+                    'imagens/cristal/cristal9.jpg',
+                    'imagens/cristal/cristal10.jpg',
+                    'imagens/cristal/cristal11.jpg'
                 ],
                 comodidades_keys: ["cm_1", "cm_2", "cm_3", "cm_4", "cm_5", "cm_6", "cm_7", "cm_8"]
             },
@@ -978,10 +978,10 @@
                 preco: "Desde 60€ / noite",
                 descricao_key: "tonay_desc",
                 fotos: [
-    'imagens/tonay/tonay1.jpg',
-    'imagens/tonay/tonay2.jpg',
-    'imagens/tonay/tonay3.jpg',
-    'imagens/tonay/tonay4.jpg'
+                    'imagens/tonay/tonay1.jpg',
+                    'imagens/tonay/tonay2.jpg',
+                    'imagens/tonay/tonay3.jpg',
+                    'imagens/tonay/tonay4.jpg'
                 ],
                 comodidades_keys: ["ts_1", "ts_2", "ts_3", "ts_4", "ts_5", "ts_6", "ts_7", "ts_8"]
             }
