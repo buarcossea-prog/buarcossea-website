@@ -190,12 +190,13 @@
             <div id="modal-conteudo" class="space-y-6"></div>
         </div>
     </div>
-    <!-- Modal de Visualização de Foto Individual em Tamanho Grande -->
-    <div id="modal-foto-grande" class="hidden fixed inset-0 z-60 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+
+    <!-- Modal de Visualização de Foto Individual em Tamanho Grande (Fecha ao clicar fora ou no X) -->
+    <div id="modal-foto-grande" onclick="fecharFotoGrande()" class="hidden fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer">
         <button type="button" onclick="fecharFotoGrande()" class="absolute top-6 right-6 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full transition-colors cursor-pointer z-10">
             <i data-lucide="x" class="w-6 h-6"></i>
         </button>
-        <img id="foto-grande-src" src="" alt="Foto em tamanho grande" class="max-w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl">
+        <img id="foto-grande-src" src="" alt="Foto em tamanho grande" onclick="event.stopPropagation()" class="max-w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl cursor-default">
     </div>
     
     <!-- Simulador de Reserva Interativo -->
@@ -994,7 +995,7 @@
             }
         };
 
-                function abrirDetalhes(id) {
+        function abrirDetalhes(id) {
             const apt = alojamentosDados[id];
             if (!apt) return;
 
@@ -1005,7 +1006,6 @@
 
             const descTexto = t[apt.descricao_key] || apt.descricao_key;
             
-            // Cada foto agora tem um evento onclick para abrir em grande
             let fotosHtml = apt.fotos.map(f => `<img src="${f}" onclick="abrirFotoGrande('${f}')" class="w-full h-48 object-cover rounded-xl shadow-sm cursor-pointer hover:opacity-90 transition-opacity" title="Clique para ver em tamanho grande">`).join('');
 
             let comodidadesHtml = apt.comodidades_keys.map(key => {
@@ -1058,7 +1058,6 @@
                 modalGrande.classList.add('hidden');
             }
         }
-
 
         function fecharDetalhes() {
             document.getElementById('modal-detalhes').classList.add('hidden');
