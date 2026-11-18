@@ -413,7 +413,7 @@
         </div>
     </section>
 
-        <!-- Secção: Explorar a Região (Com Cartões Interativos por Tópico) -->
+    <!-- Secção: Explorar a Região (Cartões Interativos) -->
     <section id="explorar" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="bg-sea-100/60 rounded-3xl p-8 sm:p-10 border border-sea-200">
             <div class="max-w-3xl mb-8">
@@ -443,15 +443,15 @@
                     </div>
                 </div>
 
-                <!-- Cartão 2: Natureza -->
+                <!-- Cartão 2: Turismo & Informação Local -->
                 <div onclick="abrirTopicoGuia('natureza')" class="bg-white p-6 rounded-2xl border border-sea-200/70 shadow-sm hover:shadow-md hover:border-sea-500 transition-all cursor-pointer flex flex-col justify-between group">
                     <div>
                         <div class="w-12 h-12 rounded-xl bg-sea-100 flex items-center justify-center mb-4 text-sea-600 group-hover:bg-navy-900 group-hover:text-white transition-colors">
-                            <i data-lucide="mountain" class="w-6 h-6"></i>
+                            <i data-lucide="compass" class="w-6 h-6"></i>
                         </div>
-                        <h3 class="font-bold text-navy-900 text-base mb-2">Natureza & Miradouros</h3>
+                        <h3 class="font-bold text-navy-900 text-base mb-2">Turismo & Informação Local</h3>
                         <p class="text-xs text-navy-800/75 leading-relaxed">
-                            Serra da Boa Viagem, Miradouro da Vela, Cabo Mondego e Salinas.
+                            Visit Figueira da Foz, Serra da Boa Viagem, miradouros e Cabo Mondego.
                         </p>
                     </div>
                     <div class="mt-4 pt-3 border-t border-sea-100 flex items-center justify-between text-xs font-semibold text-sea-600 group-hover:text-navy-900">
@@ -466,9 +466,9 @@
                         <div class="w-12 h-12 rounded-xl bg-sea-100 flex items-center justify-center mb-4 text-sea-600 group-hover:bg-navy-900 group-hover:text-white transition-colors">
                             <i data-lucide="waves" class="w-6 h-6"></i>
                         </div>
-                        <h3 class="font-bold text-navy-900 text-base mb-2">Praia, Surf & Marginal</h3>
+                        <h3 class="font-bold text-navy-900 text-base mb-2">Praia, Surf & Mobilidade</h3>
                         <p class="text-xs text-navy-800/75 leading-relaxed">
-                            Praia de Buarcos à porta, ciclovias, livecams e ondas do Cabedelo.
+                            Praia de Buarcos à porta, Beachcam em direto, ciclovias e comboios (CP).
                         </p>
                     </div>
                     <div class="mt-4 pt-3 border-t border-sea-100 flex items-center justify-between text-xs font-semibold text-sea-600 group-hover:text-navy-900">
@@ -485,18 +485,17 @@
                         </div>
                         <h3 class="font-bold text-navy-900 text-base mb-2">Gastronomia & Sabores</h3>
                         <p class="text-xs text-navy-800/75 leading-relaxed">
-                            Peixe fresco, caldeiradas, Brisas da Figueira e reservas de restaurantes.
+                            Restaurantes recomendados, mariscarias, peixe fresco, pastelaria e gelados artesanais.
                         </p>
                     </div>
                     <div class="mt-4 pt-3 border-t border-sea-100 flex items-center justify-between text-xs font-semibold text-sea-600 group-hover:text-navy-900">
-                        <span>Ver detalhes e links</span>
+                        <span>Ver detalhes e recomendações</span>
                         <i data-lucide="arrow-right" class="w-4 h-4 transform group-hover:translate-x-1 transition-transform"></i>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
 
     <!-- Localização Section -->
     <section id="localizacao" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -570,7 +569,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 
-    <!-- Dicionário de Traduções (PT / EN / FR / ES) -->
+    <!-- Dicionário de Traduções -->
     <script>
         const traducoes = {
             pt: {
@@ -640,15 +639,6 @@
                 tur_etiqueta: "Guia Local • Figueira da Foz",
                 tur_titulo: "Descubra o Melhor de Buarcos e da Figueira",
                 tur_desc: "De praias extensas e miradouros sobre o Atlântico a espetáculos culturais e gastronomia de excelência, prepare a sua estadia com as nossas sugestões locais:",
-                tur_c1_tit: "Cultura & Espetáculos",
-                tur_c1_desc: "Visite o <strong>Centro de Artes e Espetáculos (CAE)</strong>, o histórico <strong>Casino Figueira</strong>, o Palácio Sotto Mayor e o Núcleo Museológico do Mar em Buarcos.",
-                tur_c2_tit: "Natureza & Miradouros",
-                tur_c2_desc: "Suba à <strong>Serra da Boa Viagem</strong> até ao Miradouro da Vela, percorra o Cabo Mondego ou conheça as <strong>Salinas</strong> e a observação de aves no estuário.",
-                tur_c3_tit: "Praia, Surf & Marginal",
-                tur_c3_desc: "Relaxe na <strong>Praia de Buarcos</strong> à porta de casa, passeie pela ciclovia à beira-mar ou experimente surf e bodyboard nas ondas do <strong>Cabedelo</strong>.",
-                tur_c4_tit: "Gastronomia & Sabores",
-                tur_c4_desc: "Prove o peixe fresco grelhado e a caldeirada tradicional em Buarcos, sem esquecer as <strong>Brisas da Figueira</strong> e os gelados artesanais na marginal.",
-                tur_portais_tit: "Portais Úteis & Agendas:",
                 loc_etiqueta: "Localização Privilegiada",
                 loc_titulo: "Buarcos, Figueira da Foz",
                 loc_desc: "Situados numa das zonas mais tradicionais e encantadoras da Figueira da Foz. A curta distância a pé da praia de Buarcos, de excelentes restaurantes de peixe fresco, pastelarias e comércio local.",
@@ -770,15 +760,6 @@
                 tur_etiqueta: "Local Guide • Figueira da Foz",
                 tur_titulo: "Discover the Best of Buarcos and Figueira",
                 tur_desc: "From vast sandy beaches and Atlantic viewpoints to cultural shows and fine seafood gastronomy, plan your stay with our local tips:",
-                tur_c1_tit: "Culture & Shows",
-                tur_c1_desc: "Visit the <strong>Center for Arts and Entertainment (CAE)</strong>, the historic <strong>Casino Figueira</strong>, Sotto Mayor Palace, and the Sea Museum in Buarcos.",
-                tur_c2_tit: "Nature & Viewpoints",
-                tur_c2_desc: "Head up to <strong>Serra da Boa Viagem</strong> and Miradouro da Vela, explore Cabo Mondego, or visit the <strong>Salt Pans</strong> and estuary birdwatching.",
-                tur_c3_tit: "Beach, Surf & Esplanade",
-                tur_c3_desc: "Relax on <strong>Buarcos Beach</strong> right at your doorstep, stroll along the seaside cycle path, or try surfing and bodyboarding at <strong>Cabedelo</strong>.",
-                tur_c4_tit: "Gastronomy & Flavors",
-                tur_c4_desc: "Taste fresh grilled fish and traditional fish stew in Buarcos, as well as the local <strong>Brisas da Figueira</strong> pastries and artisan ice cream.",
-                tur_portais_tit: "Useful Portals & Agendas:",
                 loc_etiqueta: "Privileged Location",
                 loc_titulo: "Buarcos, Figueira da Foz",
                 loc_desc: "Located in one of the most traditional and charming areas of Figueira da Foz. Within walking distance of Buarcos beach, excellent fresh fish restaurants, bakeries, and local shops.",
@@ -900,15 +881,6 @@
                 tur_etiqueta: "Guide Local • Figueira da Foz",
                 tur_titulo: "Découvrez le Meilleur de Buarcos et Figueira",
                 tur_desc: "Des grandes plages et belvédères sur l'Atlantique aux spectacles culturels et à la gastronomie locale, préparez votre séjour avec nos suggestions :",
-                tur_c1_tit: "Culture & Spectacles",
-                tur_c1_desc: "Visitez le <strong>Centre des Arts et Spectacles (CAE)</strong>, l'historique <strong>Casino Figueira</strong>, le Palais Sotto Mayor et le Musée de la Mer à Buarcos.",
-                tur_c2_tit: "Nature & Belvédères",
-                tur_c2_desc: "Montez à la <strong>Serra da Boa Viagem</strong> jusqu'au Miradouro da Vela, explorez le Cabo Mondego ou découvrez les <strong>Marais Salants</strong>.",
-                tur_c3_tit: "Plage, Surf & Front de Mer",
-                tur_c3_desc: "Détendez-vous sur la <strong>Plage de Buarcos</strong> au pied de l'immeuble, parcourez la piste cyclable ou faites du surf à <strong>Cabedelo</strong>.",
-                tur_c4_tit: "Gastronomie & Saveurs",
-                tur_c4_desc: "Dégustez le poisson frais grillé et la caldeirada à Buarcos, sans oublier les pâtisseries <strong>Brisas da Figueira</strong> et les glaces artisanales.",
-                tur_portais_tit: "Portails Utiles & Agendas :",
                 loc_etiqueta: "Emplacement Privilégié",
                 loc_titulo: "Buarcos, Figueira da Foz",
                 loc_desc: "Situés dans l'un des quartiers les plus traditionnels de Figueira da Foz. À distance de marche de la plage de Buarcos, d'excellents restaurants et commerces.",
@@ -1030,15 +1002,6 @@
                 tur_etiqueta: "Guía Local • Figueira da Foz",
                 tur_titulo: "Descubra lo Mejor de Buarcos y de Figueira",
                 tur_desc: "Desde extensas playas y miradores sobre el Atlántico hasta espectáculos culturales y gastronomía de excelencia, prepare su estancia con nuestras sugerencias locales:",
-                tur_c1_tit: "Cultura & Espectáculos",
-                tur_c1_desc: "Visite el <strong>Centro de Artes e Espectáculos (CAE)</strong>, el histórico <strong>Casino Figueira</strong>, el Palacio Sotto Mayor y el Museo del Mar en Buarcos.",
-                tur_c2_tit: "Naturaleza & Miradores",
-                tur_c2_desc: "Suba a la <strong>Serra da Boa Viagem</strong> hasta el Miradouro da Vela, recorra Cabo Mondego o conozca las <strong>Salinas</strong> y el avistamiento de aves en el estuario.",
-                tur_c3_tit: "Playa, Surf & Paseo Marítimo",
-                tur_c3_desc: "Relájese en la <strong>Playa de Buarcos</strong> a la puerta de casa, pasee por el carril bici o practique surf y bodyboard en las olas de <strong>Cabedelo</strong>.",
-                tur_c4_tit: "Gastronomía & Sabores",
-                tur_c4_desc: "Pruebe el pescado fresco a la brasa y la caldeirada tradicional en Buarcos, sin olvidar los dulces <strong>Brisas da Figueira</strong> y los helados artesanales en el paseo.",
-                tur_portais_tit: "Portales Útiles & Agendas:",
                 loc_etiqueta: "Ubicación Privilegiada",
                 loc_titulo: "Buarcos, Figueira da Foz",
                 loc_desc: "Situados en una de las zonas más tradicionales y encantadoras de Figueira da Foz. A poca distancia a pie de la playa de Buarcos, excelentes restaurantes de pescado fresco y comercios.",
@@ -1661,7 +1624,8 @@
             }, 150);
         });
     </script>
-        <!-- Modal Dinâmico para os Tópicos do Guia Local -->
+
+    <!-- Modal Dinâmico para os Tópicos do Guia Local -->
     <div id="modal-guia" class="hidden fixed inset-0 z-50 bg-navy-950/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto border border-sea-200">
             <button type="button" onclick="fecharModalGuia()" class="absolute top-6 right-6 bg-sand-100 hover:bg-sea-100 text-navy-900 p-2 rounded-full transition-colors cursor-pointer z-10">
@@ -1671,8 +1635,8 @@
         </div>
     </div>
 
+    <!-- Script dos Cartões Interativos e Modais do Guia -->
     <script>
-        // Base de dados com os links e recomendações para cada tópico
         const guiaDados = {
             cultura: {
                 titulo: "Cultura, Espetáculos & Lazer",
@@ -1686,12 +1650,12 @@
                 ]
             },
             natureza: {
-                titulo: "Natureza, Trilhos & Miradouros",
-                icone: "mountain",
-                descricao: "Descubra paisagens protegidas, panoramas incríveis sobre o Atlântico e percursos verdes.",
+                titulo: "Turismo & Informação Local",
+                icone: "compass",
+                descricao: "Consulte o portal oficial de turismo e descubra paisagens protegidas e panoramas incríveis sobre o Atlântico.",
                 itens: [
-                    { nome: "Serra da Boa Viagem & Miradouro da Vela", desc: "Trilhos pedestres e a vista panorámica mais icónica sobre a costa.", link: "https://www.visitfigueiradafoz.com", icone: "compass" },
-                    { nome: "Portal Oficial de Turismo", desc: "Guia completo de praias, percursos BTT e pontos de interesse natural.", link: "https://www.visitportugal.com", icone: "globe" }
+                    { nome: "Visit Figueira da Foz (Portal Oficial)", desc: "Guia completo de turismo, praias e pontos de interesse do concelho.", link: "https://www.visitfigueiradafoz.com", icone: "globe" },
+                    { nome: "Serra da Boa Viagem & Miradouro da Vela", desc: "Trilhos pedestres e a vista panorâmica mais icónica sobre toda a costa.", link: "https://www.visitfigueiradafoz.com", icone: "mountain" }
                 ]
             },
             praia: {
@@ -1699,17 +1663,20 @@
                 icone: "waves",
                 descricao: "Aproveite a proximidade ao mar e consulte o estado do tempo ou os transportes em tempo real.",
                 itens: [
-                    { nome: "Beachcam Praia de Buarcos", desc: "Veja o estado do mar e o tempo em direto na nossa praia.", link: "https://beachcam.meo.pt/livecams/praia-de-buarcos/", icone: "video" },
+                    { nome: "Beachcam Praia de Buarcos", desc: "Veja o estado do mar e o tempo em direto na nossa praia.", link: "https://beachcam.meo.pt/praias/praia-de-buarcos/", icone: "video" },
                     { nome: "Comboios de Portugal (CP)", desc: "Planeie a sua viagem de comboio de forma cómoda e sustentável.", link: "https://www.cp.pt", icone: "train" }
                 ]
             },
             gastronomia: {
                 titulo: "Gastronomia & Sabores Locais",
                 icone: "utensils",
-                descricao: "Delicie-se com o melhor peixe fresco da lota, marisco e a doçaria tradicional da região.",
+                descricao: "Recomendações exclusivas dos melhores locais para saborear peixe fresco, marisco, petiscos e doces tradicionais em Buarcos e na Figueira da Foz.",
                 itens: [
-                    { nome: "TheFork Portugal", desc: "Encontre os melhores restaurantes e reserve mesa com vantagens.", link: "https://www.thefork.pt", icone: "utensils-crossed" },
-                    { nome: "Visite a Gastronomia Local", desc: "Sugestões de pratos típicos como a caldeirada e as Brisas da Figueira.", link: "https://www.visitfigueiradafoz.com", icone: "star" }
+                    { nome: "Marisqueira Sagres", desc: "Referência incontornável de marisco fresco e peixe grelhado junto à marginal.", link: "https://www.thefork.pt", icone: "utensils" },
+                    { nome: "Restaurante O Caçarola", desc: "Pratos tradicionais portugueses de excelência, caldeiradas e arroz de marisco.", link: "https://www.thefork.pt", icone: "utensils" },
+                    { nome: "Dom Picanha", desc: "Carnes de qualidade superior e um ambiente acolhedor e familiar.", link: "https://www.thefork.pt", icone: "utensils" },
+                    { nome: "Pastelaria Dionísio & Doce Pecado", desc: "Perfeito para o café da manhã, pastelaria fina e as tradicionais Brisas da Figueira.", link: "https://www.visitfigueiradafoz.com", icone: "coffee" },
+                    { nome: "Gelataria San Reno", desc: "Paragem obrigatória na marginal para saborear gelados artesanais.", link: "https://www.visitfigueiradafoz.com", icone: "ice-cream" }
                 ]
             }
         };
@@ -1757,6 +1724,5 @@
             document.getElementById('modal-guia').classList.add('hidden');
         }
     </script>
-
 </body>
 </html>
