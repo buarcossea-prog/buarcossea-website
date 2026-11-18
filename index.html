@@ -1195,7 +1195,7 @@
         let datasBloqueadasPorApto = {};
         let regrasEstadiaConfig = { base: 2, junho: 4, alta: 7 };
 
-        async function inicializarCalendario() {
+                async function inicializarCalendario() {
             const inputDatas = document.getElementById('campo-datas');
             if (!inputDatas) return;
 
@@ -1223,8 +1223,18 @@
 
             const selectApt = document.getElementById('apt-select');
             const aptAtual = selectApt ? selectApt.value : 'cristal_mar';
-            const diasIndisponiveis = datasBloqueadasPorApto[aptAtual] || [];
+            const diasOcupados = datasBloqueadasPorApto[aptAtual] || [];
             const langAtual = localStorage.getItem('buarcos_lang') || 'pt';
+
+            const diasApenasCheckout = diasOcupados.filter(dataStr => {
+                const parts = dataStr.split('-');
+                const dt = new Date(parts[0], parts[1] - 1, parts[2]);
+                dt.setDate(dt.getDate() - 1);
+                const diaAnteriorStr = formatarDataLocal(dt);
+                return !diasOcupados.includes(diaAnteriorStr);
+            });
+
+            const diasTotalmenteBloqueados = diasOcupados.filter(d => !diasApenasCheckout.includes(d));
 
             if (calendarioPicker) {
                 calendarioPicker.destroy();
@@ -1235,8 +1245,24 @@
                 locale: langAtual,
                 minDate: "today",
                 dateFormat: "Y-m-d",
-                disable: diasIndisponiveis,
-                conjunction: " a "
+                disable: diasTotalmenteBloqueados,
+                conjunction: " a ",
+                onDayCreate: function(dObj, dStr, fp, dayElem) {
+                    const dataStr = formatarDataLocal(dayElem.dateObj);
+                    if (diasApenasCheckout.includes(dataStr)) {
+                        dayElem.title = "Disponível apenas para Check-out";
+                        dayElem.style.borderBottom = "2px solid #f59e0b";
+                    }
+                },
+                onChange: function(selectedDates, dateStr, instance) {
+                    if (selectedDates.length === 1) {
+                        const checkinStr = formatarDataLocal(selectedDates[0]);
+                        if (diasApenasCheckout.includes(checkinStr)) {
+                            instance.clear();
+                            alert("Esta data está disponível apenas para Check-out de reservas anteriores.");
+                        }
+                    }
+                }
             });
         }
 
