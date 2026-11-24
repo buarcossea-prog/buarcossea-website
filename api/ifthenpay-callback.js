@@ -1,9 +1,4 @@
-import { Redis } from '@upstash/redis';
-
-const redis = Redis.fromEnv();
-
 export default async function handler(req, res) {
-  // A ifthenpay envia os callbacks via GET
   if (req.method !== 'GET') {
     return res.status(405).send('Method Not Allowed');
   }
@@ -11,9 +6,7 @@ export default async function handler(req, res) {
   const { key, id, orderId, amount, status } = req.query;
   const reservaId = id || orderId;
 
-  // 1. Validar se o pedido veio mesmo da ifthenpay através da chave anti-phishing
   if (!key || key !== process.env.IFTHENPAY_ANTI_PHISHING_KEY) {
-    console.warn('Tentativa de callback inválida:', req.query);
     return res.status(401).send('Chave anti-phishing inválida');
   }
 
@@ -21,30 +14,68 @@ export default async function handler(req, res) {
     return res.status(400).send('ID da reserva em falta');
   }
 
-  try {
-    // 2. Procurar a reserva pendente no Upstash Redis
-    const reservaKey = `reserva:${reservaId}`;
-    const reserva = await redis.get(reservaKey);
+  const redisUrl = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+  const redisToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
 
-    if (!reserva) {
-      console.warn(`Reserva ${reservaId} não encontrada no Redis.`);
+  try {
+    const getRes = await fetch(`${redisUrl}/get/reserva_${reservaId}`, {
+      headers: { Authorization: `Bearer ${redisToken}` }
+    });
+    const getData = await getRes.json();
+
+    if (!getData || !getData.result) {
       return res.status(404).send('Reserva não encontrada');
     }
 
-    // 3. Confirmar o pagamento
+    const reserva = typeof getData.result === 'string' ? JSON.parse(getData.result) : getData.result;
+
     if (!status || status.toUpperCase() === 'PAGO' || status.toUpperCase() === 'PAID' || status === '000') {
-      reserva.estado = 'PAGO';
+      reserva.estado = 'pago';
       reserva.pagoEm = new Date().toISOString();
       reserva.valorPago = amount || reserva.total;
 
-      await redis.set(reservaKey, reserva);
-      console.log(`Pagamento confirmado para a reserva ${reservaId}`);
+      await fetch(`${redisUrl}/set/reserva_${reservaId}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${redisToken}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(reserva)
+      });
+
+      // Atualizar os dias no calendário principal (precos_buarcos) de 'pendente' para 'pago'
+      const calRes = await fetch(`${redisUrl}/get/precos_buarcos`, {
+        headers: { Authorization: `Bearer ${redisToken}` }
+      });
+      const calData = await calRes.json();
+      if (calData && calData.result) {
+        const storedData = typeof calData.result === 'string' ? JSON.parse(calData.result) : calData.result;
+        if (storedData.data && storedData.data[reserva.apartamento]) {
+          let dtAtual = new Date(`${reserva.checkin}T00:00:00`);
+          const dtFim = new Date(`${reserva.checkout}T00:00:00`);
+          while (dtAtual < dtFim) {
+            const ano = dtAtual.getFullYear();
+            const mes = String(dtAtual.getMonth() + 1).padStart(2, '0');
+            const dia = String(dtAtual.getDate()).padStart(2, '0');
+            const dataStr = `${ano}-${mes}-${dia}`;
+
+            if (storedData.data[reserva.apartamento][dataStr]) {
+              storedData.data[reserva.apartamento][dataStr].estadoPagamento = 'pago';
+              delete storedData.data[reserva.apartamento][dataStr].expiraEm;
+              storedData.data[reserva.apartamento][dataStr].motivo = `Reserva Confirmada (${reserva.metodoPagamento.toUpperCase()}): ${reserva.hospede.nome}`;
+            }
+            dtAtual.setDate(dtAtual.getDate() + 1);
+          }
+
+          await fetch(`${redisUrl}/set/precos_buarcos`, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${redisToken}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(storedData)
+          });
+        }
+      }
     }
 
-    // A ifthenpay exige HTTP 200 OK para confirmar a receção
     return res.status(200).send('OK');
   } catch (error) {
-    console.error('Erro no processamento do callback:', error);
+    console.error('Erro no callback ifthenpay:', error);
     return res.status(500).send('Erro interno');
   }
 }
