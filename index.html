@@ -1092,7 +1092,7 @@
                 ts_9: "Ropa de Cama y Toallas Incluidas",
                 ts_10: "Secador de Pelo y Artículos de Aseo",
                 ts_11: "Plancha, Tabla de Planchar y Tendedero",
-                ts_12: "Acceso por Ascensor",
+                ts_12: "Acceso por Ascenseur",
                 ts_13: "Aparcamiento Público Gratuito Cercano",
                 ts_14: "Cafetera, Tostadora y Utensilios",
                 ts_15: "Juegos de Mesa / Puzzles",
@@ -1521,6 +1521,9 @@
         async function submeterReservaBackend(metodo) {
             if (!calendarioPicker || calendarioPicker.selectedDates.length < 2) return { success: false };
             const datasSelecionadas = calendarioPicker.selectedDates;
+            const telMbway = document.getElementById('mbway-tel')?.value.trim();
+            const telHospede = telMbway || document.getElementById('hospede-telefone').value.trim();
+
             const payload = {
                 apartamento: document.getElementById('apt-select').value,
                 checkin: formatarDataLocal(datasSelecionadas[0]),
@@ -1533,7 +1536,7 @@
                 hospede: {
                     nome: document.getElementById('hospede-nome').value.trim(),
                     email: document.getElementById('hospede-email').value.trim(),
-                    telefone: document.getElementById('hospede-telefone').value.trim(),
+                    telefone: telHospede,
                     pais: document.getElementById('hospede-pais').value.trim(),
                     nif: document.getElementById('hospede-nif').value.trim()
                 }
@@ -1552,7 +1555,7 @@
                 return json;
             } catch (err) {
                 console.error("Erro ao comunicar com API:", err);
-                return { success: false };
+                return { success: false, error: 'Erro de comunicação com o servidor.' };
             }
         }
 
@@ -1597,13 +1600,9 @@
             } else if (metodo === 'multibanco') {
                 container.innerHTML = `
                     <div class="font-bold text-navy-900 mb-1">Referência Multibanco</div>
-                    <div class="space-y-1 font-mono text-xs bg-white p-3 rounded border border-sea-200 text-navy-900">
-                        <div class="flex justify-between"><span>Entidade:</span> <strong>11683</strong></div>
-                        <div class="flex justify-between"><span>Referência:</span> <strong>987 654 321</strong></div>
-                        <div class="flex justify-between"><span>Valor:</span> <strong>${total}</strong></div>
-                    </div>
+                    <p class="text-xs text-navy-800/80">Ao confirmar, será gerada uma referência Multibanco válida para o valor de <strong>${total}</strong>.</p>
                     <div class="mt-3">
-                        <button type="button" onclick="confirmarEfetivarReserva('multibanco')" class="w-full bg-navy-900 hover:bg-navy-800 text-white text-xs py-2.5 rounded font-bold cursor-pointer shadow">Confirmar e Registar Reserva</button>
+                        <button type="button" onclick="confirmarEfetivarReserva('multibanco')" class="w-full bg-navy-900 hover:bg-navy-800 text-white text-xs py-2.5 rounded font-bold cursor-pointer shadow">Gerar Referência e Registar Reserva</button>
                     </div>
                     ${avisoPrazo}
                 `;
@@ -1634,26 +1633,44 @@
 
             const resposta = await submeterReservaBackend(metodo);
 
-            if (resposta && resposta.success) {
-                if (metodo === 'mbway') {
-                    alert('Pedido MB WAY enviado com sucesso! Verifique a sua aplicação.');
-                } else if (metodo === 'multibanco') {
-                    const ent = resposta.entidade || '11683';
-                    const ref = resposta.referencia || '987 654 321';
-                    container.innerHTML = `
-                        <div class="font-bold text-emerald-700 mb-1">✓ Reserva Registada com Sucesso!</div>
-                        <p class="text-xs text-navy-800 mb-2">As referências foram geradas e enviadas para o seu email.</p>
-                        <div class="space-y-1 font-mono text-xs bg-white p-3 rounded border border-sea-200 text-navy-900">
-                            <div class="flex justify-between"><span>Entidade:</span> <strong>${ent}</strong></div>
-                            <div class="flex justify-between"><span>Referência:</span> <strong>${ref}</strong></div>
-                            <div class="flex justify-between"><span>Valor:</span> <strong>${document.getElementById('valor-total').innerText}</strong></div>
-                        </div>
-                    `;
-                } else {
-                    alert('Reserva confirmada com sucesso! Redirecionando...');
-                }
+            if (!resposta || !resposta.success) {
+                container.innerHTML = `
+                    <div class="p-3 rounded bg-red-50 border border-red-200 text-red-700 text-xs">
+                        <strong>Erro ao registar reserva:</strong> ${resposta?.error || 'As datas podem já ter sido ocupadas ou ocorreu um erro temporário. Tente novamente.'}
+                    </div>
+                `;
+                return;
+            }
+
+            if (resposta.paymentUrl) {
+                container.innerHTML = `<p class="text-xs text-navy-800 font-semibold">✓ Reserva <strong>${resposta.orderId || ''}</strong> registada! A redirecionar para o pagamento seguro...</p>`;
+                window.location.href = resposta.paymentUrl;
+                return;
+            }
+
+            if (metodo === 'mbway') {
+                container.innerHTML = `
+                    <div class="font-bold text-emerald-700 mb-1">✓ Pedido MB WAY Enviado!</div>
+                    <p class="text-xs text-navy-800">
+                        Reserva <strong>${resposta.orderId || ''}</strong> registada. Abra a aplicação <strong>MB WAY</strong> no seu telemóvel e aprove o pagamento nos próximos <strong>5 minutos</strong>.
+                    </p>
+                `;
+            } else if (metodo === 'multibanco') {
+                container.innerHTML = `
+                    <div class="font-bold text-emerald-700 mb-1">✓ Reserva Registada com Sucesso!</div>
+                    <p class="text-xs text-navy-800 mb-2">Reserva <strong>${resposta.orderId || ''}</strong>. Utilize os dados abaixo no Multibanco ou Homebanking (também enviados por email):</p>
+                    <div class="space-y-1 font-mono text-xs bg-white p-3 rounded border border-sea-200 text-navy-900">
+                        <div class="flex justify-between"><span>Entidade:</span> <strong>${resposta.entidade || '—'}</strong></div>
+                        <div class="flex justify-between"><span>Referência:</span> <strong>${resposta.referencia || '—'}</strong></div>
+                        <div class="flex justify-between"><span>Valor:</span> <strong>${document.getElementById('valor-total').innerText}</strong></div>
+                    </div>
+                    ${resposta.expiraEm ? `<p class="text-[11px] text-amber-700 bg-amber-50 p-2 rounded border border-amber-200 mt-2">⏳ Válido até: <strong>${resposta.expiraEm}</strong></p>` : ''}
+                `;
             } else {
-                alert('Ocorreu um erro ao registar a reserva ou as datas já foram ocupadas. Por favor tente novamente.');
+                container.innerHTML = `
+                    <div class="font-bold text-emerald-700 mb-1">✓ Reserva Registada com Sucesso!</div>
+                    <p class="text-xs text-navy-800">Reserva <strong>${resposta.orderId || ''}</strong> registada. Verifique o seu email para acompanhar os detalhes.</p>
+                `;
             }
         }
 
