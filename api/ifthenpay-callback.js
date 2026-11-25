@@ -33,6 +33,7 @@ export default async function handler(req, res) {
       reserva.estado = 'pago';
       reserva.pagoEm = new Date().toISOString();
       reserva.valorPago = amount || reserva.total;
+      reserva.calendarioBloqueado = true;
 
       await fetch(`${redisUrl}/set/reserva_${reservaId}`, {
         method: 'POST',
@@ -40,37 +41,63 @@ export default async function handler(req, res) {
         body: JSON.stringify(reserva)
       });
 
-      // Atualizar os dias no calendário principal (precos_buarcos) de 'pendente' para 'pago'
+      // Bloquear/confirmar os dias no calendário principal (precos_buarcos) apenas após pagamento
       const calRes = await fetch(`${redisUrl}/get/precos_buarcos`, {
         headers: { Authorization: `Bearer ${redisToken}` }
       });
       const calData = await calRes.json();
+
+      let storedData = {
+        data: {},
+        limpezaGlobal: { cristal_mar: 35, tonay_sol: 35 },
+        petGlobal: 15,
+        regrasEstadia: { base: 2, junho: 4, alta: 7 }
+      };
+
       if (calData && calData.result) {
-        const storedData = typeof calData.result === 'string' ? JSON.parse(calData.result) : calData.result;
-        if (storedData.data && storedData.data[reserva.apartamento]) {
-          let dtAtual = new Date(`${reserva.checkin}T00:00:00`);
-          const dtFim = new Date(`${reserva.checkout}T00:00:00`);
-          while (dtAtual < dtFim) {
-            const ano = dtAtual.getFullYear();
-            const mes = String(dtAtual.getMonth() + 1).padStart(2, '0');
-            const dia = String(dtAtual.getDate()).padStart(2, '0');
-            const dataStr = `${ano}-${mes}-${dia}`;
-
-            if (storedData.data[reserva.apartamento][dataStr]) {
-              storedData.data[reserva.apartamento][dataStr].estadoPagamento = 'pago';
-              delete storedData.data[reserva.apartamento][dataStr].expiraEm;
-              storedData.data[reserva.apartamento][dataStr].motivo = `Reserva Confirmada (${reserva.metodoPagamento.toUpperCase()}): ${reserva.hospede.nome}`;
-            }
-            dtAtual.setDate(dtAtual.getDate() + 1);
-          }
-
-          await fetch(`${redisUrl}/set/precos_buarcos`, {
-            method: 'POST',
-            headers: { Authorization: `Bearer ${redisToken}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify(storedData)
-          });
+        const parsed = typeof calData.result === 'string' ? JSON.parse(calData.result) : calData.result;
+        if (parsed.data) {
+          storedData = parsed;
+        } else {
+          storedData.data = parsed;
         }
       }
+
+      if (!storedData.data) {
+        storedData.data = {};
+      }
+      if (!storedData.data[reserva.apartamento]) {
+        storedData.data[reserva.apartamento] = {};
+      }
+
+      let dtAtual = new Date(`${reserva.checkin}T00:00:00`);
+      const dtFim = new Date(`${reserva.checkout}T00:00:00`);
+      while (dtAtual < dtFim) {
+        const ano = dtAtual.getFullYear();
+        const mes = String(dtAtual.getMonth() + 1).padStart(2, '0');
+        const dia = String(dtAtual.getDate()).padStart(2, '0');
+        const dataStr = `${ano}-${mes}-${dia}`;
+
+        const diaAtual = { ...(storedData.data[reserva.apartamento][dataStr] || {}) };
+        delete diaAtual.expiraEm;
+
+        storedData.data[reserva.apartamento][dataStr] = {
+          ...diaAtual,
+          bloqueado: true,
+          estadoPagamento: 'pago',
+          orderId: reserva.orderId || reservaId,
+          motivo: `Reserva Confirmada (${(reserva.metodoPagamento || '').toUpperCase()}): ${reserva.hospede?.nome || ''}`,
+          contacto: reserva.hospede ? `${reserva.hospede.telefone || ''} (${reserva.hospede.email || ''})` : ''
+        };
+
+        dtAtual.setDate(dtAtual.getDate() + 1);
+      }
+
+      await fetch(`${redisUrl}/set/precos_buarcos`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${redisToken}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(storedData)
+      });
     }
 
     return res.status(200).send('OK');
