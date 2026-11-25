@@ -106,68 +106,21 @@ export default async function handler(req, res) {
       dadosPagamento = { paymentUrl: gwData.PinpayUrl };
     }
 
-    // 2. BLOQUEAR DATAS NO CALENDÁRIO E GUARDAR RESERVA NO REDIS
+    // 2. GUARDAR REGISTO DA PRÉ-RESERVA NO REDIS (CALENDÁRIO SÓ BLOQUEIA NO CALLBACK)
     if (redisUrl && redisToken) {
-      const getRes = await fetch(`${redisUrl}/get/precos_buarcos`, {
-        headers: { Authorization: `Bearer ${redisToken}` }
-      });
-      const getData = await getRes.json();
-      let storedData = {
-        data: {},
-        limpezaGlobal: { cristal_mar: 35, tonay_sol: 35 },
-        petGlobal: 15,
-        regrasEstadia: { base: 2, junho: 4, alta: 7 }
-      };
-
-      if (getData && getData.result) {
-        const parsed = typeof getData.result === 'string' ? JSON.parse(getData.result) : getData.result;
-        if (parsed.data) {
-          storedData = parsed;
-        } else {
-          storedData.data = parsed;
-        }
-      }
-
-      if (!storedData.data[apartamento]) {
-        storedData.data[apartamento] = {};
-      }
-
-      let dtAtual = new Date(`${checkin}T00:00:00`);
-      const dtFim = new Date(`${checkout}T00:00:00`);
-      while (dtAtual < dtFim) {
-        const ano = dtAtual.getFullYear();
-        const mes = String(dtAtual.getMonth() + 1).padStart(2, '0');
-        const dia = String(dtAtual.getDate()).padStart(2, '0');
-        const dataStr = `${ano}-${mes}-${dia}`;
-
-        storedData.data[apartamento][dataStr] = {
-          ...(storedData.data[apartamento][dataStr] || {}),
-          bloqueado: true,
-          estadoPagamento: 'pendente',
-          orderId,
-          expiraEm: expiraEm,
-          motivo: `Pré-Reserva (${metodoPagamento.toUpperCase()}): ${hospede.nome}`,
-          contacto: `${hospede.telefone} (${hospede.email})`
-        };
-        dtAtual.setDate(dtAtual.getDate() + 1);
-      }
-
-      await fetch(`${redisUrl}/set/precos_buarcos`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${redisToken}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify(storedData)
-      });
-
-      // Guardar registo individual da reserva para o callback confirmar quando for paga
       const registoReserva = {
         orderId,
         apartamento,
         checkin,
         checkout,
+        adultos,
+        criancas,
         total: valorNumerico,
         metodoPagamento,
         hospede,
         estado: 'pendente',
+        calendarioBloqueado: false,
+        expiraEm,
         criadaEm: new Date().toISOString()
       };
 
@@ -194,12 +147,12 @@ export default async function handler(req, res) {
       const emailRes = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
+        body: JSON.stringify({
           from: 'Buarcos & Sea <reservas@buarcossea.pt>',
           to: hospede.email,
           bcc: 'buarcossea@gmail.com',
           reply_to: 'buarcossea@gmail.com',
-          subject: `Nova Pré-Reserva (${metodoPagamento.toUpperCase()}): ${nomeApt} (${checkin} a ${checkout}) - ${hospede.nome}`, 
+          subject: `Nova Pré-Reserva (${metodoPagamento.toUpperCase()}): ${nomeApt} (${checkin} a ${checkout}) - ${hospede.nome}`,
           html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #193247;">
               <h2 style="color: #23425c;">Pré-Reserva Registada com Sucesso!</h2>
@@ -230,6 +183,7 @@ export default async function handler(req, res) {
       success: true,
       orderId,
       emailEnviado,
+      calendarioBloqueado: false,
       expiraEm: dataLimiteFormatada,
       ...dadosPagamento
     });
