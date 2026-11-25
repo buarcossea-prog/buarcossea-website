@@ -195,7 +195,7 @@ export default async function handler(req, res) {
         method: 'POST',
         headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          from: 'Buarcos & Sea <onboarding@resend.dev>',
+          from: 'Buarcos & Sea <reservas@buarcossea.pt>',
           to: ['buarcossea@gmail.com', hospede.email],
           subject: `Nova Pré-Reserva (${metodoPagamento.toUpperCase()}): ${nomeApt} (${checkin} a ${checkout}) - ${hospede.nome}`,
           html: `
