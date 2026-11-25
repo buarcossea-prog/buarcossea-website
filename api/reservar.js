@@ -194,11 +194,12 @@ export default async function handler(req, res) {
       const emailRes = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({
+                      body: JSON.stringify({
           from: 'Buarcos & Sea <reservas@buarcossea.pt>',
-          replyTo: 'buarcossea@gmail.com',
-          to: ['buarcossea@gmail.com', hospede.email],
-          subject: `Nova Pré-Reserva (${metodoPagamento.toUpperCase()}): ${nomeApt} (${checkin} a ${checkout}) - ${hospede.nome}`,
+          to: hospede.email,
+          bcc: 'buarcossea@gmail.com',
+          reply_to: 'buarcossea@gmail.com',
+          subject: `Nova Pré-Reserva (${metodoPagamento.toUpperCase()}): ${nomeApt} (${checkin} a ${checkout}) - ${hospede.nome}`, 
           html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #193247;">
               <h2 style="color: #23425c;">Pré-Reserva Registada com Sucesso!</h2>
